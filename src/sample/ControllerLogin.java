@@ -37,11 +37,13 @@ public class ControllerLogin {
             Stage stage = (Stage)login_bttn.getScene().getWindow();
             stage.close();
         }
-        error_lbl.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> ov, String t, String t1) {
-                System.out.println(" ");
-            }
+
+
+        id.textProperty().addListener((observable, oldValue, newValue) -> {
+            error_lbl.setText(" ");
+        });
+        pass.textProperty().addListener((observable, oldValue, newValue) -> {
+            error_lbl.setText(" ");
         });
 
     }
