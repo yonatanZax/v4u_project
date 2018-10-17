@@ -1,5 +1,7 @@
 package sample;
 
+import db.DatabaseManager;
+
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
 
@@ -13,6 +15,10 @@ public class ControllerLogin {
     public void login(ActionEvent actionEvent) {
         String password = pass.getText();
         String userName = id.getText();
+        user = DatabaseManager.selectUser(userName, password);
+        if(user == null){
+
+        }
 
     }
 

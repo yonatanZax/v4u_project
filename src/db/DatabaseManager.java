@@ -1,5 +1,7 @@
 package db;
 
+import sample.User;
+
 import java.sql.*;
 
 public class DatabaseManager {
@@ -34,7 +36,7 @@ public class DatabaseManager {
      * currently works only with 'DatabaseManager.TABLE_USER'
      */
     public static void createNewTable(String tableName) {
-        // SQLite connection string
+        // SQLite connection strin
         String url = PATH_DB + tableName;
 
         // SQL statement for creating a new table
@@ -106,9 +108,10 @@ public class DatabaseManager {
 
     }
 
-/*    *//**
+    /**
      * select all rows in the warehouses table
-     *//*
+     */
+    /*
     public void selectAll(){
         String sql = "SELECT id, name, capacity FROM warehouses";
 
@@ -127,8 +130,47 @@ public class DatabaseManager {
         }
     }*/
 
+    //TODO - CHECK WITH TABLE WE ARE WORKING WITH AND THE COLUMNS NAMES(!!!!!), IF NEEDED: CHANGE String sql (FROM)
+    public static User selectUser(String id, String pass) {
+        Connection conn = connect();
+        String userName, password, firstName, lastName, city;
+        Date birthDate;
+        String sql = "SELECT * " +
+                "FROM users " +
+                "WHERE id = users.user_name";
 
-    public static void main(String[] args) {
-        System.out.println(System.getProperty("user.dir"));
+        if (conn != null) {
+            try {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql);
+                if (rs != null) {
+                    userName = rs.getString("user_name");
+                    password = rs.getString("password");
+                    if (!pass.equals(password)) {
+                        return null;
+                    }
+                    firstName = rs.getString("first_name");
+                    lastName = rs.getString("last_name");
+                    city = rs.getString("city");
+                    birthDate = rs.getDate("birth_date");
+                    User user = new User(userName, password, firstName, lastName, city, birthDate);
+                    return user;
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            } finally {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        }
+        return null;
     }
-}
+
+
+        public static void main (String[]args){
+            System.out.println(System.getProperty("user.dir"));
+        }
+    }
