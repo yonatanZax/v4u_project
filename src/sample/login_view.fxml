@@ -18,7 +18,7 @@
                   <Insets />
                </opaqueInsets></Label>
             <Region opacity="0.0" prefHeight="100.0" prefWidth="50.0" />
-            <TextField>
+            <TextField fx:id="id">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets></TextField>
@@ -28,9 +28,9 @@
          <children>
              <Label text="Password" />
             <Region opacity="0.0" prefHeight="100.0" prefWidth="50.0" />
-            <TextField />
+            <TextField fx:id="pass" />
          </children>
       </HBox>
-      <Button mnemonicParsing="false" text="Login" />
+      <Button mnemonicParsing="false" onAction="#login" text="Login" />
    </children>
 </VBox>
