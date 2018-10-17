@@ -31,6 +31,7 @@
             <TextField fx:id="pass" />
          </children>
       </HBox>
-      <Button mnemonicParsing="false" onAction="#login" text="Login" />
+      <Button fx:id="login_bttn" mnemonicParsing="false" onAction="#login" text="Login" />
+      <Label fx:id="error_lbl" alignment="CENTER" prefHeight="25.0" prefWidth="196.0" textAlignment="CENTER" textFill="RED" />
    </children>
 </VBox>
