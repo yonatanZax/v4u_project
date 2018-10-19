@@ -1,4 +1,4 @@
-package sample;
+package db.testing;
 import db.DatabaseManager;
 
 import java.sql.Date;

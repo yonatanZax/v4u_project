@@ -1,9 +1,8 @@
 package db;
 
-import sample.User;
+import db.testing.User;
 
 import java.sql.*;
-import java.sql.Date;
 import java.util.*;
 
 public class DatabaseManager {
@@ -99,7 +98,7 @@ public class DatabaseManager {
 
     /**
      * Insert a new row into the warehouses table
-     * TODO - fix thi fucking func
+     *
      */
     public static void insert(User user) {
         String sql = "INSERT INTO " + TABLE_USER + "(" + COLUMN_USERTABLE_USER_NAME + "," + COLUMN_USERTABLE_PASS + "," + COLUMN_USERTABLE_FIRST_NAME + "," + COLUMN_USERTABLE_LAST_NAME + "," + COLUMN_USERTABLE_CITY + "," + COLUMN_USERTABLE_BIRTHDAY + ") VALUES(?,?,?,?,?,?)";
@@ -177,29 +176,6 @@ public class DatabaseManager {
         }
     }
 
-    private static List<Map<String, Object>> map(ResultSet rs) throws SQLException {
-        List<Map<String, Object>> results = new ArrayList<Map<String, Object>>();
-        try {
-            if (rs != null) {
-                ResultSetMetaData meta = rs.getMetaData();
-                int numColumns = meta.getColumnCount();
-                while (rs.next()) {
-                    Map<String, Object> row = new HashMap<String, Object>();
-                    for (int i = 1; i <= numColumns; ++i) {
-                        String name = meta.getColumnName(i);
-                        Object value = rs.getObject(i);
-                        row.put(name, value);
-                    }
-                    results.add(row);
-                }
-            }
-        } finally {
-            rs.close();
-        }
-        return results;
-    }
-
-
     /**
      * A Generic method to make any query on the 'userInfo' table.
      * any query of the type: 'SELECT ??? FROM userInfo WHERE ??? ORDERBY'
@@ -230,6 +206,31 @@ public class DatabaseManager {
         }
         return list;
     }
+
+    private static List<Map<String, Object>> map(ResultSet rs) throws SQLException {
+        List<Map<String, Object>> results = new ArrayList<Map<String, Object>>();
+        try {
+            if (rs != null) {
+                ResultSetMetaData meta = rs.getMetaData();
+                int numColumns = meta.getColumnCount();
+                while (rs.next()) {
+                    Map<String, Object> row = new HashMap<String, Object>();
+                    for (int i = 1; i <= numColumns; ++i) {
+                        String name = meta.getColumnName(i);
+                        Object value = rs.getObject(i);
+                        row.put(name, value);
+                    }
+                    results.add(row);
+                }
+            }
+        } finally {
+            rs.close();
+        }
+        return results;
+    }
+
+
+
 
     /**
      * This method transfrom the list of maps to a list of users
