@@ -3,6 +3,9 @@ package MainPackage;
 import db.User;
 import db.UserTable;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,10 +16,11 @@ import java.util.List;
 
 
 public class ControllerLogin {
-    public TextField pass;
-    public TextField id;
-    public Button login_bttn;
+    public TextField password;
+    public TextField userName;
+    public Button readUser_btn;
     public Label error_lbl;
+    public Label info_lbl;
     User user;
 
     private void errorWindow(String title, String header, String content){
@@ -27,30 +31,59 @@ public class ControllerLogin {
         alert.showAndWait();
     }
 
-    public void login(ActionEvent actionEvent) {
-        String password = pass.getText();
-        String userName = id.getText();
-        User user = new User();
+
+    // Todo - check password without "select" method
+    public void readUser(ActionEvent actionEvent) {
+        String password = this.password.getText();
+        String userName = this.userName.getText();
+        User userFromDB = new User();
         UserTable userTable = UserTable.getInstance();
         String selection = UserTable.COLUMN_USERTABLE_USER_NAME + " = \"" + userName + "\"";
         List<User> userList = userTable.select(null,selection,null);
-        user = userList.get(0);
-        if(user == null){
+        userFromDB = userList.get(0);
+        if(userFromDB == null ){
 //            errorWindow("ERROR", "Invalid Connection", "Incorrect Username or Password...");
             error_lbl.setText("Incorrect Username or Password");
         } else {
-            Stage stage = (Stage)login_bttn.getScene().getWindow();
-            stage.close();
+            info_lbl.setText(userFromDB.toString());
+            //Stage stage = (Stage) readUser_btn.getScene().getWindow();
+            //stage.close();
         }
 
 
-        id.textProperty().addListener((observable, oldValue, newValue) -> {
+        this.userName.textProperty().addListener((observable, oldValue, newValue) -> {
             error_lbl.setText(" ");
         });
-        pass.textProperty().addListener((observable, oldValue, newValue) -> {
+        this.password.textProperty().addListener((observable, oldValue, newValue) -> {
             error_lbl.setText(" ");
         });
 
     }
 
+    public void createUser(ActionEvent event) throws Exception{
+        Stage createStage = new Stage();
+        createStage.setTitle("Create user");
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        Parent root = fxmlLoader.load(getClass().getResource("createUser_view.fxml").openStream());
+        Scene scene = new Scene(root,400,300);
+        createStage.setScene(scene);
+        createStage.show();
+
+    }
+
+
+    public void updateUser(ActionEvent event) throws Exception{
+
+        Stage createStage = new Stage();
+        createStage.setTitle("Edit user");
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        Parent root = fxmlLoader.load(getClass().getResource("createUser_view.fxml").openStream());
+        Scene scene = new Scene(root,400,300);
+        createStage.setScene(scene);
+        createStage.show();
+    }
+
+    public void deleteUser(ActionEvent event) {
+
+    }
 }

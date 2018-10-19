@@ -49,7 +49,7 @@ public class DBManager implements IDBManager {
         if(conn != null && sql != null) {
             try {
                 PreparedStatement stmt = conn.prepareStatement(sql);
-                // create a new table
+                // createUser a new table
                 stmt.execute();
                 stmt.close();
                 worked = true;

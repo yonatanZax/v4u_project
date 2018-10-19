@@ -8,31 +8,37 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainPackage.ControllerCreateUser">
     <children>
-        <Label text="Welcome" />
+        <Label text="Create\Edit" />
         <HBox prefHeight="100.0" prefWidth="200.0">
             <children>
                 <Label text="User name" />
-                <TextField />
+                <TextField fx:id="userName_textInput" />
             </children>
         </HBox>
         <HBox prefHeight="100.0" prefWidth="200.0">
             <children>
                 <Label text="Password" />
-                <TextField />
+                <TextField fx:id="password_textInput" />
             </children>
         </HBox>
         <HBox prefHeight="100.0" prefWidth="200.0">
             <children>
-                <Label text="Name" />
-                <TextField />
+                <Label text="First name" />
+                <TextField fx:id="firstName_textInput" />
+            </children>
+        </HBox>
+        <HBox prefHeight="100.0" prefWidth="200.0">
+            <children>
+                <Label text="Last name" />
+                <TextField fx:id="lastName_textInput" />
             </children>
         </HBox>
         <HBox prefHeight="100.0" prefWidth="200.0">
             <children>
                 <Label text="City" />
-                <TextField />
+                <TextField fx:id="city_textInput" />
             </children>
         </HBox>
-        <Button fx:id="save_bttn" mnemonicParsing="false" onAction="#saveInfo" text="SAVE" />
+        <Button fx:id="save_btn" mnemonicParsing="false" onAction="#saveInfo" text="SAVE" />
     </children>
 </VBox>
