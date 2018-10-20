@@ -34,7 +34,7 @@ public class ControllerLogin {
 
     // Todo - check password without "select" method
     public void readUser(ActionEvent actionEvent) {
-        String password = this.password.getText();
+//        String password = this.password.getText();
         String userName = this.userName.getText();
         User userFromDB = new User();
         UserTable userTable = UserTable.getInstance();
@@ -58,9 +58,9 @@ public class ControllerLogin {
         this.userName.textProperty().addListener((observable, oldValue, newValue) -> {
             error_lbl.setText(" ");
         });
-        this.password.textProperty().addListener((observable, oldValue, newValue) -> {
+/*        this.password.textProperty().addListener((observable, oldValue, newValue) -> {
             error_lbl.setText(" ");
-        });
+        });*/
 
     }
 
