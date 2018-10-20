@@ -21,3 +21,10 @@ public class Main extends Application {
         launch(args);
     }
 }
+//TODO - learn how to work with java log and add it
+
+//TODO - add check critirea to create new user, checking user doesnt exist already, and all the information is valid
+
+//TODO - add enums to returning and calling functions and act accordingly
+
+//TODO - fix the views appearance

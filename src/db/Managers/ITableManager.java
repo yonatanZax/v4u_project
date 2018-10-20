@@ -4,14 +4,14 @@ import java.util.List;
 
 public interface ITableManager<T> {
 
-    boolean createTable();
+    DBResult createTable();
 
-    boolean InsertToTable(T object);
+    DBResult InsertToTable(T object);
 
-    boolean DeleteFromTable(String id);
+    DBResult DeleteFromTable(String id);
 
     List<T> select(String projection, String selection, String orderBy);
 
-    int updateData(String where, String set);
+    DBResult updateData(String where, String set);
 
 }
