@@ -6,8 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class ATableManager<T> implements ITableManager<T> {
 
+
+public abstract class ATableManager<T> implements ITableManager<T> {
     protected IDBManager db;
     public final String TABLE_NAME;
 
@@ -17,6 +18,7 @@ public abstract class ATableManager<T> implements ITableManager<T> {
     protected ATableManager(IDBManager db, String table_name) {
         this.db = db;
         TABLE_NAME = table_name;
+
     }
 
     protected boolean createTable(String[] parameters){
@@ -34,13 +36,39 @@ public abstract class ATableManager<T> implements ITableManager<T> {
                     worked = 1 == preparedStatement.executeUpdate();
                     preparedStatement.close();
                 }catch (SQLException e){
+                    /*
+                    errorCode(vendorCode) 19 is: name = SQLITE_CONSTRAINT_PRIMARYKEY, messeage =  A PRIMARY KEY constraint failed.
+                     */
+                    int errorCode = e.getErrorCode();
                     e.printStackTrace();
                 }finally {
+                    closeStatement(preparedStatement);
                     db.closeConnection(connection);
+
                 }
             }
         }
         return worked;
+    }
+
+    private void closeStatement(Statement statement){
+        if(statement != null) {
+            try {
+                statement.closeOnCompletion();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void closeResultSet(ResultSet rs){
+        if(rs != null ){
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
@@ -49,15 +77,13 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         List<T> list = null;
         try {
             List<Map<String,String>>  mapList = map(rs);
+            closeResultSet(rs);
+            rs = null;
             list = transformListMapToList(mapList);
         } catch (SQLException e) {
             e.printStackTrace();
         }finally {
-            try {
-                rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            closeResultSet(rs);
         }
         return list;
     }

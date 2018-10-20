@@ -40,16 +40,20 @@ public class ControllerLogin {
         UserTable userTable = UserTable.getInstance();
         String selection = UserTable.COLUMN_USERTABLE_USER_NAME + " = \"" + userName + "\"";
         List<User> userList = userTable.select(null,selection,null);
-        userFromDB = userList.get(0);
-        if(userFromDB == null ){
+        if(userList != null && userList.size() > 0) {
+            userFromDB = userList.get(0);
+            if (userFromDB == null) {
 //            errorWindow("ERROR", "Invalid Connection", "Incorrect Username or Password...");
-            error_lbl.setText("Incorrect Username or Password");
-        } else {
-            info_lbl.setText(userFromDB.toString());
-            //Stage stage = (Stage) readUser_btn.getScene().getWindow();
-            //stage.close();
+                error_lbl.setText("Incorrect Username or Password");
+            } else {
+                info_lbl.setText(userFromDB.toString());
+                //Stage stage = (Stage) readUser_btn.getScene().getWindow();
+                //stage.close();
+            }
         }
-
+        else{
+            //TODO - make it show nothing or error/window of not finding anything
+        }
 
         this.userName.textProperty().addListener((observable, oldValue, newValue) -> {
             error_lbl.setText(" ");

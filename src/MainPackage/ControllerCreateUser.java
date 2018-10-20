@@ -20,6 +20,7 @@ public class ControllerCreateUser {
 
     public Button save_btn;
 
+
     public void saveInfo(ActionEvent event) {
         User newUser = new User();
         newUser.setUserName(this.userName_textInput.getText());
@@ -27,6 +28,7 @@ public class ControllerCreateUser {
         newUser.setFirstName(this.firstName_textInput.getText());
         newUser.setLastName(this.lastName_textInput.getText());
         newUser.setCity(this.city_textInput.getText());
+        //TODO - add to GUI drop down  tables of dates so the user could pick the date easily
         newUser.setBirthDate(20180505);
 
         UserTable userTable = UserTable.getInstance();

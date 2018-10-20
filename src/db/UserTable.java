@@ -2,6 +2,7 @@ package db;
 
 import db.Managers.ATableManager;
 import db.Managers.DBManager;
+import sun.rmi.runtime.Log;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,6 +23,7 @@ public class UserTable extends ATableManager<User> {
     public static final String COLUMN_USERTABLE_BIRTHDAY = "birthday";
 
 
+
     public static UserTable getInstance() {
         if(ourInstance == null) {
             ourInstance = new UserTable();
@@ -31,10 +33,12 @@ public class UserTable extends ATableManager<User> {
 
     private UserTable() {
         super(DBManager.getInstance(),"userInfo");
+        createTable();
     }
 
     @Override
     protected List<User> transformListMapToList(List<Map<String, String>> listMap) {
+
         List<User> list = new ArrayList<>(listMap.size());
         for(Map<String,String> map : listMap){
             User user = new User();
@@ -79,7 +83,7 @@ public class UserTable extends ATableManager<User> {
 
     @Override
     protected PreparedStatement getInsertPreparedStatement(User object, Connection connection) {
-        String sql = "INSERT OR IGNORE INTO " + TABLE_NAME + "(" + COLUMN_USERTABLE_USER_NAME + "," + COLUMN_USERTABLE_PASS + "," + COLUMN_USERTABLE_FIRST_NAME + "," + COLUMN_USERTABLE_LAST_NAME + "," + COLUMN_USERTABLE_CITY + "," + COLUMN_USERTABLE_BIRTHDAY + ") VALUES(?,?,?,?,?,?)";
+        String sql = "INSERT INTO " + TABLE_NAME + "(" + COLUMN_USERTABLE_USER_NAME + "," + COLUMN_USERTABLE_PASS + "," + COLUMN_USERTABLE_FIRST_NAME + "," + COLUMN_USERTABLE_LAST_NAME + "," + COLUMN_USERTABLE_CITY + "," + COLUMN_USERTABLE_BIRTHDAY + ") VALUES(?,?,?,?,?,?)";
         PreparedStatement pstmt = null;
         if (connection != null) {
             try {
