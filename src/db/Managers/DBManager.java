@@ -39,6 +39,7 @@ public class DBManager implements IDBManager {
         return result;
     }
 
+
     @Override
     public DBResult createTable(String tableName, String[] tableParameters) {
         DBResult result = DBResult.NONE;
@@ -53,7 +54,7 @@ public class DBManager implements IDBManager {
                 result = DBResult.TABLE_CREATED;
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
-                result = DBResult.TABLE_NOT_CREATED;
+                result = DBResult.ERROR;
             } finally {
                 if (closeConnection(conn) != DBResult.CONNECTION_CLOSED)
                     result = DBResult.ERROR;
@@ -99,5 +100,10 @@ public class DBManager implements IDBManager {
             result = DBResult.ERROR;
         }
         return result;
+    }
+
+
+    public static void main(String[] args) {
+
     }
 }

@@ -8,8 +8,8 @@ public enum DBResult{
     CONNECTION_CLOSED,
     // Creations:
     DATABASE_CREATED,
+    DATABASE_DELETED,
     TABLE_CREATED,
-    TABLE_NOT_CREATED,
     // InsertToDB:
     ADDED,
     ALREADY_EXIST,
