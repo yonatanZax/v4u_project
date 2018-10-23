@@ -14,8 +14,10 @@ import java.util.Map;
 
 public class UserTable extends ATableManager<User> {
 
+    // Singleton
     private static UserTable ourInstance;
 
+    // The fields of a user in the DB
     public static final String COLUMN_USERTABLE_USER_NAME = "userName";
     public static final String COLUMN_USERTABLE_PASS = "password";
     public static final String COLUMN_USERTABLE_FIRST_NAME = "firstName";
@@ -24,7 +26,7 @@ public class UserTable extends ATableManager<User> {
     public static final String COLUMN_USERTABLE_BIRTHDAY = "birthday";
 
 
-
+    // Singleton
     public static UserTable getInstance() {
         if(ourInstance == null) {
             ourInstance = new UserTable();
@@ -32,12 +34,15 @@ public class UserTable extends ATableManager<User> {
         return ourInstance;
     }
 
+    // If ourInstance is null, instantiate a new table in the DB
     private UserTable() {
         super(DBManager.getInstance(),"userInfo");
+        // Creates new table named "userInfo"
         createTable();
     }
 
     @Override
+    // Todo - comment here
     protected List<User> transformListMapToList(List<Map<String, String>> listMap) {
 
         List<User> list = new ArrayList<>(listMap.size());
@@ -82,7 +87,9 @@ public class UserTable extends ATableManager<User> {
 
 
 
+
     @Override
+    // Todo - comment here
     protected PreparedStatement getInsertPreparedStatement(User object, Connection connection) {
         String sql = "INSERT INTO " + TABLE_NAME + "(" + COLUMN_USERTABLE_USER_NAME + "," + COLUMN_USERTABLE_PASS + "," + COLUMN_USERTABLE_FIRST_NAME + "," + COLUMN_USERTABLE_LAST_NAME + "," + COLUMN_USERTABLE_CITY + "," + COLUMN_USERTABLE_BIRTHDAY + ") VALUES(?,?,?,?,?,?)";
         PreparedStatement pstmt = null;
@@ -109,6 +116,10 @@ public class UserTable extends ATableManager<User> {
     }
 
     @Override
+    /**
+     * Creates an array of fields to the new DB
+     * Sends the array to the father class
+     */
     public DBResult createTable() {
         String[] parameters = {COLUMN_USERTABLE_USER_NAME + " text PRIMARY KEY"
                 , COLUMN_USERTABLE_PASS + " text NOT NULL"
@@ -117,6 +128,28 @@ public class UserTable extends ATableManager<User> {
                 , COLUMN_USERTABLE_CITY + " text NOT NULL"
                 , COLUMN_USERTABLE_BIRTHDAY + " integer NOT NULL" /*CHECK DATE PARAMETER*/};
         return super.createTable(parameters);
+    }
+
+
+    /**
+     *
+     * @param listOfUsername = An array of userName
+     * @return
+     */
+    public List<User> readUsers(String[] listOfUsername) {
+        // ToDo (DONE) - change selection for an array of users
+
+        // Generates the selection part
+        // Example:     SELECT * FROM userInfo WHERE userName IN ("user1","user2")
+        String selection = UserTable.COLUMN_USERTABLE_USER_NAME + " IN (";
+        for (int i=0 ; i < listOfUsername.length - 1; i++) {
+            selection += "\"" + listOfUsername[i] + "\",";
+        }
+        selection += "\"" + listOfUsername[listOfUsername.length-1] + "\")";
+
+        // Get the list of users from the database
+        List<User> userList = select(null,selection,null);
+        return userList;
     }
 
     @Override

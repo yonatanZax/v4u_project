@@ -32,9 +32,15 @@ public class ControllerCreateUser implements Initializable {
     public static final String result_lblTitle = "Info from DB:\t";
 
     public Button save_btn;
+    private UserTable userTable;
 
 
-
+    /**
+     * This method checks if the parameters are valid and creates a User
+     * @param values: An array with parameters to create a new user
+     * @param date: The user's birthday
+     * @return
+     */
     private User createUserIfValuesAreValid(String[] values, int date){
         User newUser = new User();
         for (String val: values) {
@@ -53,6 +59,7 @@ public class ControllerCreateUser implements Initializable {
         return newUser;
     }
 
+
     public void saveInfo(ActionEvent event) {
         this.result_lbl.setText(result_lblTitle);
 
@@ -65,16 +72,16 @@ public class ControllerCreateUser implements Initializable {
         String city = this.city_textInput.getText();
         String[] values = {userName,password,firstName,lastName,city};
 
-        //int birthDay = 20180505;
         int date = 0;
         if (create_datePicker.getValue() != null){
+            // TODO (DONE) - get date as int
+            // Generates an int from the datePicker
             date = this.convertDateStringToInt(create_datePicker.getValue().toString());
         }
-        // TODO - get date as int
+        // Creates a new user if the values a valid
         User newUser = createUserIfValuesAreValid(values,date);
         if (newUser != null){
-
-            UserTable userTable = UserTable.getInstance();
+            // Try to add the new user to the database
             result = userTable.InsertToTable(newUser);
 
             if (result == DBResult.ADDED){
@@ -90,6 +97,11 @@ public class ControllerCreateUser implements Initializable {
 
     }
 
+    /**
+     * Generates a dateAsInt from a string
+     * @param str: 01-01-2018
+     * @return
+     */
     private int convertDateStringToInt(String str) {
         if(str != null && !str.equals("")){
             String[] tempArr = str.split("-");
@@ -101,6 +113,7 @@ public class ControllerCreateUser implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        userTable = UserTable.getInstance();
         create_datePicker.setDayCellFactory(create_datePicker-> new DateCell(){
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);

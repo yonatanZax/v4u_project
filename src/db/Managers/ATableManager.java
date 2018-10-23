@@ -78,8 +78,9 @@ public abstract class ATableManager<T> implements ITableManager<T> {
     }
 
 
-
+    // Todo - comment here
     private List<T> getDataList(ResultSet rs){
+
         List<T> list = null;
         try {
             List<Map<String,String>>  mapList = map(rs);
@@ -88,12 +89,14 @@ public abstract class ATableManager<T> implements ITableManager<T> {
             list = transformListMapToList(mapList);
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }finally {
             closeResultSet(rs);
         }
         return list;
     }
 
+    // Todo - comment here
     private static List<Map<String, String>> map(ResultSet rs) throws SQLException {
         List<Map<String, String>> results = new ArrayList<Map<String, String>>();
         if(rs != null) {
@@ -119,6 +122,7 @@ public abstract class ATableManager<T> implements ITableManager<T> {
     }
 
     @Override
+    // Todo - comment here
     public List<T> select(String projection, String selection, String orderBy) {
         String sqlQuery = createSQLSelect(projection, selection, orderBy);
         Connection connection = db.connect();
@@ -139,6 +143,7 @@ public abstract class ATableManager<T> implements ITableManager<T> {
     }
 
 
+    // Todo - comment here
     private String createSQLSelect(String projection, String selection, String orderBy) {
         String sqlQuery = "SELECT ";
         // set the projection, if null or empty will auto assign '*'

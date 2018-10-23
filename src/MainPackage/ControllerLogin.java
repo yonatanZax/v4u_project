@@ -4,6 +4,7 @@ import db.User;
 import db.UserTable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -12,16 +13,18 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
 
-
-public class ControllerLogin{
-    public TextField userName;
+public class ControllerLogin implements Initializable{
+    public TextField textField;
     public Button readUser_btn;
     public Label error_lbl;
     public Label info_lbl;
     public static final String info_lblTitle = "Info from DB:\n";
+    private UserTable userTable;
 
 
     private void errorWindow(String title, String header, String content){
@@ -33,35 +36,40 @@ public class ControllerLogin{
     }
 
 
-
-
-
-
+    /**
+     * This method is called when the "Read" button is clicked
+     * The textField is split to an array of userName and sent to the UserModel
+     * It receives back a list of users, and prints it on the screen
+     * @param actionEvent
+     */
     public void readUser(ActionEvent actionEvent) {
-        info_lbl.setText(info_lblTitle);
-//        String password = this.password.getText();
-        String userName = this.userName.getText();
-        User userFromDB = new User();
-        UserTable userTable = UserTable.getInstance();
-        String selection = UserTable.COLUMN_USERTABLE_USER_NAME + " = \"" + userName + "\"";
-        List<User> userList = userTable.select(null,selection,null);
-        if(userList != null && userList.size() > 0) {
-            userFromDB = userList.get(0);
-            if (userFromDB == null) {
-//            errorWindow("ERROR", "Invalid Connection", "Incorrect Username or Password...");
-                error_lbl.setText("Incorrect Username or Password");
-            } else {
-                info_lbl.setText(info_lblTitle + userFromDB.toString());
-                //Stage stage = (Stage) readUser_btn.getScene().getWindow();
-                //stage.close();
+        // The user's input
+        String list = this.textField.getText();
+        // Check that input is not a mistake by the user
+        if (list == "" || list == " ")
+            return;
+        // An array of userName
+        String[] listOfUserName = list.split(",");
+        // Users from the db, only if the user exists.
+        List<User> usersFromDB = userTable.readUsers(listOfUserName);
+
+        if (usersFromDB == null) {
+            // Null returns if an error occurs
+            error_lbl.setText("Incorrect Username or Password");
+        }else if (usersFromDB.size() == 0){
+            // Empty list means that not even one of the list was in the db
+            info_lbl.setText(info_lblTitle + list +" is/are not stored in DB..");
+        }else {
+            // Generate the list of users as String to print
+            String textForLable = info_lblTitle;
+            for (User user:usersFromDB) {
+                textForLable += "\n" + user.toString();
             }
-        }
-        else{
-            info_lbl.setText(info_lblTitle + userName +" is not stored in DB..");
-            //TODO - make it show nothing or error/window of not finding anything
+            info_lbl.setText(textForLable);
         }
 
-        this.userName.textProperty().addListener((observable, oldValue, newValue) -> {
+
+        this.textField.textProperty().addListener((observable, oldValue, newValue) -> {
             error_lbl.setText(" ");
         });
 /*        this.password.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -70,16 +78,21 @@ public class ControllerLogin{
 
     }
 
+
+    /**
+     * Creates a new window with a form to add a new user to the DB
+     * @param event
+     * @throws Exception
+     */
     public void createUser(ActionEvent event) throws Exception{
         this.info_lbl.setText(info_lblTitle);
         Stage createStage = new Stage();
-        createStage.setTitle("Create user");
+        createStage.setTitle("Create a new user");
         FXMLLoader fxmlLoader = new FXMLLoader();
         Parent root = fxmlLoader.load(getClass().getResource("createUser_view.fxml").openStream());
         Scene scene = new Scene(root,400,300);
         createStage.setScene(scene);
         createStage.show();
-
     }
 
 
@@ -92,4 +105,9 @@ public class ControllerLogin{
     }
 
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // Singleton
+        userTable = UserTable.getInstance();
+    }
 }
