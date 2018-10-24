@@ -116,14 +116,15 @@ public class ControllerLogin implements Initializable{
 
 
     public void updateUser(ActionEvent event) throws Exception{
+        ControllerCreateUser.setUserForUpdate(this.userName.getText());
         this.info_lbl.setText(info_lblTitle);
-        Stage createStage = new Stage();
-        createStage.setTitle("Update user");
+        Stage updateStage = new Stage();
+        updateStage.setTitle("Update user");
         FXMLLoader fxmlLoader = new FXMLLoader();
         Parent root = fxmlLoader.load(getClass().getResource("createUser_view.fxml").openStream());
         Scene scene = new Scene(root,400,300);
-        createStage.setScene(scene);
-        createStage.show();
+        updateStage.setScene(scene);
+        updateStage.show();
     }
 
 

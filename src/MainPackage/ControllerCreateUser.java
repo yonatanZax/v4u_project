@@ -3,6 +3,7 @@ package MainPackage;
 import db.Managers.DBResult;
 import db.User;
 import db.UserTable;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -38,6 +39,16 @@ public class ControllerCreateUser implements Initializable {
 
     public Button save_btn;
     private UserTable userTable;
+    private User updatedUser = null;
+    private static String [] updateUserName = null;
+
+    public static void setUserForUpdate(String userName) {
+        updateUserName = new String[]{userName};
+    }
+
+    public void setUpdatedUser(){
+        updatedUser = userTable.readUsers(updateUserName).get(0);
+    }
 
 
     /**
@@ -70,11 +81,11 @@ public class ControllerCreateUser implements Initializable {
 
         DBResult result = DBResult.NONE;
 
-        String userName = this.userName_textInput.getText();
-        String password = this.password_textInput.getText();
-        String firstName = this.firstName_textInput.getText();
-        String lastName = this.lastName_textInput.getText();
-        String city = this.city_textInput.getText();
+        String userName = getTextBoxValue(this.userName_textInput);
+        String password = getTextBoxValue(this.password_textInput);
+        String firstName = getTextBoxValue(this.firstName_textInput);
+        String lastName = getTextBoxValue(this.lastName_textInput);
+        String city = getTextBoxValue(this.city_textInput);
         String[] values = {userName,password,firstName,lastName,city};
 
         int date = 0;
@@ -102,6 +113,12 @@ public class ControllerCreateUser implements Initializable {
 
     }
 
+    private String getTextBoxValue(TextField textField) {
+        if (textField.getText().equals("") && !textField.getPromptText().equals(""))
+                return textField.getPromptText();
+        return textField.getText();
+    }
+
     /**
      * Generates a dateAsInt from a string
      * @param str: 01-01-2018
@@ -125,9 +142,19 @@ public class ControllerCreateUser implements Initializable {
                 LocalDate today = LocalDate.now();
                 
                 setDisable(empty || date.compareTo(today) > 0 );
+
+
             }
         });
-
+        if (updateUserName!=null){
+            setUpdatedUser();
+            userName_textInput.setPromptText(updatedUser.getUserName());
+            password_textInput.setPromptText(updatedUser.getPassword());
+            firstName_textInput.setPromptText(updatedUser.getFirstName());
+            lastName_textInput.setPromptText(updatedUser.getLastName());
+            city_textInput.setPromptText(updatedUser.getCity());
+            create_datePicker.setPromptText(""+updatedUser.getBirthDate());
+        }
     }
 
 
