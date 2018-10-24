@@ -26,7 +26,7 @@
                <HBox.margin>
                   <Insets right="10.0" />
                </HBox.margin></Label>
-            <TextField fx:id="textField">
+            <TextField fx:id="userName">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>

@@ -16,6 +16,7 @@ public enum DBResult{
     // UpdateToDB:
     UPDATED,
     // DeleteFromDB:
-    DELETED
+    DELETED,
+    NOTHING_TO_DELETE
 
 }

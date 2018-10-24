@@ -1,5 +1,6 @@
 package MainPackage;
 
+import db.Managers.DBResult;
 import db.User;
 import db.UserTable;
 import javafx.event.ActionEvent;
@@ -11,15 +12,21 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/*
+I THINK WE NEED TO CALL THIS CLASS: ControllerCRUD
+ */
+
+
 
 public class ControllerLogin implements Initializable{
-    public TextField textField;
+    public TextField userName;
     public Button readUser_btn;
     public Label error_lbl;
     public Label info_lbl;
@@ -36,6 +43,18 @@ public class ControllerLogin implements Initializable{
     }
 
 
+
+    public void deleteUser(ActionEvent event) {
+//        info_lbl.setText(info_lblTitle);
+        String id = this.userName.getText();
+        DBResult result = UserTable.getInstance().DeleteFromTable(id);
+        if(result == DBResult.NOTHING_TO_DELETE){
+            info_lbl.setText(info_lblTitle + "User " + id + " is not in the DB");
+        } else if(result == DBResult.DELETED){
+            info_lbl.setText(info_lblTitle + "User " + id + " Deleted");
+        }
+    }
+
     /**
      * This method is called when the "Read" button is clicked
      * The textField is split to an array of userName and sent to the UserModel
@@ -44,7 +63,7 @@ public class ControllerLogin implements Initializable{
      */
     public void readUser(ActionEvent actionEvent) {
         // The user's input
-        String list = this.textField.getText();
+        String list = this.userName.getText();
         // Check that input is not a mistake by the user
         if (list == "" || list == " ")
             return;
@@ -69,7 +88,7 @@ public class ControllerLogin implements Initializable{
         }
 
 
-        this.textField.textProperty().addListener((observable, oldValue, newValue) -> {
+        this.userName.textProperty().addListener((observable, oldValue, newValue) -> {
             error_lbl.setText(" ");
         });
 /*        this.password.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -97,12 +116,16 @@ public class ControllerLogin implements Initializable{
 
 
     public void updateUser(ActionEvent event) throws Exception{
-
+        this.info_lbl.setText(info_lblTitle);
+        Stage createStage = new Stage();
+        createStage.setTitle("Update user");
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        Parent root = fxmlLoader.load(getClass().getResource("createUser_view.fxml").openStream());
+        Scene scene = new Scene(root,400,300);
+        createStage.setScene(scene);
+        createStage.show();
     }
 
-    public void deleteUser(ActionEvent event) {
-
-    }
 
 
     @Override

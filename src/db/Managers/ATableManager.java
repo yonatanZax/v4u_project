@@ -12,8 +12,11 @@ public abstract class ATableManager<T> implements ITableManager<T> {
     protected IDBManager db;
     public final String TABLE_NAME;
 
-    protected abstract List<T> transformListMapToList(List<Map<String,String>> listMap);
+    protected abstract List<T> transformListMapToList(List<Map<String, String>> listMap);
+
     protected abstract PreparedStatement getInsertPreparedStatement(T object, Connection connection);
+
+    protected abstract PreparedStatement getDeletePreparedStatement(String id, Connection connection);
 
     protected ATableManager(IDBManager db, String table_name) {
         this.db = db;
@@ -57,8 +60,35 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return result;
     }
 
-    private void closeStatement(Statement statement){
-        if(statement != null) {
+
+    //TODO - CHANGE THE INPUT FROM STRING TO --> SELECTION, PROJECTION "FOR MORE GENERIC APPROACH"
+    public DBResult DeleteFromTable(String id) {
+        DBResult result = DBResult.NONE;
+        Connection connection = db.connect();
+        if (connection != null) {
+            PreparedStatement preparedStatement = getDeletePreparedStatement(id, connection);
+            if (preparedStatement != null) {
+                try {
+                    if (1 == preparedStatement.executeUpdate())
+                        result = DBResult.DELETED;
+                    else {
+                        result = DBResult.NOTHING_TO_DELETE;
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    result = DBResult.ERROR;
+                } finally {
+                    closeStatement(preparedStatement);
+                    if (db.closeConnection(connection) != DBResult.CONNECTION_CLOSED)
+                        result = DBResult.ERROR;
+                }
+            }
+        }
+        return result;
+    }
+
+    private void closeStatement(Statement statement) {
+        if (statement != null) {
             try {
                 statement.closeOnCompletion();
             } catch (SQLException e) {

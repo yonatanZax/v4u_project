@@ -19,6 +19,11 @@ import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
+/*
+THIS CLASS NEED TO BE CALLED "ControllerUserForm"
+and will do the update and the create
+ */
+
 public class ControllerCreateUser implements Initializable {
 
     public TextField userName_textInput;
@@ -118,7 +123,7 @@ public class ControllerCreateUser implements Initializable {
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
                 LocalDate today = LocalDate.now();
-
+                
                 setDisable(empty || date.compareTo(today) > 0 );
             }
         });

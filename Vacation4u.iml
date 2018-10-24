@@ -8,10 +8,11 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" name="JavaFX" level="project" />
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://C:/sqlite/sqlite-jdbc-3.23.1.jar!/" />
+          <root url="jar://C:/Program Files/Java/jdbc_sqlite/sqlite-jdbc-3.23.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

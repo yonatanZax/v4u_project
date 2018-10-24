@@ -115,6 +115,28 @@ public class UserTable extends ATableManager<User> {
         return null;
     }
 
+
+    @Override
+    protected PreparedStatement getDeletePreparedStatement(String id, Connection connection){
+        String sql = "DELETE FROM "+ TABLE_NAME + " WHERE " +  COLUMN_USERTABLE_USER_NAME + " =  ?" ;
+        PreparedStatement pstmt;
+        if (connection != null) {
+            try {
+                pstmt = connection.prepareStatement(sql);
+                pstmt.setString(1, id);
+                return pstmt;
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+                try {
+                    connection.rollback();
+                } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        }
+        return null;
+    }
+
     @Override
     /**
      * Creates an array of fields to the new DB
