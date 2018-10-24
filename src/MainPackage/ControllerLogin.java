@@ -116,6 +116,10 @@ public class ControllerLogin implements Initializable{
 
 
     public void updateUser(ActionEvent event) throws Exception{
+        if(userName.getText().equals("")) {
+            info_lbl.setText(info_lblTitle + "Please Enter A Valid User Name");
+            return;
+        }
         ControllerCreateUser.setUserForUpdate(this.userName.getText());
         this.info_lbl.setText(info_lblTitle);
         Stage updateStage = new Stage();
@@ -133,5 +137,6 @@ public class ControllerLogin implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
         // Singleton
         userTable = UserTable.getInstance();
+
     }
 }

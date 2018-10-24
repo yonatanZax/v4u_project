@@ -28,7 +28,7 @@ public class UserTable extends ATableManager<User> {
 
     // Singleton
     public static UserTable getInstance() {
-        if(ourInstance == null) {
+        if (ourInstance == null) {
             ourInstance = new UserTable();
         }
         return ourInstance;
@@ -36,7 +36,7 @@ public class UserTable extends ATableManager<User> {
 
     // If ourInstance is null, instantiate a new table in the DB
     private UserTable() {
-        super(DBManager.getInstance(),"userInfo");
+        super(DBManager.getInstance(), "userInfo");
         // Creates new table named "userInfo"
         createTable();
     }
@@ -46,32 +46,32 @@ public class UserTable extends ATableManager<User> {
     protected List<User> transformListMapToList(List<Map<String, String>> listMap) {
 
         List<User> list = new ArrayList<>(listMap.size());
-        for(Map<String,String> map : listMap){
+        for (Map<String, String> map : listMap) {
             User user = new User();
-            for(Map.Entry<String,String> entry : map.entrySet()){
+            for (Map.Entry<String, String> entry : map.entrySet()) {
                 String key = entry.getKey();
-                switch (key){
+                switch (key) {
                     case COLUMN_USERTABLE_BIRTHDAY:
                         String dateString = entry.getValue();
                         int dateAsInt = Integer.parseInt(dateString);
                         user.setBirthDate(dateAsInt);
                         break;
                     case COLUMN_USERTABLE_CITY:
-                        user.setCity( entry.getValue());
+                        user.setCity(entry.getValue());
                         break;
 
                     case COLUMN_USERTABLE_FIRST_NAME:
-                        user.setFirstName( entry.getValue());
+                        user.setFirstName(entry.getValue());
                         break;
                     case COLUMN_USERTABLE_LAST_NAME:
-                        user.setLastName( entry.getValue());
+                        user.setLastName(entry.getValue());
 
                         break;
                     case COLUMN_USERTABLE_USER_NAME:
-                        user.setUserName( entry.getValue());
+                        user.setUserName(entry.getValue());
                         break;
                     case COLUMN_USERTABLE_PASS:
-                        user.setPassword( entry.getValue());
+                        user.setPassword(entry.getValue());
                         //TODO (Keep for Part1) - delete this, we don't want to return password never
 
                         break;
@@ -82,10 +82,6 @@ public class UserTable extends ATableManager<User> {
         }
         return list;
     }
-
-
-
-
 
 
     @Override
@@ -115,10 +111,43 @@ public class UserTable extends ATableManager<User> {
         return null;
     }
 
+    @Override
+    protected PreparedStatement getUpdatePreparedStatement(User user, Connection connection) {
+        String sql = "UPDATE " + TABLE_NAME + " SET " + COLUMN_USERTABLE_USER_NAME + " = ? , "
+                + COLUMN_USERTABLE_PASS + " = ? , "
+                + COLUMN_USERTABLE_FIRST_NAME + " = ? , "
+                + COLUMN_USERTABLE_LAST_NAME + " = ? , "
+                + COLUMN_USERTABLE_CITY + " = ? , "
+                + COLUMN_USERTABLE_BIRTHDAY + " = ?  " +
+                "Where " + COLUMN_USERTABLE_USER_NAME+ " = ?" ;
+        PreparedStatement pstmt = null;
+        if (connection != null) {
+            try {
+                pstmt = connection.prepareStatement(sql);
+                pstmt.setString(1, user.getUserName());
+                pstmt.setString(2, user.getPassword());
+                pstmt.setString(3, user.getFirstName());
+                pstmt.setString(4, user.getLastName());
+                pstmt.setString(5, user.getCity());
+                pstmt.setObject(6, user.getBirthDate());
+                pstmt.setString(7, user.getUserName());
+                return pstmt;
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+                try {
+                    connection.rollback();
+                } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        }
+        return null;
+    }
+
 
     @Override
-    protected PreparedStatement getDeletePreparedStatement(String id, Connection connection){
-        String sql = "DELETE FROM "+ TABLE_NAME + " WHERE " +  COLUMN_USERTABLE_USER_NAME + " =  ?" ;
+    protected PreparedStatement getDeletePreparedStatement(String id, Connection connection) {
+        String sql = "DELETE FROM " + TABLE_NAME + " WHERE " + COLUMN_USERTABLE_USER_NAME + " =  ?";
         PreparedStatement pstmt;
         if (connection != null) {
             try {
@@ -154,7 +183,6 @@ public class UserTable extends ATableManager<User> {
 
 
     /**
-     *
      * @param listOfUsername = An array of userName
      * @return
      */
@@ -164,13 +192,13 @@ public class UserTable extends ATableManager<User> {
         // Generates the selection part
         // Example:     SELECT * FROM userInfo WHERE userName IN ("user1","user2")
         String selection = UserTable.COLUMN_USERTABLE_USER_NAME + " IN (";
-        for (int i=0 ; i < listOfUsername.length - 1; i++) {
+        for (int i = 0; i < listOfUsername.length - 1; i++) {
             selection += "\"" + listOfUsername[i] + "\",";
         }
-        selection += "\"" + listOfUsername[listOfUsername.length-1] + "\")";
+        selection += "\"" + listOfUsername[listOfUsername.length - 1] + "\")";
 
         // Get the list of users from the database
-        List<User> userList = select(null,selection,null);
+        List<User> userList = select(null, selection, null);
         return userList;
     }
 
@@ -204,7 +232,7 @@ public class UserTable extends ATableManager<User> {
         String selection = null;
         String orderBy = null;
 
-        List<User> userList = userTable.select(projection,selection,orderBy);
+        List<User> userList = userTable.select(projection, selection, orderBy);
 
 
         System.out.println(userList);

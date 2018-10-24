@@ -93,15 +93,18 @@ public class ControllerCreateUser implements Initializable {
             // TODO (DONE) - get date as int
             // Generates an int from the datePicker
             date = this.convertDateStringToInt(create_datePicker.getValue().toString());
+        } else if ( create_datePicker.getPromptText() !=null){
+            date = Integer.parseInt(create_datePicker.getPromptText());
         }
         // Creates a new user if the values a valid
         User newUser = createUserIfValuesAreValid(values,date);
+
         if (newUser != null){
             // Try to add the new user to the database
-            result = userTable.InsertToTable(newUser);
+            result = updatedUser==null? userTable.InsertToTable(newUser): userTable.UpdateUser(newUser);
 
-            if (result == DBResult.ADDED){
-                this.result_lbl.setText(result_lblTitle + "User was added successfully");
+            if (result == DBResult.ADDED || result == DBResult.UPDATED){
+                this.result_lbl.setText(result_lblTitle + "User was "+ (updatedUser==null? "added": "updated") + " successfully");
                 Stage stage = (Stage) save_btn.getScene().getWindow();
                 stage.close();
             }else if (result == DBResult.ALREADY_EXIST) {
@@ -111,7 +114,10 @@ public class ControllerCreateUser implements Initializable {
         }else
             this.result_lbl.setText("Please fill all the fields..");
 
+        updatedUser =null;
+        updateUserName=null;
     }
+
 
     private String getTextBoxValue(TextField textField) {
         if (textField.getText().equals("") && !textField.getPromptText().equals(""))
