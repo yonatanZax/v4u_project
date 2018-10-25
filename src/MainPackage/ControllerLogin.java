@@ -1,5 +1,6 @@
 package MainPackage;
 
+import db.Managers.DBResult;
 import db.User;
 import db.UserTable;
 import javafx.event.ActionEvent;
@@ -17,6 +18,9 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/*
+I THINK WE NEED TO CALL THIS CLASS: ControllerCRUD
+ */
 
 public class ControllerLogin implements Initializable{
     public TextField textField;
@@ -101,7 +105,14 @@ public class ControllerLogin implements Initializable{
     }
 
     public void deleteUser(ActionEvent event) {
-
+//        info_lbl.setText(info_lblTitle);
+        String id = textField.getText();
+        DBResult result = UserTable.getInstance().DeleteFromTable(id);
+        if(result == DBResult.NOTHING_TO_DELETE){
+            info_lbl.setText(info_lblTitle + "User " + id + " is not in the DB");
+        } else if(result == DBResult.DELETED){
+            info_lbl.setText(info_lblTitle + "User " + id + " Deleted");
+        }
     }
 
 

@@ -1,4 +1,5 @@
 package db.Managers;
+import java.io.File;
 import java.sql.*;
 
 public class DBManager implements IDBManager {
@@ -14,13 +15,17 @@ public class DBManager implements IDBManager {
     }
 
     protected static final String DATABASE = "v4u.db";
-    protected static final String PATH_DB = "jdbc:sqlite:" + System.getProperty("user.dir") + "/db/" + DATABASE;
+    protected static final String DATABASE_FOLDER = System.getProperty("user.dir") + "/db/";
+    protected static final String PATH_DB = "jdbc:sqlite:" + DATABASE_FOLDER + DATABASE;
 
-    /**
-     * TODO - add if exists for the db
-     */
+
     private DBResult createDatabase() {
         DBResult result = DBResult.NONE;
+
+        File directory = new File(DATABASE_FOLDER);
+        if (! directory.exists()){
+            directory.mkdir();
+        }
 
         Connection connection = connect();
         if(connection != null) {
