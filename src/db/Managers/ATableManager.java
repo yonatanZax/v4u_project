@@ -15,6 +15,8 @@ public abstract class ATableManager<T> implements ITableManager<T> {
     protected abstract List<T> transformListMapToList(List<Map<String,String>> listMap);
     protected abstract PreparedStatement getInsertPreparedStatement(T object, Connection connection);
 
+    protected abstract PreparedStatement getUpdatePreparedStatement(T object, Connection connection);
+
     protected abstract PreparedStatement getDeletePreparedStatement(String id, Connection connection);
 
     protected ATableManager(IDBManager db, String table_name) {
@@ -197,4 +199,31 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return sqlQuery;
     }
 
+    public DBResult UpdateUser(T object) {
+        DBResult result = DBResult.NONE;
+        Connection connection = db.connect();
+        if(connection != null) {
+            PreparedStatement preparedStatement = getUpdatePreparedStatement(object, connection);
+            if(preparedStatement != null){
+                try{
+                    if(1 == preparedStatement.executeUpdate())
+                        result = DBResult.UPDATED;
+                }catch (SQLException e){
+                    int errorCode = e.getErrorCode();
+                    if (errorCode == 19)
+                        result = DBResult.ALREADY_EXIST;
+                    else {
+                        e.printStackTrace();
+                        result = DBResult.ERROR;
+                    }
+                }finally {
+                    closeStatement(preparedStatement);
+                    if (db.closeConnection(connection) != DBResult.CONNECTION_CLOSED)
+                        result = DBResult.ERROR;
+
+                }
+            }
+        }
+        return result;
+    }
 }

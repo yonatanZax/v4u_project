@@ -101,7 +101,19 @@ public class ControllerLogin implements Initializable{
 
 
     public void updateUser(ActionEvent event) throws Exception{
-
+        if(textField.getText().equals("")) {
+            info_lbl.setText(info_lblTitle + "Please Enter A Valid User Name");
+            return;
+        }
+        ControllerCreateUser.setUserForUpdate(this.textField.getText());
+        this.info_lbl.setText(info_lblTitle);
+        Stage updateStage = new Stage();
+        updateStage.setTitle("Update user");
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        Parent root = fxmlLoader.load(getClass().getResource("createUser_view.fxml").openStream());
+        Scene scene = new Scene(root,400,300);
+        updateStage.setScene(scene);
+        updateStage.show();
     }
 
     public void deleteUser(ActionEvent event) {

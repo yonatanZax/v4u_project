@@ -3,6 +3,7 @@ package MainPackage;
 import db.Managers.DBResult;
 import db.User;
 import db.UserTable;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -38,6 +39,16 @@ public class ControllerCreateUser implements Initializable {
 
     public Button save_btn;
     private UserTable userTable;
+    private User updatedUser = null;
+    private static String [] updateUserName = null;
+
+    public static void setUserForUpdate(String userName) {
+        updateUserName = new String[]{userName};
+    }
+
+    public void setUpdatedUser(){
+        updatedUser = userTable.readUsers(updateUserName).get(0);
+    }
 
 
     /**
@@ -70,11 +81,11 @@ public class ControllerCreateUser implements Initializable {
 
         DBResult result = DBResult.NONE;
 
-        String userName = this.userName_textInput.getText();
-        String password = this.password_textInput.getText();
-        String firstName = this.firstName_textInput.getText();
-        String lastName = this.lastName_textInput.getText();
-        String city = this.city_textInput.getText();
+        String userName = getTextBoxValue(this.userName_textInput);
+        String password = getTextBoxValue(this.password_textInput);
+        String firstName = getTextBoxValue(this.firstName_textInput);
+        String lastName = getTextBoxValue(this.lastName_textInput);
+        String city = getTextBoxValue(this.city_textInput);
         String[] values = {userName,password,firstName,lastName,city};
 
         int date = 0;
@@ -82,15 +93,18 @@ public class ControllerCreateUser implements Initializable {
             // TODO (DONE) - get date as int
             // Generates an int from the datePicker
             date = this.convertDateStringToInt(create_datePicker.getValue().toString());
+        } else if ( create_datePicker.getPromptText() !=null){
+            date = Integer.parseInt(create_datePicker.getPromptText());
         }
         // Creates a new user if the values a valid
         User newUser = createUserIfValuesAreValid(values,date);
+
         if (newUser != null){
             // Try to add the new user to the database
-            result = userTable.InsertToTable(newUser);
+            result = updatedUser==null? userTable.InsertToTable(newUser): userTable.UpdateUser(newUser);
 
-            if (result == DBResult.ADDED){
-                this.result_lbl.setText(result_lblTitle + "User was added successfully");
+            if (result == DBResult.ADDED || result == DBResult.UPDATED){
+                this.result_lbl.setText(result_lblTitle + "User was "+ (updatedUser==null? "added": "updated") + " successfully");
                 Stage stage = (Stage) save_btn.getScene().getWindow();
                 stage.close();
             }else if (result == DBResult.ALREADY_EXIST) {
@@ -100,6 +114,15 @@ public class ControllerCreateUser implements Initializable {
         }else
             this.result_lbl.setText("Please fill all the fields..");
 
+        updatedUser =null;
+        updateUserName=null;
+    }
+
+
+    private String getTextBoxValue(TextField textField) {
+        if (textField.getText().equals("") && !textField.getPromptText().equals(""))
+                return textField.getPromptText();
+        return textField.getText();
     }
 
     /**
@@ -125,9 +148,19 @@ public class ControllerCreateUser implements Initializable {
                 LocalDate today = LocalDate.now();
 
                 setDisable(empty || date.compareTo(today) > 0 );
+
+
             }
         });
-
+        if (updateUserName!=null){
+            setUpdatedUser();
+            userName_textInput.setPromptText(updatedUser.getUserName());
+            password_textInput.setPromptText(updatedUser.getPassword());
+            firstName_textInput.setPromptText(updatedUser.getFirstName());
+            lastName_textInput.setPromptText(updatedUser.getLastName());
+            city_textInput.setPromptText(updatedUser.getCity());
+            create_datePicker.setPromptText(""+updatedUser.getBirthDate());
+        }
     }
 
 

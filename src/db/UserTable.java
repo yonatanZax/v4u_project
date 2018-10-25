@@ -115,6 +115,38 @@ public class UserTable extends ATableManager<User> {
         return null;
     }
 
+    @Override
+    protected PreparedStatement getUpdatePreparedStatement(User user, Connection connection) {
+        String sql = "UPDATE " + TABLE_NAME + " SET " + COLUMN_USERTABLE_USER_NAME + " = ? , "
+                + COLUMN_USERTABLE_PASS + " = ? , "
+                + COLUMN_USERTABLE_FIRST_NAME + " = ? , "
+                + COLUMN_USERTABLE_LAST_NAME + " = ? , "
+                + COLUMN_USERTABLE_CITY + " = ? , "
+                + COLUMN_USERTABLE_BIRTHDAY + " = ?  " +
+                "Where " + COLUMN_USERTABLE_USER_NAME+ " = ?" ;
+        PreparedStatement pstmt = null;
+        if (connection != null) {
+            try {
+                pstmt = connection.prepareStatement(sql);
+                pstmt.setString(1, user.getUserName());
+                pstmt.setString(2, user.getPassword());
+                pstmt.setString(3, user.getFirstName());
+                pstmt.setString(4, user.getLastName());
+                pstmt.setString(5, user.getCity());
+                pstmt.setObject(6, user.getBirthDate());
+                pstmt.setString(7, user.getUserName());
+                return pstmt;
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+                try {
+                    connection.rollback();
+                } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        }
+        return null;
+    }
 
     protected PreparedStatement getDeletePreparedStatement(String id, Connection connection){
         String sql = "DELETE FROM "+ TABLE_NAME + " WHERE " +  COLUMN_USERTABLE_USER_NAME + " =  ?" ;
@@ -137,6 +169,10 @@ public class UserTable extends ATableManager<User> {
     }
 
     @Override
+    /**
+     * Creates an array of fields to the new DB
+     * Sends the array to the father class
+     */
     public DBResult createTable() {
         String[] parameters = {COLUMN_USERTABLE_USER_NAME + " text PRIMARY KEY"
                 , COLUMN_USERTABLE_PASS + " text NOT NULL"
