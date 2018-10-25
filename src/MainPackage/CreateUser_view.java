@@ -1,31 +1,20 @@
 package MainPackage;
 
-import db.Managers.DBResult;
 import db.User;
-import db.UserTable;
-import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
-import javafx.util.Callback;
-import javafx.util.StringConverter;
 
 import java.net.URL;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.chrono.ChronoLocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
 
 /*
 THIS CLASS NEED TO BE CALLED "ControllerUserForm"
 and will do the update and the create
  */
 
-public class ControllerCreateUser implements Initializable {
+public class CreateUser_view implements Initializable {
 
     public TextField userName_textInput;
     public TextField password_textInput;
@@ -35,51 +24,26 @@ public class ControllerCreateUser implements Initializable {
     public DatePicker create_datePicker;
 
     public Label result_lbl;
-    public static final String result_lblTitle = "Info from DB:\t";
-
+    public static final String RESULT_LBLTITLE = "Info from DB:\t";
     public Button save_btn;
-    private UserTable userTable;
     private User updatedUser = null;
     private static String [] updateUserName = null;
+    private CreateUser_controller createUser_controller;
+
 
     public static void setUserForUpdate(String userName) {
         updateUserName = new String[]{userName};
     }
 
-    public void setUpdatedUser(){
-        updatedUser = userTable.readUsers(updateUserName).get(0);
-    }
 
 
-    /**
-     * This method checks if the parameters are valid and creates a User
-     * @param values: An array with parameters to create a new user
-     * @param date: The user's birthday
-     * @return
-     */
-    private User createUserIfValuesAreValid(String[] values, int date){
-        User newUser = new User();
-        for (String val: values) {
-            if (val.equals(""))
-                return null;
-        }
-        if (date <= 0)
-            return null;
 
-        newUser.setUserName(values[0]);
-        newUser.setPassword(values[1]);
-        newUser.setFirstName(values[2]);
-        newUser.setLastName(values[3]);
-        newUser.setCity(values[4]);
-        newUser.setBirthDate(date);
-        return newUser;
-    }
 
 
     public void saveInfo(ActionEvent event) {
-        this.result_lbl.setText(result_lblTitle);
+        this.result_lbl.setText(RESULT_LBLTITLE);
 
-        DBResult result = DBResult.NONE;
+
 
         String userName = getTextBoxValue(this.userName_textInput);
         String password = getTextBoxValue(this.password_textInput);
@@ -96,23 +60,10 @@ public class ControllerCreateUser implements Initializable {
         } else if ( create_datePicker.getPromptText() !=null){
             date = Integer.parseInt(create_datePicker.getPromptText());
         }
-        // Creates a new user if the values a valid
-        User newUser = createUserIfValuesAreValid(values,date);
 
-        if (newUser != null){
-            // Try to add the new user to the database
-            result = updatedUser==null? userTable.InsertToTable(newUser): userTable.UpdateUser(newUser);
+        String added = createUser_controller.addUserToDB(values,date);
 
-            if (result == DBResult.ADDED || result == DBResult.UPDATED){
-                this.result_lbl.setText(result_lblTitle + "User was "+ (updatedUser==null? "added": "updated") + " successfully");
-                Stage stage = (Stage) save_btn.getScene().getWindow();
-                stage.close();
-            }else if (result == DBResult.ALREADY_EXIST) {
-                this.result_lbl.setText(result_lblTitle + "User already exists");
-            }else if (result == DBResult.ERROR)
-                this.result_lbl.setText(result_lblTitle + "Error while inserting new user");
-        }else
-            this.result_lbl.setText("Please fill all the fields..");
+        result_lbl.setText(RESULT_LBLTITLE + added);
 
         updatedUser =null;
         updateUserName=null;
@@ -141,7 +92,6 @@ public class ControllerCreateUser implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        userTable = UserTable.getInstance();
         create_datePicker.setDayCellFactory(create_datePicker-> new DateCell(){
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
@@ -153,7 +103,6 @@ public class ControllerCreateUser implements Initializable {
             }
         });
         if (updateUserName!=null){
-            setUpdatedUser();
             userName_textInput.setPromptText(updatedUser.getUserName());
             password_textInput.setPromptText(updatedUser.getPassword());
             firstName_textInput.setPromptText(updatedUser.getFirstName());

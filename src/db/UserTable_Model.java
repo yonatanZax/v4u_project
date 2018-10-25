@@ -3,7 +3,6 @@ package db;
 import db.Managers.ATableManager;
 import db.Managers.DBManager;
 import db.Managers.DBResult;
-import sun.rmi.runtime.Log;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,10 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class UserTable extends ATableManager<User> {
+public class UserTable_Model extends ATableManager<User> {
 
     // Singleton
-    private static UserTable ourInstance;
+    private static UserTable_Model ourInstance;
 
     // The fields of a user in the DB
     public static final String COLUMN_USERTABLE_USER_NAME = "userName";
@@ -27,15 +26,15 @@ public class UserTable extends ATableManager<User> {
 
 
     // Singleton
-    public static UserTable getInstance() {
+    public static UserTable_Model getInstance() {
         if(ourInstance == null) {
-            ourInstance = new UserTable();
+            ourInstance = new UserTable_Model();
         }
         return ourInstance;
     }
 
     // If ourInstance is null, instantiate a new table in the DB
-    private UserTable() {
+    private UserTable_Model() {
         super(DBManager.getInstance(),"userInfo");
         // Creates new table named "userInfo"
         createTable();
@@ -194,7 +193,7 @@ public class UserTable extends ATableManager<User> {
 
         // Generates the selection part
         // Example:     SELECT * FROM userInfo WHERE userName IN ("user1","user2")
-        String selection = UserTable.COLUMN_USERTABLE_USER_NAME + " IN (";
+        String selection = UserTable_Model.COLUMN_USERTABLE_USER_NAME + " IN (";
         for (int i=0 ; i < listOfUsername.length - 1; i++) {
             selection += "\"" + listOfUsername[i] + "\",";
         }
@@ -215,7 +214,7 @@ public class UserTable extends ATableManager<User> {
 
 
     public static void main(String[] args) {
-        UserTable userTable = getInstance();
+        UserTable_Model userTable = getInstance();
         userTable.createTable();
         User user = new User();
         user.setUserName("USERNAME1");

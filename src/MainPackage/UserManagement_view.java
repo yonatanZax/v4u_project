@@ -1,8 +1,5 @@
 package MainPackage;
 
-import db.Managers.DBResult;
-import db.User;
-import db.UserTable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,21 +12,21 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 /*
 I THINK WE NEED TO CALL THIS CLASS: ControllerCRUD
  */
 
-public class ControllerLogin implements Initializable{
+public class UserManagement_view implements Initializable{
     public TextField textField;
     public Button readUser_btn;
     public Label error_lbl;
     public Label info_lbl;
-    public static final String info_lblTitle = "Info from DB:\n";
-    private UserTable userTable;
+    public static final String INFO_LBL_TITLE = "Info from DB:\n";
 
+    // Todo - change this
+    public UserManagement_controller userManagement_controller;
 
     private void errorWindow(String title, String header, String content){
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -54,23 +51,16 @@ public class ControllerLogin implements Initializable{
             return;
         // An array of userName
         String[] listOfUserName = list.split(",");
-        // Users from the db, only if the user exists.
-        List<User> usersFromDB = userTable.readUsers(listOfUserName);
-
-        if (usersFromDB == null) {
+        String[] listOfUsers = userManagement_controller.readUsers(listOfUserName);
+        if (listOfUsers == null) {
             // Null returns if an error occurs
             error_lbl.setText("Incorrect Username or Password");
-        }else if (usersFromDB.size() == 0){
-            // Empty list means that not even one of the list was in the db
-            info_lbl.setText(info_lblTitle + list +" is/are not stored in DB..");
-        }else {
-            // Generate the list of users as String to print
-            String textForLable = info_lblTitle;
-            for (User user:usersFromDB) {
-                textForLable += "\n" + user.toString();
-            }
-            info_lbl.setText(textForLable);
         }
+        String textForLable = INFO_LBL_TITLE;
+        for (int i = 0 ; i < listOfUsers.length; i++){
+            textForLable += listOfUsers[i];
+        }
+        info_lbl.setText(textForLable);
 
 
         this.textField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -89,7 +79,7 @@ public class ControllerLogin implements Initializable{
      * @throws Exception
      */
     public void createUser(ActionEvent event) throws Exception{
-        this.info_lbl.setText(info_lblTitle);
+        this.info_lbl.setText(INFO_LBL_TITLE);
         Stage createStage = new Stage();
         createStage.setTitle("Create a new user");
         FXMLLoader fxmlLoader = new FXMLLoader();
@@ -102,11 +92,11 @@ public class ControllerLogin implements Initializable{
 
     public void updateUser(ActionEvent event) throws Exception{
         if(textField.getText().equals("")) {
-            info_lbl.setText(info_lblTitle + "Please Enter A Valid User Name");
+            info_lbl.setText(INFO_LBL_TITLE + "Please Enter A Valid User Name");
             return;
         }
-        ControllerCreateUser.setUserForUpdate(this.textField.getText());
-        this.info_lbl.setText(info_lblTitle);
+        CreateUser_view.setUserForUpdate(this.textField.getText());
+        this.info_lbl.setText(INFO_LBL_TITLE);
         Stage updateStage = new Stage();
         updateStage.setTitle("Update user");
         FXMLLoader fxmlLoader = new FXMLLoader();
@@ -117,20 +107,13 @@ public class ControllerLogin implements Initializable{
     }
 
     public void deleteUser(ActionEvent event) {
-//        info_lbl.setText(info_lblTitle);
-        String id = textField.getText();
-        DBResult result = UserTable.getInstance().DeleteFromTable(id);
-        if(result == DBResult.NOTHING_TO_DELETE){
-            info_lbl.setText(info_lblTitle + "User " + id + " is not in the DB");
-        } else if(result == DBResult.DELETED){
-            info_lbl.setText(info_lblTitle + "User " + id + " Deleted");
-        }
+        String userId = textField.getText();
+        String deleted = userManagement_controller.deleteUser(userId);
+        info_lbl.setText(INFO_LBL_TITLE + deleted);
     }
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Singleton
-        userTable = UserTable.getInstance();
     }
 }
