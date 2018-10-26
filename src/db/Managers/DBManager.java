@@ -16,48 +16,48 @@ public class DBManager implements IDBManager {
     protected static final String DATABASE = "v4u.db";
     protected static final String PATH_DB = "jdbc:sqlite:" + System.getProperty("user.dir") + "/db/" + DATABASE;
 
-    /**
-     * TODO - add if exists for the db
-     * Connect to a MainPackage database
-     * currently works only with 'DatabaseManager.DATABASE'
-     */
-    private boolean createDatabase() {
+
+    private DBResult createDatabase() {
+        DBResult result = DBResult.NONE;
 
         Connection connection = connect();
-        boolean worked = false;
         if(connection != null) {
             try {
                 DatabaseMetaData meta = connection.getMetaData();
-                worked =  true;
+                result = DBResult.DATABASE_CREATED;
 
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
+                result = DBResult.ERROR;
             }finally {
-                closeConnection(connection);
+                if (closeConnection(connection) != DBResult.CONNECTION_CLOSED)
+                    result = DBResult.ERROR;
             }
         }
-        return worked;
+        return result;
     }
 
     @Override
-    public boolean createTable(String tableName, String[] tableParameters) {
+    public DBResult createTable(String tableName, String[] tableParameters) {
+        DBResult result = DBResult.NONE;
         String sql = getCreateTableSQLSting(tableName,tableParameters);
         Connection conn = connect();
-        boolean worked = false;
         if(conn != null && sql != null) {
             try {
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 // createUser a new table
                 stmt.execute();
                 stmt.close();
-                worked = true;
+                result = DBResult.TABLE_CREATED;
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
+                result = DBResult.ERROR;
             } finally {
-                closeConnection(conn);
+                if (closeConnection(conn) != DBResult.CONNECTION_CLOSED)
+                    result = DBResult.ERROR;
             }
         }
-        return worked;
+        return result;
     }
 
     private String getCreateTableSQLSting(String tableName, String[] tableParameters) {
@@ -87,14 +87,20 @@ public class DBManager implements IDBManager {
     }
 
     @Override
-    public boolean closeConnection(Connection connection) {
-        boolean worked = false;
+    public DBResult closeConnection(Connection connection) {
+        DBResult result = DBResult.NONE;
         try {
             connection.close();
-            worked = true;
+            result = DBResult.CONNECTION_CLOSED;
         } catch (SQLException e) {
             e.printStackTrace();
+            result = DBResult.ERROR;
         }
-        return worked;
+        return result;
+    }
+
+
+    public static void main(String[] args) {
+
     }
 }

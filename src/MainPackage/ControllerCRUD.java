@@ -15,13 +15,16 @@ import javafx.stage.Stage;
 import java.util.List;
 
 
-public class ControllerLogin {
-    public TextField password;
+public class ControllerCRUD {
+
     public TextField userName;
     public Button readUser_btn;
     public Label error_lbl;
     public Label info_lbl;
-    User user;
+    public static final String info_lblTitle = "Info from DB:\n";
+
+    private ControllerCreateUser userController = new ControllerCreateUser();
+
 
     private void errorWindow(String title, String header, String content){
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -32,8 +35,9 @@ public class ControllerLogin {
     }
 
 
-    // Todo - check password without "select" method
+
     public void readUser(ActionEvent actionEvent) {
+        info_lbl.setText(info_lblTitle);
 //        String password = this.password.getText();
         String userName = this.userName.getText();
         User userFromDB = new User();
@@ -46,12 +50,13 @@ public class ControllerLogin {
 //            errorWindow("ERROR", "Invalid Connection", "Incorrect Username or Password...");
                 error_lbl.setText("Incorrect Username or Password");
             } else {
-                info_lbl.setText(userFromDB.toString());
+                info_lbl.setText(info_lblTitle + userFromDB.toString());
                 //Stage stage = (Stage) readUser_btn.getScene().getWindow();
                 //stage.close();
             }
         }
         else{
+            info_lbl.setText(info_lblTitle + userName +" is not stored in DB..");
             //TODO - make it show nothing or error/window of not finding anything
         }
 
@@ -65,26 +70,28 @@ public class ControllerLogin {
     }
 
     public void createUser(ActionEvent event) throws Exception{
-        Stage createStage = new Stage();
+        this.info_lbl.setText(info_lblTitle);
+/*        Stage createStage = new Stage();
         createStage.setTitle("Create user");
         FXMLLoader fxmlLoader = new FXMLLoader();
-        Parent root = fxmlLoader.load(getClass().getResource("createUser_view.fxml").openStream());
-        Scene scene = new Scene(root,400,300);
-        createStage.setScene(scene);
-        createStage.show();
 
+        fxmlLoader.setController(new UserDetailsView());
+
+        Parent root = fxmlLoader.load(getClass().getResource("createUser_view.fxml").openStream());
+        Scene scene = new Scene(root,400,400);
+        createStage.setScene(scene);
+        createStage.show();*/
+
+        userController.openCreate();
     }
 
 
     public void updateUser(ActionEvent event) throws Exception{
-
-        Stage createStage = new Stage();
-        createStage.setTitle("Edit user");
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        Parent root = fxmlLoader.load(getClass().getResource("createUser_view.fxml").openStream());
-        Scene scene = new Scene(root,400,300);
-        createStage.setScene(scene);
-        createStage.show();
+        String userName = this.userName.getText();
+        List<User> list = UserTable.getInstance().select(null, UserTable.COLUMN_USERTABLE_USER_NAME + " = \"" + userName + "\"", null);
+        if(list != null && list.size() > 0 ){
+            userController.openUpdate(list.get(0));
+        }
     }
 
     public void deleteUser(ActionEvent event) {

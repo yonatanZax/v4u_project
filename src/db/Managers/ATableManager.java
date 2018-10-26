@@ -1,5 +1,7 @@
 package db.Managers;
 
+import db.UserTable;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,11 +11,16 @@ import java.util.Map;
 
 
 public abstract class ATableManager<T> implements ITableManager<T> {
+
     protected IDBManager db;
     public final String TABLE_NAME;
 
     protected abstract List<T> transformListMapToList(List<Map<String,String>> listMap);
     protected abstract PreparedStatement getInsertPreparedStatement(T object, Connection connection);
+
+    protected abstract PreparedStatement getUpdatePreparedStatement(T object, Connection connection);
+
+   // protected abstract PreparedStatement getDeletePreparedStatement(String id, Connection connection);
 
     protected ATableManager(IDBManager db, String table_name) {
         this.db = db;
@@ -21,34 +28,40 @@ public abstract class ATableManager<T> implements ITableManager<T> {
 
     }
 
-    protected boolean createTable(String[] parameters){
+    protected DBResult createTable(String[] parameters){
         return db.createTable(TABLE_NAME, parameters);
     }
 
     @Override
-    public boolean InsertToTable(T object) {
-        boolean worked = false;
+    public DBResult InsertToTable(T object) {
+        DBResult result = DBResult.NONE;
         Connection connection = db.connect();
         if(connection != null) {
             PreparedStatement preparedStatement = getInsertPreparedStatement(object, connection);
             if(preparedStatement != null){
                 try{
-                    worked = 1 == preparedStatement.executeUpdate();
-                    preparedStatement.close();
+                    if(1 == preparedStatement.executeUpdate())
+                        result = DBResult.ADDED;
                 }catch (SQLException e){
                     /*
                     errorCode(vendorCode) 19 is: name = SQLITE_CONSTRAINT_PRIMARYKEY, messeage =  A PRIMARY KEY constraint failed.
                      */
                     int errorCode = e.getErrorCode();
+                    if (errorCode == 19)
+                        result = DBResult.ALREADY_EXIST;
+                    else {
                     e.printStackTrace();
+                        result = DBResult.ERROR;
+                    }
                 }finally {
                     closeStatement(preparedStatement);
-                    db.closeConnection(connection);
+                    if (db.closeConnection(connection) != DBResult.CONNECTION_CLOSED)
+                        result = DBResult.ERROR;
 
                 }
             }
         }
-        return worked;
+        return result;
     }
 
     private void closeStatement(Statement statement){
@@ -112,9 +125,17 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return results;
     }
 
+    /**
+     *
+     * @param projection
+     * @param selection
+     * @param orderBy
+     * @return
+     */
     @Override
     public List<T> select(String projection, String selection, String orderBy) {
         String sqlQuery = createSQLSelect(projection, selection, orderBy);
+        System.out.println(sqlQuery);
         Connection connection = db.connect();
         List<T> list = null;
         if(connection != null){
@@ -143,7 +164,7 @@ public abstract class ATableManager<T> implements ITableManager<T> {
             sqlQuery += "* ";
         }
 
-        sqlQuery += " FROM " + TABLE_NAME + " ";
+        sqlQuery += "FROM " + TABLE_NAME + " ";
 
         // set the selection. where selection[i] suppose to refer selectionArgs[i]
         if(selection != null && selection.length() > 0 ){
@@ -157,4 +178,31 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return sqlQuery;
     }
 
+    public DBResult updateUser(T object) {
+        DBResult result = DBResult.NONE;
+        Connection connection = db.connect();
+        if(connection != null) {
+            PreparedStatement preparedStatement = getUpdatePreparedStatement(object, connection);
+            if(preparedStatement != null){
+                try{
+                    if(1 == preparedStatement.executeUpdate())
+                        result = DBResult.UPDATED;
+                }catch (SQLException e){
+                    int errorCode = e.getErrorCode();
+                    if (errorCode == 19)
+                        result = DBResult.ALREADY_EXIST;
+                    else {
+                        e.printStackTrace();
+                        result = DBResult.ERROR;
+                    }
+                }finally {
+                    closeStatement(preparedStatement);
+                    if (db.closeConnection(connection) != DBResult.CONNECTION_CLOSED)
+                        result = DBResult.ERROR;
+
+                }
+            }
+        }
+        return result;
+    }
 }

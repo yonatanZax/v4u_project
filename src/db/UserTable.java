@@ -2,7 +2,8 @@ package db;
 
 import db.Managers.ATableManager;
 import db.Managers.DBManager;
-import sun.rmi.runtime.Log;
+import db.Managers.DBResult;
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -66,7 +67,7 @@ public class UserTable extends ATableManager<User> {
                         break;
                     case COLUMN_USERTABLE_PASS:
                         user.setPassword( entry.getValue());
-                        //TODO - delete this, we don't want to return password never
+                        //TODO (Keep for Part1) - delete this, we don't want to return password never
 
                         break;
                 }
@@ -107,8 +108,42 @@ public class UserTable extends ATableManager<User> {
         return null;
     }
 
+
     @Override
-    public boolean createTable() {
+    protected PreparedStatement getUpdatePreparedStatement(User user, Connection connection) {
+        String sql = "UPDATE " + TABLE_NAME + " SET " + COLUMN_USERTABLE_USER_NAME + " = ? , "
+                + COLUMN_USERTABLE_PASS + " = ? , "
+                + COLUMN_USERTABLE_FIRST_NAME + " = ? , "
+                + COLUMN_USERTABLE_LAST_NAME + " = ? , "
+                + COLUMN_USERTABLE_CITY + " = ? , "
+                + COLUMN_USERTABLE_BIRTHDAY + " = ?  " +
+                "Where " + COLUMN_USERTABLE_USER_NAME+ " = ?" ;
+        PreparedStatement pstmt = null;
+        if (connection != null) {
+            try {
+                pstmt = connection.prepareStatement(sql);
+                pstmt.setString(1, user.getUserName());
+                pstmt.setString(2, user.getPassword());
+                pstmt.setString(3, user.getFirstName());
+                pstmt.setString(4, user.getLastName());
+                pstmt.setString(5, user.getCity());
+                pstmt.setObject(6, user.getBirthDate());
+                pstmt.setString(7, user.getUserName());
+                return pstmt;
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+                try {
+                    connection.rollback();
+                } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public DBResult createTable() {
         String[] parameters = {COLUMN_USERTABLE_USER_NAME + " text PRIMARY KEY"
                 , COLUMN_USERTABLE_PASS + " text NOT NULL"
                 , COLUMN_USERTABLE_FIRST_NAME + " text NOT NULL"
@@ -119,15 +154,15 @@ public class UserTable extends ATableManager<User> {
     }
 
     @Override
-    public boolean DeleteFromTable(String id) {
+    public DBResult DeleteFromTable(String id) {
         //TODO - implement
-        return false;
+        return DBResult.NONE;
     }
 
     @Override
-    public int updateData(String where, String set) {
+    public DBResult updateData(String where, String set) {
         //TODO - implement
-        return 0;
+        return DBResult.NONE;
     }
 
 
