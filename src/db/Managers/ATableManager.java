@@ -1,5 +1,7 @@
 package db.Managers;
 
+
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +11,7 @@ import java.util.Map;
 
 
 public abstract class ATableManager<T> implements ITableManager<T> {
+
     protected IDBManager db;
     public final String TABLE_NAME;
 
@@ -17,7 +20,7 @@ public abstract class ATableManager<T> implements ITableManager<T> {
 
     protected abstract PreparedStatement getUpdatePreparedStatement(T object, Connection connection);
 
-    protected abstract PreparedStatement getDeletePreparedStatement(String id, Connection connection);
+   protected abstract PreparedStatement getDeletePreparedStatement(String id, Connection connection);
 
     protected ATableManager(IDBManager db, String table_name) {
         this.db = db;
@@ -47,7 +50,7 @@ public abstract class ATableManager<T> implements ITableManager<T> {
                     if (errorCode == 19)
                         result = DBResult.ALREADY_EXIST;
                     else {
-                        e.printStackTrace();
+                    e.printStackTrace();
                         result = DBResult.ERROR;
                     }
                 }finally {
@@ -199,7 +202,7 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return sqlQuery;
     }
 
-    public DBResult UpdateUser(T object) {
+    public DBResult updateUser(T object) {
         DBResult result = DBResult.NONE;
         Connection connection = db.connect();
         if(connection != null) {

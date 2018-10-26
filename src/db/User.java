@@ -79,7 +79,7 @@ public class User {
     @Override
     public String toString() {
         String ans = "";
-        ans += "textField: " + userName + "\n";
+        ans += "userName: " + userName + "\n";
         ans += "password: " + password + "\n";
         ans += "firstName: " + firstName + "\n";
         ans += "lastName: " + lastName + "\n";

@@ -11,10 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class UserTable_Model extends ATableManager<User> {
+public class UserTable extends ATableManager<User> {
 
-    // Singleton
-    private static UserTable_Model ourInstance;
+    private static UserTable ourInstance;
 
     // The fields of a user in the DB
     public static final String COLUMN_USERTABLE_USER_NAME = "userName";
@@ -25,16 +24,15 @@ public class UserTable_Model extends ATableManager<User> {
     public static final String COLUMN_USERTABLE_BIRTHDAY = "birthday";
 
 
-    // Singleton
-    public static UserTable_Model getInstance() {
+
+    public static UserTable getInstance() {
         if(ourInstance == null) {
-            ourInstance = new UserTable_Model();
+            ourInstance = new UserTable();
         }
         return ourInstance;
     }
 
-    // If ourInstance is null, instantiate a new table in the DB
-    private UserTable_Model() {
+    private UserTable() {
         super(DBManager.getInstance(),"userInfo");
         // Creates new table named "userInfo"
         createTable();
@@ -193,7 +191,7 @@ public class UserTable_Model extends ATableManager<User> {
 
         // Generates the selection part
         // Example:     SELECT * FROM userInfo WHERE userName IN ("user1","user2")
-        String selection = UserTable_Model.COLUMN_USERTABLE_USER_NAME + " IN (";
+        String selection = UserTable.COLUMN_USERTABLE_USER_NAME + " IN (";
         for (int i=0 ; i < listOfUsername.length - 1; i++) {
             selection += "\"" + listOfUsername[i] + "\",";
         }
@@ -214,7 +212,7 @@ public class UserTable_Model extends ATableManager<User> {
 
 
     public static void main(String[] args) {
-        UserTable_Model userTable = getInstance();
+        UserTable userTable = getInstance();
         userTable.createTable();
         User user = new User();
         user.setUserName("USERNAME1");
