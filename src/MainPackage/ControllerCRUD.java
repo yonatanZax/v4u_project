@@ -12,10 +12,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 
-public class ControllerCRUD {
+public class ControllerCRUD implements Observer{
 
     public TextField userName;
     public Button readUser_btn;
@@ -23,7 +26,15 @@ public class ControllerCRUD {
     public Label info_lbl;
     public static final String info_lblTitle = "Info from DB:\n";
 
-    private ControllerCreateUser userController = new ControllerCreateUser();
+    private UserModel userModel;
+
+    public ControllerCRUD() {
+        userModel = UserModel.getInstance();
+        userModel.addObserver(this);
+    }
+
+
+
 
 
     private void errorWindow(String title, String header, String content){
@@ -38,25 +49,25 @@ public class ControllerCRUD {
 
     public void readUser(ActionEvent actionEvent) {
         info_lbl.setText(info_lblTitle);
-        String userName = this.userName.getText();
+        String textField = this.userName.getText();
+        String[] userNames = textField.split(",");
         User userFromDB = new User();
-        UserTable userTable = UserTable.getInstance();
-        String selection = UserTable.COLUMN_USERTABLE_USER_NAME + " = \"" + userName + "\"";
-        List<User> userList = userTable.select(null,selection,null);
-        if(userList != null && userList.size() > 0) {
-            userFromDB = userList.get(0);
-            if (userFromDB == null) {
-//            errorWindow("ERROR", "Invalid Connection", "Incorrect Username or Password...");
-                error_lbl.setText("Incorrect Username or Password");
-            } else {
-                info_lbl.setText(info_lblTitle + userFromDB.toString());
-                //Stage stage = (Stage) readUser_btn.getScene().getWindow();
-                //stage.close();
+
+        List<User> userList = userModel.readUsers(userNames);
+        // Todo (DONE) - change to read multiple users
+        if (userList == null) {
+            // Null returns if an error occurs
+            error_lbl.setText("Incorrect Username or Password");
+        }else if (userList.size() == 0){
+            // Empty list means that not even one of the list was in the db
+            info_lbl.setText(info_lblTitle + userList +" is/are not stored in DB..");
+        }else {
+            // Generate the list of users as String to print
+            String textForLable = info_lblTitle;
+            for (User user:userList) {
+                textForLable += "\n" + user.toString();
             }
-        }
-        else{
-            info_lbl.setText(info_lblTitle + userName +" is not stored in DB..");
-            //TODO - make it show nothing or error/window of not finding anything
+            info_lbl.setText(textForLable);
         }
 
         this.userName.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -70,19 +81,28 @@ public class ControllerCRUD {
 
     public void createUser(ActionEvent event) throws Exception{
         this.info_lbl.setText(info_lblTitle);
-        userController.openCreate();
+        ControllerCreateUser controllerCreateUser = new ControllerCreateUser(userModel,"Create");
+        controllerCreateUser.openCreate();
     }
 
 
     public void updateUser(ActionEvent event) throws Exception{
         String userName = this.userName.getText();
-        List<User> list = UserTable.getInstance().select(null, UserTable.COLUMN_USERTABLE_USER_NAME + " = \"" + userName + "\"", null);
-        if(list != null && list.size() > 0 ){
-            userController.openUpdate(list.get(0));
+        List<User> userList = userModel.getUserList(userName);
+        if(userList != null && userList.size() > 0 ){
+            ControllerCreateUser controllerCreateUser = new ControllerCreateUser(userModel,"Update");
+            controllerCreateUser.openUpdate(userList.get(0));
         }
     }
 
     public void deleteUser(ActionEvent event) {
 
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if(o == userModel){
+
+        }
     }
 }

@@ -25,11 +25,13 @@ public class UserDetailsView extends java.util.Observable implements Initializab
     public Label result_lbl;
     private static final String result_lblTitle = "Info from DB:\t";
 
+    private String status;
 
 
 
-    public UserDetailsView() {
 
+    public UserDetailsView(String status) {
+        this.status = status;
     }
 
     public void setUserName(String userName){
@@ -83,6 +85,7 @@ public class UserDetailsView extends java.util.Observable implements Initializab
 
     public void setResult_lbl(String message){
         if(message != null)
+            // Todo - need to fix, text does not change
             result_lbl.setText(result_lblTitle + message);
     }
 
@@ -99,7 +102,7 @@ public class UserDetailsView extends java.util.Observable implements Initializab
     public void saveInfo(){
         System.out.println("UserDetailsView: saveInfo");
         setChanged();
-        notifyObservers("saveInfo");
+        notifyObservers(status);
     }
 
 

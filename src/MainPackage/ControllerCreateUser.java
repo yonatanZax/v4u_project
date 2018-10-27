@@ -29,20 +29,23 @@ public class ControllerCreateUser implements Observer{
     public DatePicker create_datePicker;*/
 
     private UserDetailsView myView;
-    private String status;
+    //private String status;
     private Stage stage;
+    private UserModel userModel;
 /*    public Label result_lbl;
     public static final String result_lblTitle = "Info from DB:\t";*/
 
     /*public Button save_btn;*/
 
-    public ControllerCreateUser() {
-        this.myView = new UserDetailsView();
+    public ControllerCreateUser(UserModel userModel,String status) {
+        this.userModel = userModel;
+        this.myView = new UserDetailsView(status);
         myView.addObserver(this);
+        userModel.addObserver(this);
     }
 
     public void openCreate() throws IOException {
-        status = "create";
+        //status = "create";
         stage = new Stage();
         stage.setTitle("Create user");
         FXMLLoader fxmlLoader = new FXMLLoader();
@@ -58,7 +61,7 @@ public class ControllerCreateUser implements Observer{
 
     public void openUpdate(User user) throws IOException {
         //TODO - if user doesnt exist
-        status = "update";
+        //status = "update";
         stage = new Stage();
         stage.setTitle("Update user");
         FXMLLoader fxmlLoader = new FXMLLoader();
@@ -99,43 +102,11 @@ public class ControllerCreateUser implements Observer{
         return newUser;
     }
 
+
     public void saveInfo() {
         System.out.println("ControllerCreateUse: saveInfo");
         myView.setResult_lbl("");
 
-        DBResult result = DBResult.NONE;
-
-/*
-        String userName = this.userName_textInput.getText();
-        String password = this.password_textInput.getText();
-        String firstName = this.firstName_textInput.getText();
-        String lastName = this.lastName_textInput.getText();
-        String city = this.city_textInput.getText();
-        String[] values = {userName,password,firstName,lastName,city};
-
-        //int birthDay = 20180505;
-        int date = 0;
-        if (create_datePicker.getValue() != null){
-            date = this.convertDateStringToInt(create_datePicker.getValue().toString());
-        }
-        // TODO - get date as int
-        User newUser = createUserIfValuesAreValid(values,date);
-        if (newUser != null){
-
-        UserTable userTable = UserTable.getInstance();
-            result = userTable.InsertToTable(newUser);
-
-            if (result == DBResult.ADDED){
-                this.result_lbl.setText(result_lblTitle + "User was added successfully");
-            Stage stage = (Stage) save_btn.getScene().getWindow();
-            stage.close();
-            }else if (result == DBResult.ALREADY_EXIST) {
-                this.result_lbl.setText(result_lblTitle + "User already exists");
-            }else if (result == DBResult.ERROR)
-                this.result_lbl.setText(result_lblTitle + "Error while inserting new user");
-        }else
-            this.result_lbl.setText("Please fill all the fields..");
-*/
         String userName = myView.getUserName();
 
         String password = myView.getPassword();
@@ -147,27 +118,15 @@ public class ControllerCreateUser implements Observer{
         //int birthDay = 20180505;
         int date = 0;
         if (myView.getBirthday() != null){
-
             date = this.convertDateStringToInt(myView.getBirthday().toString());
         }
-        // TODO - get date as int
-        User newUser = createUserIfValuesAreValid(values,date);
+        // TODO (DONE) - get date as int
+         User newUser = createUserIfValuesAreValid(values,date);
         if (newUser != null){
-
-            UserTable userTable = UserTable.getInstance();
-            result = userTable.InsertToTable(newUser);
-
-            if (result == DBResult.ADDED){
-                myView.setResult_lbl("User was added successfully");
-                closeStage();
-            }else if (result == DBResult.ALREADY_EXIST) {
-                myView.setResult_lbl( "User already exists");
-            }else if (result == DBResult.ERROR)
-                myView.setResult_lbl( "Error while inserting new user");
-        }else
+            userModel.createUser(newUser);
+        }else{
             myView.setResult_lbl("Please fill all the fields..");
-
-
+        }
     }
 
     private void updateInfo(){
@@ -190,8 +149,7 @@ public class ControllerCreateUser implements Observer{
         User newUser = createUserIfValuesAreValid(values,date);
         if (newUser != null){
 
-            UserTable userTable = UserTable.getInstance();
-            result = userTable.updateUser(newUser);
+            result = userModel.updateUser(newUser);
 
             if (result == DBResult.UPDATED){
                 myView.setResult_lbl("User was updated successfully");
@@ -220,14 +178,28 @@ public class ControllerCreateUser implements Observer{
 
     @Override
     public void update(Observable o, Object arg) {
-        System.out.println("ControllerCreateUser: update");
-        if(arg.equals("saveInfo")){
-            if(status.equals("create")) {
+        if ( o == myView){
+            System.out.println("update by myView");
+            if(arg.equals("Create")) {
                 saveInfo();
-            }else if(status.equals("update")){
+            }else if(arg.equals("Update")){
                 updateInfo();
             }
+        }else if (o == userModel){
+            System.out.println("update by userModel");
+
+            if(arg.equals("Added")){
+                myView.setResult_lbl("User was added successfully");
+                closeStage();
+            }else if (arg.equals("Exists")){
+                myView.setResult_lbl("User already exists");
+            }else if(arg.equals("Error")){
+                myView.setResult_lbl("Error while creating user");
+            }
+
         }
+
+
     }
 
 }
