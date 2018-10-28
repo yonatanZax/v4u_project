@@ -1,6 +1,6 @@
 package db.Managers;
 
-import db.UserTable;
+import db.DBResult;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -19,6 +19,8 @@ public abstract class ATableManager<T> implements ITableManager<T> {
     protected abstract PreparedStatement getInsertPreparedStatement(T object, Connection connection);
 
     protected abstract PreparedStatement getUpdatePreparedStatement(T object, Connection connection);
+
+    protected abstract PreparedStatement getDeletePreparedStatement(String id, Connection connection);
 
    // protected abstract PreparedStatement getDeletePreparedStatement(String id, Connection connection);
 
@@ -58,6 +60,32 @@ public abstract class ATableManager<T> implements ITableManager<T> {
                     if (db.closeConnection(connection) != DBResult.CONNECTION_CLOSED)
                         result = DBResult.ERROR;
 
+                }
+            }
+        }
+        return result;
+    }
+
+    //TODO - CHANGE THE INPUT FROM STRING TO --> SELECTION, PROJECTION "FOR MORE GENERIC APPROACH"
+    public DBResult DeleteFromTable(String id) {
+        DBResult result = DBResult.NONE;
+        Connection connection = db.connect();
+        if (connection != null) {
+            PreparedStatement preparedStatement = getDeletePreparedStatement(id, connection);
+            if (preparedStatement != null) {
+                try {
+                    if (1 == preparedStatement.executeUpdate())
+                        result = DBResult.DELETED;
+                    else {
+                        result = DBResult.NOTHING_TO_DELETE;
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    result = DBResult.ERROR;
+                } finally {
+                    closeStatement(preparedStatement);
+                    if (db.closeConnection(connection) != DBResult.CONNECTION_CLOSED)
+                        result = DBResult.ERROR;
                 }
             }
         }
@@ -153,6 +181,12 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return list;
     }
 
+    @Override
+    public DBResult updateData(String where, String set) {
+        //TODO - move the update here
+        return null;
+    }
+
 
     private String createSQLSelect(String projection, String selection, String orderBy) {
         String sqlQuery = "SELECT ";
@@ -178,6 +212,7 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return sqlQuery;
     }
 
+    //TODO -
     public DBResult updateUser(T object) {
         DBResult result = DBResult.NONE;
         Connection connection = db.connect();

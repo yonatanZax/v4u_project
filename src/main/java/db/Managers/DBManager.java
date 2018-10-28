@@ -1,4 +1,6 @@
 package db.Managers;
+import db.DBResult;
+
 import java.sql.*;
 
 public class DBManager implements IDBManager {

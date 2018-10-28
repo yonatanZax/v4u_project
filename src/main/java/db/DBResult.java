@@ -1,4 +1,4 @@
-package db.Managers;
+package db;
 
 public enum DBResult{
     // General:
@@ -16,6 +16,6 @@ public enum DBResult{
     // UpdateToDB:
     UPDATED,
     // DeleteFromDB:
-    DELETED
-
+    DELETED,
+    NOTHING_TO_DELETE
 }

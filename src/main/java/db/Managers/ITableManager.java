@@ -1,5 +1,7 @@
 package db.Managers;
 
+import db.DBResult;
+
 import java.util.List;
 
 public interface ITableManager<T> {

@@ -1,8 +1,8 @@
 package db;
 
+import Model.User;
 import db.Managers.ATableManager;
 import db.Managers.DBManager;
-import db.Managers.DBResult;
 
 
 import java.sql.Connection;
@@ -24,7 +24,7 @@ public class UserTable extends ATableManager<User> {
     public static final String COLUMN_USERTABLE_BIRTHDAY = "birthday";
 
 
-
+    // Singleton
     public static UserTable getInstance() {
         if(ourInstance == null) {
             ourInstance = new UserTable();
@@ -80,8 +80,6 @@ public class UserTable extends ATableManager<User> {
 
 
 
-
-
     @Override
     protected PreparedStatement getInsertPreparedStatement(User object, Connection connection) {
         String sql = "INSERT INTO " + TABLE_NAME + "(" + COLUMN_USERTABLE_USER_NAME + "," + COLUMN_USERTABLE_PASS + "," + COLUMN_USERTABLE_FIRST_NAME + "," + COLUMN_USERTABLE_LAST_NAME + "," + COLUMN_USERTABLE_CITY + "," + COLUMN_USERTABLE_BIRTHDAY + ") VALUES(?,?,?,?,?,?)";
@@ -117,7 +115,7 @@ public class UserTable extends ATableManager<User> {
                 + COLUMN_USERTABLE_LAST_NAME + " = ? , "
                 + COLUMN_USERTABLE_CITY + " = ? , "
                 + COLUMN_USERTABLE_BIRTHDAY + " = ?  " +
-                "Where " + COLUMN_USERTABLE_USER_NAME+ " = ?" ;
+                "WHERE " + COLUMN_USERTABLE_USER_NAME + " = ?" ;
         PreparedStatement pstmt = null;
         if (connection != null) {
             try {
@@ -153,16 +151,24 @@ public class UserTable extends ATableManager<User> {
         return super.createTable(parameters);
     }
 
-    @Override
-    public DBResult DeleteFromTable(String id) {
-        //TODO - implement
-        return DBResult.NONE;
-    }
-
-    @Override
-    public DBResult updateData(String where, String set) {
-        //TODO - implement
-        return DBResult.NONE;
+    protected PreparedStatement getDeletePreparedStatement(String id, Connection connection){
+        String sql = "DELETE FROM "+ TABLE_NAME + " WHERE " +  COLUMN_USERTABLE_USER_NAME + " =  ?" ;
+        PreparedStatement pstmt;
+        if (connection != null) {
+            try {
+                pstmt = connection.prepareStatement(sql);
+                pstmt.setString(1, id);
+                return pstmt;
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+                try {
+                    connection.rollback();
+                } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        }
+        return null;
     }
 
 
@@ -185,9 +191,7 @@ public class UserTable extends ATableManager<User> {
 
         List<User> userList = userTable.select(projection,selection,orderBy);
 
-
         System.out.println(userList);
     }
-
 
 }

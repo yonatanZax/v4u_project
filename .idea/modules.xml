@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Vacation4u.iml" filepath="$PROJECT_DIR$/Vacation4u.iml" />
-      <module fileurl="file://$USER_HOME$/Downloads/openjfx-11_windows-x64_bin-sdk/javafx-sdk-11/lib/javafx.iml" filepath="$USER_HOME$/Downloads/openjfx-11_windows-x64_bin-sdk/javafx-sdk-11/lib/javafx.iml" />
     </modules>
   </component>
 </project>

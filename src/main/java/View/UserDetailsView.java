@@ -1,6 +1,8 @@
-package MainPackage;
+package View;
 
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -21,16 +23,10 @@ public class UserDetailsView extends java.util.Observable implements Initializab
     public TextField lastName_textInput;
     public TextField city_textInput;
     public DatePicker create_datePicker;
+    public Button save_btn;
 
     public Label result_lbl;
     private static final String result_lblTitle = "Info from DB:\t";
-
-
-
-
-    public UserDetailsView() {
-
-    }
 
     public void setUserName(String userName){
         userName_textInput.setText(userName);
@@ -74,7 +70,11 @@ public class UserDetailsView extends java.util.Observable implements Initializab
 
     public void setBirthdate(String birthdate){
         //create_datePicker.setValue();
-        //TODO - make it work and insert date
+        int day = Integer.valueOf(birthdate.substring(birthdate.length() - 2, birthdate.length()));
+        int month = Integer.valueOf(birthdate.substring(birthdate.length() - 4, birthdate.length() - 2));
+        int year =  Integer.valueOf(birthdate.substring(0, birthdate.length() - 4));
+        LocalDate localDate = LocalDate.of(year, month, day);
+        create_datePicker.setValue(localDate);
     }
 
     public LocalDate getBirthday(){
@@ -111,6 +111,12 @@ public class UserDetailsView extends java.util.Observable implements Initializab
                 LocalDate today = LocalDate.now();
 
                 setDisable(empty || date.compareTo(today) > 0 );
+            }
+        });
+        save_btn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                saveInfo();
             }
         });
     }
