@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ControllerCRUD">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ControllerCRUD">
    <children>
       <Label text="Welcome">
          <font>
@@ -84,6 +84,9 @@
          </children>
       </HBox>
 
-      <Label fx:id="error_lbl" alignment="CENTER" prefHeight="22.0" prefWidth="420.0" textAlignment="CENTER" textFill="RED" wrapText="true" />
+      <Label fx:id="error_lbl" alignment="CENTER" prefHeight="22.0" prefWidth="420.0" textAlignment="CENTER" wrapText="true">
+         <VBox.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </VBox.margin></Label>
    </children>
 </VBox>

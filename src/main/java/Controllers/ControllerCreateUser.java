@@ -1,5 +1,6 @@
 package Controllers;
 
+import Model.UserModel;
 import View.UserDetailsView;
 import db.DBResult;
 import Model.User;
@@ -16,13 +17,14 @@ import java.util.Observer;
 public class ControllerCreateUser implements Observer{
 
     private UserDetailsView myView;
+    private UserModel myModel;
     private String status;
     private Stage stage;
     private Parent root;
     private FXMLLoader fxmlLoader;
 
 
-    public ControllerCreateUser() {
+    public ControllerCreateUser(UserModel myModel) {
         stage = new Stage();
         fxmlLoader = new FXMLLoader(getClass().getResource("/createUser_view.fxml"));
         try {
@@ -33,34 +35,30 @@ public class ControllerCreateUser implements Observer{
         Scene scene = new Scene(root,400,400);
         stage.setScene(scene);
         myView = fxmlLoader.getController();
+
+        this.myModel = myModel;
+        myModel.addObserver(this);
     }
 
     public void openCreate() throws IOException {
         status = "create";
-        //stage = new Stage();
         stage.setTitle("Create user");
-        //FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/createUser_view.fxml"));
 
-        //root = fxmlLoader.load();
         UserDetailsView userDetailsView = fxmlLoader.getController();
         userDetailsView.resetAll();
         userDetailsView.addObserver(this);
 
-        //Scene scene = new Scene(root,400,400);
-        //stage.setScene(scene);
+        updateUserName = null;
         stage.show();
     }
 
     private String updateUserName = null;
 
     public void openUpdate(User user) throws IOException {
+        myView.setResult_lbl("");
         updateUserName = user.getUserName();
-
-
         status = "update";
-        //stage = new Stage();
         stage.setTitle("Update user");
-        //root = fxmlLoader.load();
         myView = fxmlLoader.getController();
 
         myView.setUserName(user.getUserName());
@@ -71,9 +69,6 @@ public class ControllerCreateUser implements Observer{
         myView.setBirthdate(String.valueOf(user.getBirthDate()));
         myView.addObserver(this);
 
-
-        //Scene scene = new Scene(root,400,400);
-        //stage.setScene(scene);
         stage.show();
     }
 
@@ -90,7 +85,7 @@ public class ControllerCreateUser implements Observer{
         if (date <= 0)
             return null;
 
-        newUser.setUserName(values[0]);
+        newUser.setUserName(values[0].trim());
         newUser.setPassword(values[1]);
         newUser.setFirstName(values[2]);
         newUser.setLastName(values[3]);
@@ -99,13 +94,12 @@ public class ControllerCreateUser implements Observer{
         return newUser;
     }
 
-    public void saveInfo() {
-        System.out.println("ControllerCreateUse: saveInfo");
+
+
+    private User generateUserFromFields(){
+        System.out.println("ControllerCreateUser: generateUser");
         myView.setResult_lbl("");
-
-        DBResult result = DBResult.NONE;
-
-        String userName = myView.getUserName();
+        String userName = myView.getUserName().trim();
 
         String password = myView.getPassword();
         String firstName = myView.getFirstName();
@@ -113,65 +107,56 @@ public class ControllerCreateUser implements Observer{
         String city = myView.getCityName();
         String[] values = {userName,password,firstName,lastName,city};
 
-        //int birthDay = 20180505;
         int date = 0;
         if (myView.getBirthday() != null){
             date = this.convertDateStringToInt(myView.getBirthday().toString());
         }
-        User newUser = createUserIfValuesAreValid(values, date);
-        if (newUser != null){
-
-            UserTable userTable = UserTable.getInstance();
-            result = userTable.InsertToTable(newUser);
-
-            if (result == DBResult.ADDED){
-                myView.setResult_lbl("User was added successfully");
-                closeStage();
-            }else if (result == DBResult.ALREADY_EXIST) {
-                myView.setResult_lbl( "User already exists");
-            }else if (result == DBResult.ERROR)
-                myView.setResult_lbl( "Error while inserting new user");
-        }else
-            myView.setResult_lbl("Please fill all the fields..");
+        return createUserIfValuesAreValid(values,date);
     }
 
-    //TODO - make sure we make updateUserName null where ever its needed
-    private void updateInfo(){
-        DBResult result = DBResult.NONE;
-        String userName = myView.getUserName();
-        String password = myView.getPassword();
-        String firstName = myView.getFirstName();
-        String lastName = myView.getLastName();
-        String city = myView.getCityName();
-        String[] values = {userName,password,firstName,lastName,city};
 
-        if(!userName.equals(updateUserName)){
-            //TODO - if the new name already exists show an error
+
+    public void saveInfo() {
+        System.out.println("ControllerCreateUse: saveInfo");
+
+        User newUser = generateUserFromFields();
+        if (newUser != null){
+            myModel.createUser(newUser);
+        }else{
+            myView.setResult_lbl("Please fill all the fields..");
         }
-        else {
-            //int birthDay = 20180505;
-            int date = 0;
-            if (myView.getBirthday() != null) {
+    }
 
-                date = this.convertDateStringToInt(myView.getBirthday().toString());
+
+    private void updateInfo() {
+        User newUser = generateUserFromFields();
+        if (newUser != null) {
+            if (!checkUpdateUserName(newUser.getUserName(), updateUserName)) {
+                myView.setResult_lbl("User name already exist");
             }
-            User newUser = createUserIfValuesAreValid(values, date);
-            if (newUser != null) {
+            else{
+                myModel.updateUser(newUser);
+            }
+        } else
+            myView.setResult_lbl("Please fill all the fields..");
 
-                UserTable userTable = UserTable.getInstance();
-                result = userTable.updateUser(newUser);
+    }
 
-                if (result == DBResult.UPDATED) {
-                    myView.setResult_lbl("User was updated successfully");
-                    closeStage();
-                } else if (result == DBResult.ALREADY_EXIST) {
-                    myView.setResult_lbl("User already exists");
-                } else if (result == DBResult.ERROR)
-                    myView.setResult_lbl("Error while updating user");
-            } else
-                myView.setResult_lbl("Please fill all the fields..");
+
+    /**
+     * checks if the new UserName is a valid UserName
+     * @param newUserName
+     * @param oldUserName
+     * @return - true if its valid. meaning its the same as the old. if it isn't the same it checks that the new name doesn't already exist in the DB
+     */
+    private boolean checkUpdateUserName(String newUserName, String oldUserName){
+        if(!newUserName.equals(oldUserName)){
+            User user = myModel.readUser(oldUserName);
+            if(user != null){
+                return false;
+            }
         }
-
+        return true;
     }
 
     private int convertDateStringToInt(String str) {
@@ -185,12 +170,26 @@ public class ControllerCreateUser implements Observer{
 
     @Override
     public void update(Observable o, Object arg) {
-        System.out.println("ControllerCreateUser: update");
+        System.out.println("ControllerCreateUser: update by myView");
         if(arg.equals("saveInfo")){
             if(status.equals("create")) {
                 saveInfo();
             }else if(status.equals("update")){
                 updateInfo();
+            }
+        }else if (o == myModel){
+            System.out.println("ControllerCreateUser: update by userModel");
+
+            if(arg.equals(DBResult.ADDED)) {
+                myView.setResult_lbl("User was added successfully");
+                closeStage();
+            }else if (arg.equals(DBResult.UPDATED)){
+                myView.setResult_lbl("User was Updated successfully");
+                closeStage();
+            }else if (arg.equals(DBResult.ALREADY_EXIST)){
+                myView.setResult_lbl("User already exists");
+            }else if(arg.equals(DBResult.ERROR)){
+                myView.setResult_lbl("Error while creating user");
             }
         }
     }

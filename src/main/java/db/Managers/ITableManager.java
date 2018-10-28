@@ -10,7 +10,7 @@ public interface ITableManager<T> {
 
     DBResult InsertToTable(T object);
 
-    DBResult DeleteFromTable(String id);
+    DBResult deleteFromTable(String id);
 
     List<T> select(String projection, String selection, String orderBy);
 
