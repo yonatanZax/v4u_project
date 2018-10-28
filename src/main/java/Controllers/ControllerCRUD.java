@@ -38,6 +38,7 @@ public class ControllerCRUD implements Observer {
     }*/
 
 
+
     public void readUser() {
         String textField = userName.getText();
         if (textField == "" || textField == " "){
