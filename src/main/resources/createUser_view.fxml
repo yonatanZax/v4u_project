@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:controller="View.UserDetailsView" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" >
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="View.UserDetailsView">
     <children>
         <Label text="Create\Edit" />
       <GridPane prefHeight="305.0" prefWidth="600.0">

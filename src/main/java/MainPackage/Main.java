@@ -24,9 +24,3 @@ public class Main extends Application {
     }
 }
 //TODO - learn how to work with java log and add it
-
-//TODO (DONE) - add check criteria to create new user, checking user doesn't exist already, and all the information is valid
-
-//TODO (DONE) - add enums to returning and calling functions and act accordingly
-
-//TODO (DONE) - fix the views appearance
