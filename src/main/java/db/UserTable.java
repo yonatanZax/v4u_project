@@ -172,6 +172,10 @@ public class UserTable extends ATableManager<User> {
     }
 
 
+
+
+
+
     public static void main(String[] args) {
         UserTable userTable = getInstance();
         userTable.createTable();

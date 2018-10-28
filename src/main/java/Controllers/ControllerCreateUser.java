@@ -1,5 +1,6 @@
 package Controllers;
 
+import Model.UserModel;
 import View.UserDetailsView;
 import db.DBResult;
 import Model.User;
@@ -16,6 +17,7 @@ import java.util.Observer;
 public class ControllerCreateUser implements Observer{
 
     private UserDetailsView myView;
+    private UserModel myModel;
     private String status;
     private Stage stage;
     private Parent root;
@@ -33,6 +35,9 @@ public class ControllerCreateUser implements Observer{
         Scene scene = new Scene(root,400,400);
         stage.setScene(scene);
         myView = fxmlLoader.getController();
+
+        myModel = new UserModel();
+        myModel.addObserver(this);
     }
 
     public void openCreate() throws IOException {
@@ -56,7 +61,6 @@ public class ControllerCreateUser implements Observer{
     public void openUpdate(User user) throws IOException {
         updateUserName = user.getUserName();
 
-
         status = "update";
         //stage = new Stage();
         stage.setTitle("Update user");
@@ -71,9 +75,6 @@ public class ControllerCreateUser implements Observer{
         myView.setBirthdate(String.valueOf(user.getBirthDate()));
         myView.addObserver(this);
 
-
-        //Scene scene = new Scene(root,400,400);
-        //stage.setScene(scene);
         stage.show();
     }
 
@@ -99,14 +100,12 @@ public class ControllerCreateUser implements Observer{
         return newUser;
     }
 
-    public void saveInfo() {
-        System.out.println("ControllerCreateUse: saveInfo");
+
+
+    private User generateUserFromFields(){
+        System.out.println("ControllerCreateUser: generateUser");
         myView.setResult_lbl("");
-
-        DBResult result = DBResult.NONE;
-
         String userName = myView.getUserName();
-
         String password = myView.getPassword();
         String firstName = myView.getFirstName();
         String lastName = myView.getLastName();
@@ -118,59 +117,38 @@ public class ControllerCreateUser implements Observer{
         if (myView.getBirthday() != null){
             date = this.convertDateStringToInt(myView.getBirthday().toString());
         }
-        User newUser = createUserIfValuesAreValid(values, date);
+        // TODO (DONE) - get date as int
+        return createUserIfValuesAreValid(values,date);
+    }
+
+
+
+    public void saveInfo() {
+        System.out.println("ControllerCreateUse: saveInfo");
+
+        User newUser = generateUserFromFields();
         if (newUser != null){
-
-            UserTable userTable = UserTable.getInstance();
-            result = userTable.InsertToTable(newUser);
-
-            if (result == DBResult.ADDED){
-                myView.setResult_lbl("User was added successfully");
-                closeStage();
-            }else if (result == DBResult.ALREADY_EXIST) {
-                myView.setResult_lbl( "User already exists");
-            }else if (result == DBResult.ERROR)
-                myView.setResult_lbl( "Error while inserting new user");
-        }else
+            myModel.createUser(newUser);
+        }else{
             myView.setResult_lbl("Please fill all the fields..");
+        }
+
+
     }
 
     //TODO - make sure we make updateUserName null where ever its needed
     private void updateInfo(){
-        DBResult result = DBResult.NONE;
-        String userName = myView.getUserName();
-        String password = myView.getPassword();
-        String firstName = myView.getFirstName();
-        String lastName = myView.getLastName();
-        String city = myView.getCityName();
-        String[] values = {userName,password,firstName,lastName,city};
 
+        String userName = myView.getUserName();
         if(!userName.equals(updateUserName)){
             //TODO - if the new name already exists show an error
         }
-        else {
-            //int birthDay = 20180505;
-            int date = 0;
-            if (myView.getBirthday() != null) {
 
-                date = this.convertDateStringToInt(myView.getBirthday().toString());
-            }
-            User newUser = createUserIfValuesAreValid(values, date);
-            if (newUser != null) {
-
-                UserTable userTable = UserTable.getInstance();
-                result = userTable.updateUser(newUser);
-
-                if (result == DBResult.UPDATED) {
-                    myView.setResult_lbl("User was updated successfully");
-                    closeStage();
-                } else if (result == DBResult.ALREADY_EXIST) {
-                    myView.setResult_lbl("User already exists");
-                } else if (result == DBResult.ERROR)
-                    myView.setResult_lbl("Error while updating user");
-            } else
-                myView.setResult_lbl("Please fill all the fields..");
-        }
+        User newUser = generateUserFromFields();
+        if (newUser != null){
+            myModel.updateUser(newUser);
+        }else
+            myView.setResult_lbl("Please fill all the fields..");
 
     }
 
@@ -185,12 +163,26 @@ public class ControllerCreateUser implements Observer{
 
     @Override
     public void update(Observable o, Object arg) {
-        System.out.println("ControllerCreateUser: update");
+        System.out.println("ControllerCreateUser: update by myView");
         if(arg.equals("saveInfo")){
             if(status.equals("create")) {
                 saveInfo();
             }else if(status.equals("update")){
                 updateInfo();
+            }
+        }else if (o == myModel){
+            System.out.println("ControllerCreateUser: update by userModel");
+
+            if(arg.equals(DBResult.ADDED)) {
+                myView.setResult_lbl("User was added successfully");
+                closeStage();
+            }else if (arg.equals(DBResult.UPDATED)){
+                myView.setResult_lbl("User was Updated successfully");
+                closeStage();
+            }else if (arg.equals(DBResult.ALREADY_EXIST)){
+                myView.setResult_lbl("User already exists");
+            }else if(arg.equals(DBResult.ERROR)){
+                myView.setResult_lbl("Error while creating user");
             }
         }
     }

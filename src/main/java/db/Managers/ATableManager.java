@@ -67,7 +67,7 @@ public abstract class ATableManager<T> implements ITableManager<T> {
     }
 
     //TODO - CHANGE THE INPUT FROM STRING TO --> SELECTION, PROJECTION "FOR MORE GENERIC APPROACH"
-    public DBResult DeleteFromTable(String id) {
+    public DBResult deleteFromTable(String id) {
         DBResult result = DBResult.NONE;
         Connection connection = db.connect();
         if (connection != null) {

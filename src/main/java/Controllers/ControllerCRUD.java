@@ -1,18 +1,19 @@
 package Controllers;
 
+import Model.UserModel;
 import db.DBResult;
 import Model.User;
 import db.UserTable;
-import javafx.event.ActionEvent;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 
-public class ControllerCRUD {
+public class ControllerCRUD implements Observer {
 
     public TextField userName;
     public Button readUser_btn;
@@ -22,10 +23,10 @@ public class ControllerCRUD {
 
     private ControllerCreateUser userController = new ControllerCreateUser();
 
-    private UserTable myModel;
+    private UserModel myModel;
 
     public ControllerCRUD() {
-        myModel = UserTable.getInstance();
+        myModel = new UserModel();
     }
 
 /*    private void errorWindow(String title, String header, String content){
@@ -38,27 +39,21 @@ public class ControllerCRUD {
 
 
     public void readUser() {
-        info_lbl.setText(info_lblTitle);
-        String userName = this.userName.getText();
-        User userFromDB = new User();
-        String selection = myModel.COLUMN_USERTABLE_USER_NAME + " = \"" + userName + "\"";
-        List<User> userList = myModel.select(null, selection,null);
-        if(userList != null && userList.size() > 0) {
-            userFromDB = userList.get(0);
-            if (userFromDB == null) {
-                error_lbl.setText("Incorrect Username or Password");
-            } else {
-                info_lbl.setText(info_lblTitle + userFromDB.toString());
-
-            }
+        String textField = userName.getText();
+        if (textField == "" || textField == " "){
+            info_lbl.setText(info_lblTitle + "Insert a valid userName..");
         }
-        else{
-            info_lbl.setText(info_lblTitle + userName +" is not stored in DB..");
+        String userName = textField;
+        User user = myModel.readUser(userName);
+        // Todo (DONE) - change to read multiple users
+        if (user == null) {
+            // Empty list means that not even one of the list was in the db
+            info_lbl.setText(info_lblTitle + textField +" is not stored in DB..");
+        }else {
+            // Generate the list of users as String to print
+            info_lbl.setText(user.toString());
         }
 
-        this.userName.textProperty().addListener((observable, oldValue, newValue) -> {
-            error_lbl.setText(" ");
-        });
     }
 
     public void createUser() throws Exception{
@@ -69,22 +64,24 @@ public class ControllerCRUD {
 
     public void updateUser() throws Exception{
         String userName = this.userName.getText();
-        List<User> list = myModel.select(null, myModel.COLUMN_USERTABLE_USER_NAME + " = \"" + userName + "\"", null);
-        if(list != null && list.size() > 0 ){
-            userController.openUpdate(list.get(0));
-        }
-        else{
-            this.info_lbl.setText(info_lblTitle + "The User Doesn't exist");
+        User user = myModel.readUser(userName);
+        if (user == null){
+            this.info_lbl.setText(info_lblTitle + userName + "Doesn't exist");
+        }else{
+            userController.openUpdate(user);
         }
     }
 
     public void deleteUser() {
         String id = this.userName.getText();
-        DBResult result = myModel.DeleteFromTable(id);
-        if(result == DBResult.NOTHING_TO_DELETE){
-            info_lbl.setText(info_lblTitle + "User " + id + " is not in the DB");
-        } else if(result == DBResult.DELETED){
-            info_lbl.setText(info_lblTitle + "User " + id + " Deleted");
-        }
+        myModel.deleteUser(id);
     }
+
+
+    @Override
+    public void update(Observable o, Object arg){
+
+    }
+
+
 }
