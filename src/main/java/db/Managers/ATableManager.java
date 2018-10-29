@@ -16,18 +16,77 @@ public abstract class ATableManager<T> implements ITableManager<T> {
     public final String TABLE_NAME;
 
     protected abstract List<T> transformListMapToList(List<Map<String,String>> listMap);
+
     protected abstract PreparedStatement getInsertPreparedStatement(T object, Connection connection);
 
-    protected abstract PreparedStatement getUpdatePreparedStatement(T object, Connection connection);
+    //todo - change to string args
+    protected abstract PreparedStatement getUpdatePreparedStatement(String[] set, String [] values, String [] where, Connection connection);
 
     protected abstract PreparedStatement getDeletePreparedStatement(String id, Connection connection);
 
-   // protected abstract PreparedStatement getDeletePreparedStatement(String id, Connection connection);
 
+    // protected abstract PreparedStatement getDeletePreparedStatement(String id, Connection connection);
     protected ATableManager(IDBManager db, String table_name) {
         this.db = db;
         TABLE_NAME = table_name;
 
+    }
+
+    /**
+     *
+     * @param projection
+     * @param selection
+     * @param orderBy
+     * @return
+     */
+    @Override
+    public List<T> select(String projection, String selection, String orderBy) {
+        String sqlQuery = createSQLSelect(projection, selection, orderBy);
+        System.out.println(sqlQuery);
+        Connection connection = db.connect();
+        List<T> list = null;
+        if(connection != null){
+            try {
+                PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                list = getDataList(resultSet);
+            }catch ( SQLException e){
+                e.printStackTrace();
+            }
+            finally {
+                db.closeConnection(connection);
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public DBResult updateData(String [] set, String [] values, String [] where) {
+        DBResult result = DBResult.NONE;
+        Connection connection = db.connect();
+        if(connection != null) {
+            PreparedStatement preparedStatement = getUpdatePreparedStatement( set, values, where, connection);
+            if(preparedStatement != null){
+                try{
+                    if(1 == preparedStatement.executeUpdate())
+                        result = DBResult.UPDATED;
+                }catch (SQLException e){
+                    int errorCode = e.getErrorCode();
+                    if (errorCode == 19)
+                        result = DBResult.ALREADY_EXIST;
+                    else {
+                        e.printStackTrace();
+                        result = DBResult.ERROR;
+                    }
+                }finally {
+                    closeStatement(preparedStatement);
+                    if (db.closeConnection(connection) != DBResult.CONNECTION_CLOSED)
+                        result = DBResult.ERROR;
+
+                }
+            }
+        }
+        return result;
     }
 
     protected DBResult createTable(String[] parameters){
@@ -65,8 +124,8 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         }
         return result;
     }
-
     //TODO - CHANGE THE INPUT FROM STRING TO --> SELECTION, PROJECTION "FOR MORE GENERIC APPROACH"
+
     public DBResult deleteFromTable(String id) {
         DBResult result = DBResult.NONE;
         Connection connection = db.connect();
@@ -112,8 +171,6 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         }
     }
 
-
-
     private List<T> getDataList(ResultSet rs){
         List<T> list = null;
         try {
@@ -153,40 +210,6 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return results;
     }
 
-    /**
-     *
-     * @param projection
-     * @param selection
-     * @param orderBy
-     * @return
-     */
-    @Override
-    public List<T> select(String projection, String selection, String orderBy) {
-        String sqlQuery = createSQLSelect(projection, selection, orderBy);
-        System.out.println(sqlQuery);
-        Connection connection = db.connect();
-        List<T> list = null;
-        if(connection != null){
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                list = getDataList(resultSet);
-            }catch ( SQLException e){
-                e.printStackTrace();
-            }
-            finally {
-                db.closeConnection(connection);
-            }
-        }
-        return list;
-    }
-
-    @Override
-    public DBResult updateData(String where, String set) {
-        //TODO - move the update here
-        return null;
-    }
-
 
     private String createSQLSelect(String projection, String selection, String orderBy) {
         String sqlQuery = "SELECT ";
@@ -212,31 +235,4 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return sqlQuery;
     }
 
-    public DBResult updateUser(T object) {
-        DBResult result = DBResult.NONE;
-        Connection connection = db.connect();
-        if(connection != null) {
-            PreparedStatement preparedStatement = getUpdatePreparedStatement(object, connection);
-            if(preparedStatement != null){
-                try{
-                    if(1 == preparedStatement.executeUpdate())
-                        result = DBResult.UPDATED;
-                }catch (SQLException e){
-                    int errorCode = e.getErrorCode();
-                    if (errorCode == 19)
-                        result = DBResult.ALREADY_EXIST;
-                    else {
-                        e.printStackTrace();
-                        result = DBResult.ERROR;
-                    }
-                }finally {
-                    closeStatement(preparedStatement);
-                    if (db.closeConnection(connection) != DBResult.CONNECTION_CLOSED)
-                        result = DBResult.ERROR;
-
-                }
-            }
-        }
-        return result;
-    }
 }

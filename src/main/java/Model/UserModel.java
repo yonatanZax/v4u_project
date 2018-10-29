@@ -14,7 +14,7 @@ public class UserModel extends Observable {
         userTable = UserTable.getInstance();
     }
 
-    public void createUser(User user){
+    public void createUser(User user) {
         DBResult result = DBResult.NONE;
 
         if (user != null) {
@@ -24,10 +24,10 @@ public class UserModel extends Observable {
         }
     }
 
-    public User readUser(String primaryKey){
+    public User readUser(String primaryKey) {
         String[] listOfUserNames = {primaryKey};
         List<User> userList = readUsers(listOfUserNames);
-        if(userList != null && userList.size() > 0 ){
+        if (userList != null && userList.size() > 0) {
             return userList.get(0);
         }
         return null;
@@ -38,25 +38,30 @@ public class UserModel extends Observable {
         // Generates the selection part
         // Example:     SELECT * FROM userInfo WHERE userName IN ("user1","user2")
         String selection = UserTable.COLUMN_USERTABLE_USER_NAME + " IN (";
-        for (int i=0 ; i < listOfUsername.length - 1; i++) {
+        for (int i = 0; i < listOfUsername.length - 1; i++) {
             selection += "\"" + listOfUsername[i] + "\",";
         }
-        selection += "\"" + listOfUsername[listOfUsername.length-1] + "\")";
+        selection += "\"" + listOfUsername[listOfUsername.length - 1] + "\")";
 
         // Get the list of users from the database
-        List<User> userList = userTable.select(null,selection,null);
+        List<User> userList = userTable.select(null, selection, null);
         return userList;
     }
 
-    public void updateUser(User user){
+    public void updateUser(User user) {
         DBResult result = DBResult.NONE;
-
-        result = userTable.updateUser(user);
+        String [] where = {userTable.COLUMN_USERTABLE_USER_NAME};
+        String [] set = {userTable.COLUMN_USERTABLE_USER_NAME, userTable.COLUMN_USERTABLE_PASS,
+                userTable.COLUMN_USERTABLE_FIRST_NAME, userTable.COLUMN_USERTABLE_LAST_NAME,
+                userTable.COLUMN_USERTABLE_CITY, userTable.COLUMN_USERTABLE_BIRTHDAY};
+        String [] values = {user.getUserName(), user.getPassword(), user.getFirstName(),
+                            user.getLastName(), user.getCity(), String.valueOf(user.getBirthDate()), user.getUserName()};
+        result = userTable.updateData(set , values, where);
         setChanged();
         notifyObservers(result);
     }
 
-    public void deleteUser(String id){
+    public void deleteUser(String id) {
         DBResult result = userTable.deleteFromTable(id);
         setChanged();
         notifyObservers(result);
