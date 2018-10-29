@@ -1,22 +1,13 @@
 package View;
 
+import Controllers.ControllerCRUD;
 import javafx.fxml.Initializable;
 
 import java.net.URL;
 import java.util.Observable;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-
-import Model.UserModel;
-import db.DBResult;
-import Model.User;
-import java.net.URL;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.ResourceBundle;
 
 public class UserCRUDView extends Observable implements Initializable {
 
@@ -30,7 +21,6 @@ public class UserCRUDView extends Observable implements Initializable {
     public Label info_lbl;
 
     public static final String info_lblTitle = "Info from DB:\n";
-
 
 
     @Override

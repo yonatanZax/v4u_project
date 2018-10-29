@@ -2,7 +2,6 @@ package Controllers;
 
 import Model.UserModel;
 import View.UserCRUDView;
-import View.UserDetailsView;
 import db.DBResult;
 import Model.User;
 import javafx.fxml.FXMLLoader;
@@ -24,6 +23,27 @@ public class ControllerCRUD implements Observer {
     private Parent root;
     private FXMLLoader fxmlLoader;
 
+
+    public ControllerCRUD() {
+        myModel = new UserModel();
+        myModel.addObserver(this);
+        controllerCreateUser = new ControllerCreateUser(myModel);
+
+
+        stage = new Stage();
+        fxmlLoader = new FXMLLoader(getClass().getResource("/user_crud_view.fxml"));
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Scene scene = new Scene(root,400,400);
+        stage.setScene(scene);
+
+        userCRUDView = fxmlLoader.getController();
+        userCRUDView.addObserver(this);
+
+    }
 
 
     public void readUser() {
@@ -51,25 +71,6 @@ public class ControllerCRUD implements Observer {
     }
 
 
-
-    public ControllerCRUD(UserModel userModel) {
-        stage = new Stage();
-        fxmlLoader = new FXMLLoader(getClass().getResource("/user_crud_view.fxml"));
-        try {
-            root = fxmlLoader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Scene scene = new Scene(root,400,400);
-        stage.setScene(scene);
-        userCRUDView = fxmlLoader.getController();
-
-        myModel = userModel;
-        myModel.addObserver(this);
-//        myModel = userModel;
-//        myModel.addObserver(this);
-//        userCRUDView = new UserCRUDView(myModel);
-    }
 
 /*    private void errorWindow(String title, String header, String content){
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -106,7 +107,26 @@ public class ControllerCRUD implements Observer {
 
     @Override
     public void update(Observable o, Object arg){
-        if(o == myModel){
+        System.out.println("ControllerCRUD: update by UserCRUDView");
+        if(arg.equals("readUser")) {
+            readUser();
+        } else if(arg.equals("createUser")) {
+            try {
+                createUser();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        } else if(arg.equals("updateUser")) {
+            try {
+                updateUser();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        } else if(arg.equals("deleteUser")) {
+            deleteUser();
+        }
+
+        else if(o == myModel){
             if(arg == DBResult.UPDATED){
                 userCRUDView.error_lbl.setText("User was updated successfully");
             }
@@ -120,4 +140,10 @@ public class ControllerCRUD implements Observer {
         //TODO - make it show the result after update, create and
         //TODO - try to make it show the new information after we finish with update
     }
+
+    public void showStage(){
+        stage.show();
+    }
+
+
 }
