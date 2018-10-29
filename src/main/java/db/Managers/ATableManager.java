@@ -18,9 +18,12 @@ public abstract class ATableManager<T> implements ITableManager<T> {
     protected abstract List<T> transformListMapToList(List<Map<String,String>> listMap);
     protected abstract PreparedStatement getInsertPreparedStatement(T object, Connection connection);
 
-    protected abstract PreparedStatement getUpdatePreparedStatement(T object, Connection connection);
+    //TODO - implement here getDeletePreparedStatement
+    protected abstract PreparedStatement getDeletePreparedStatement(String where, Connection connection);
 
-    protected abstract PreparedStatement getDeletePreparedStatement(String id, Connection connection);
+    //TODO - implement here getUpdatePreparedStatement
+    protected abstract PreparedStatement getUpdatePreparedStatement(String[] set, String[] values, String[] where, Connection connection);
+
 
    // protected abstract PreparedStatement getDeletePreparedStatement(String id, Connection connection);
 
@@ -28,6 +31,62 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         this.db = db;
         TABLE_NAME = table_name;
 
+    }
+
+    /**
+     * @param projection
+     * @param selection
+     * @param orderBy
+     * @return
+     */
+    @Override
+    public List<T> select(String projection, String selection, String orderBy) {
+        String sqlQuery = createSQLSelect(projection, selection, orderBy);
+        System.out.println(sqlQuery);
+        Connection connection = db.connect();
+        List<T> list = null;
+        if (connection != null) {
+            try {
+                PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                list = getDataList(resultSet);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                db.closeConnection(connection);
+            }
+        }
+        return list;
+    }
+
+    //TODO - merge with delete function
+    @Override
+    public DBResult updateData(String[] set, String[] values, String[] where) {
+        DBResult result = DBResult.NONE;
+        Connection connection = db.connect();
+        if (connection != null) {
+            PreparedStatement preparedStatement = getUpdatePreparedStatement(set, values, where, connection);
+            if (preparedStatement != null) {
+                try {
+                    if (1 == preparedStatement.executeUpdate())
+                        result = DBResult.UPDATED;
+                } catch (SQLException e) {
+                    int errorCode = e.getErrorCode();
+                    if (errorCode == 19)
+                        result = DBResult.ALREADY_EXIST;
+                    else {
+                        e.printStackTrace();
+                        result = DBResult.ERROR;
+                    }
+                } finally {
+                    closeStatement(preparedStatement);
+                    if (db.closeConnection(connection) != DBResult.CONNECTION_CLOSED)
+                        result = DBResult.ERROR;
+
+                }
+            }
+        }
+        return result;
     }
 
     protected DBResult createTable(String[] parameters){
@@ -66,12 +125,11 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return result;
     }
 
-    //TODO - CHANGE THE INPUT FROM STRING TO --> SELECTION, PROJECTION "FOR MORE GENERIC APPROACH"
-    public DBResult deleteFromTable(String id) {
+    public DBResult deleteFromTable(String where) {
         DBResult result = DBResult.NONE;
         Connection connection = db.connect();
         if (connection != null) {
-            PreparedStatement preparedStatement = getDeletePreparedStatement(id, connection);
+            PreparedStatement preparedStatement = getDeletePreparedStatement(where, connection);
             if (preparedStatement != null) {
                 try {
                     if (1 == preparedStatement.executeUpdate())
@@ -129,6 +187,7 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return list;
     }
 
+
     private static List<Map<String, String>> map(ResultSet rs) throws SQLException {
         List<Map<String, String>> results = new ArrayList<Map<String, String>>();
         if(rs != null) {
@@ -151,40 +210,6 @@ public abstract class ATableManager<T> implements ITableManager<T> {
             }
         }
         return results;
-    }
-
-    /**
-     *
-     * @param projection
-     * @param selection
-     * @param orderBy
-     * @return
-     */
-    @Override
-    public List<T> select(String projection, String selection, String orderBy) {
-        String sqlQuery = createSQLSelect(projection, selection, orderBy);
-        System.out.println(sqlQuery);
-        Connection connection = db.connect();
-        List<T> list = null;
-        if(connection != null){
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                list = getDataList(resultSet);
-            }catch ( SQLException e){
-                e.printStackTrace();
-            }
-            finally {
-                db.closeConnection(connection);
-            }
-        }
-        return list;
-    }
-
-    @Override
-    public DBResult updateData(String where, String set) {
-        //TODO - move the update here
-        return null;
     }
 
 
@@ -212,31 +237,4 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return sqlQuery;
     }
 
-    public DBResult updateUser(T object) {
-        DBResult result = DBResult.NONE;
-        Connection connection = db.connect();
-        if(connection != null) {
-            PreparedStatement preparedStatement = getUpdatePreparedStatement(object, connection);
-            if(preparedStatement != null){
-                try{
-                    if(1 == preparedStatement.executeUpdate())
-                        result = DBResult.UPDATED;
-                }catch (SQLException e){
-                    int errorCode = e.getErrorCode();
-                    if (errorCode == 19)
-                        result = DBResult.ALREADY_EXIST;
-                    else {
-                        e.printStackTrace();
-                        result = DBResult.ERROR;
-                    }
-                }finally {
-                    closeStatement(preparedStatement);
-                    if (db.closeConnection(connection) != DBResult.CONNECTION_CLOSED)
-                        result = DBResult.ERROR;
-
-                }
-            }
-        }
-        return result;
-    }
 }

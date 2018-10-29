@@ -1,5 +1,9 @@
 package MainPackage;
 
+import Controllers.ControllerCRUD;
+import Model.UserModel;
+import View.UserCRUDView;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,12 +14,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        System.out.println();
 
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("user_crud_view.fxml"));
-        primaryStage.setTitle("User CRUD");
-        primaryStage.setScene(new Scene(root, 400, 400));
-        primaryStage.show();
+
+        ControllerCRUD controllerCRUD = new ControllerCRUD();
+        controllerCRUD.showStage();
     }
 
 

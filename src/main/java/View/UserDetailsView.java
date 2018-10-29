@@ -13,8 +13,9 @@ import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
+import java.util.Observable;
 
-public class UserDetailsView extends java.util.Observable implements Initializable {
+public class UserDetailsView extends Observable implements Initializable {
 
 
     public TextField userName_textInput;
@@ -33,7 +34,7 @@ public class UserDetailsView extends java.util.Observable implements Initializab
     }
 
     public String getUserName(){
-        return userName_textInput.getText();
+        return userName_textInput.getText().trim();
     }
 
     public void setPassword(String password){
@@ -41,7 +42,7 @@ public class UserDetailsView extends java.util.Observable implements Initializab
     }
 
     public String getPassword(){
-        return password_textInput.getText();
+        return password_textInput.getText().trim();
     }
 
     public void setFirstName(String firstName){
@@ -49,7 +50,7 @@ public class UserDetailsView extends java.util.Observable implements Initializab
     }
 
     public String getFirstName(){
-        return firstName_textInput.getText();
+        return firstName_textInput.getText().trim();
     }
 
     public void setLastName(String lastNameName){
@@ -57,7 +58,7 @@ public class UserDetailsView extends java.util.Observable implements Initializab
     }
 
     public String getLastName(){
-        return lastName_textInput.getText();
+        return lastName_textInput.getText().trim();
     }
 
     public void setCityName(String cityName){
@@ -65,11 +66,10 @@ public class UserDetailsView extends java.util.Observable implements Initializab
     }
 
     public String getCityName(){
-        return city_textInput.getText();
+        return city_textInput.getText().trim();
     }
 
     public void setBirthdate(String birthdate){
-        //create_datePicker.setValue();
         int day = Integer.valueOf(birthdate.substring(birthdate.length() - 2, birthdate.length()));
         int month = Integer.valueOf(birthdate.substring(birthdate.length() - 4, birthdate.length() - 2));
         int year =  Integer.valueOf(birthdate.substring(0, birthdate.length() - 4));
@@ -87,15 +87,6 @@ public class UserDetailsView extends java.util.Observable implements Initializab
     }
 
 
-    private int convertDateStringToInt(String str) {
-        if(str != null && !str.equals("")){
-            String[] tempArr = str.split("-");
-            String temp = tempArr[0] + tempArr[1] + tempArr[2];
-            return Integer.valueOf(temp);
-        }
-        return 0;
-    }
-
     public void saveInfo(){
         System.out.println("UserDetailsView: saveInfo");
         setChanged();
@@ -109,10 +100,12 @@ public class UserDetailsView extends java.util.Observable implements Initializab
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
                 LocalDate today = LocalDate.now();
+                LocalDate today18 = today.minusYears(18);
 
-                setDisable(empty || date.compareTo(today) > 0 );
+                setDisable(empty || date.compareTo(today18) > 0 );
             }
         });
+
         save_btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
