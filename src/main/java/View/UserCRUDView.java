@@ -38,16 +38,26 @@ public class UserCRUDView extends Observable implements Initializable {
 
     }
 
+    public void notifyController(String arg){
+        System.out.println("UserCRUDView: "+arg);
+        setChanged();
+        notifyObservers(arg);
+    }
+
     public void readUser(ActionEvent actionEvent) {
+        notifyController("readUser");
     }
 
     public void createUser(ActionEvent actionEvent) {
+        notifyController("createUser");
     }
 
     public void updateUser(ActionEvent actionEvent) {
+        notifyController("updateUser");
     }
 
     public void deleteUser(ActionEvent actionEvent) {
+        notifyController("deleteUser");
     }
     //TODO - make this class the view of the main window
 }

@@ -10,8 +10,9 @@ import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
+import java.util.Observable;
 
-public class UserDetailsView extends java.util.Observable implements Initializable {
+public class UserDetailsView extends Observable implements Initializable {
 
 
     public TextField userName_textInput;
