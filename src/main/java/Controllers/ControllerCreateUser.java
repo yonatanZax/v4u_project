@@ -23,6 +23,8 @@ public class ControllerCreateUser implements Observer{
     private Parent root;
     private FXMLLoader fxmlLoader;
 
+    private String updateUserName = null;
+
 
     public ControllerCreateUser(UserModel myModel) {
         stage = new Stage();
@@ -51,8 +53,6 @@ public class ControllerCreateUser implements Observer{
         updateUserName = null;
         stage.show();
     }
-
-    private String updateUserName = null;
 
     public void openUpdate(User user) throws IOException {
         myView.setResult_lbl("");
