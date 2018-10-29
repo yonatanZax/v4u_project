@@ -151,13 +151,13 @@ public class UserTable extends ATableManager<User> {
         return super.createTable(parameters);
     }
 
-    protected PreparedStatement getDeletePreparedStatement(String id, Connection connection){
+    protected PreparedStatement getDeletePreparedStatement(String selection, Connection connection){
         String sql = "DELETE FROM "+ TABLE_NAME + " WHERE " +  COLUMN_USERTABLE_USER_NAME + " =  ?" ;
         PreparedStatement pstmt;
         if (connection != null) {
             try {
                 pstmt = connection.prepareStatement(sql);
-                pstmt.setString(1, id);
+                pstmt.setString(1, selection);
                 return pstmt;
             } catch (SQLException e) {
                 System.out.println(e.getMessage());

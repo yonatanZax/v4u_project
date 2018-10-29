@@ -20,7 +20,7 @@ public abstract class ATableManager<T> implements ITableManager<T> {
 
     protected abstract PreparedStatement getUpdatePreparedStatement(T object, Connection connection);
 
-    protected abstract PreparedStatement getDeletePreparedStatement(String id, Connection connection);
+    protected abstract PreparedStatement getDeletePreparedStatement(String selection, Connection connection);
 
    // protected abstract PreparedStatement getDeletePreparedStatement(String id, Connection connection);
 
@@ -66,12 +66,24 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return result;
     }
 
-    //TODO - CHANGE THE INPUT FROM STRING TO --> SELECTION, PROJECTION "FOR MORE GENERIC APPROACH"
-    public DBResult deleteFromTable(String id) {
+//    private String createSQLDelte(String selection) {
+//        String sqlQuery = "DELETE ";
+//
+//        sqlQuery += "FROM " + TABLE_NAME + " ";
+//
+//        // set the selection. where selection[i] suppose to refer selectionArgs[i]
+//        if(selection != null && selection.length() > 0 ){
+//            sqlQuery += "WHERE " + selection;
+//        }
+//        return sqlQuery;
+//    }
+
+    //TODO - lets talk about the selection for a second
+    public DBResult deleteFromTable(String selection) {
         DBResult result = DBResult.NONE;
         Connection connection = db.connect();
         if (connection != null) {
-            PreparedStatement preparedStatement = getDeletePreparedStatement(id, connection);
+            PreparedStatement preparedStatement = getDeletePreparedStatement(selection, connection);
             if (preparedStatement != null) {
                 try {
                     if (1 == preparedStatement.executeUpdate())
