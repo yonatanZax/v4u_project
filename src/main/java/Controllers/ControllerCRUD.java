@@ -137,8 +137,8 @@ public class ControllerCRUD implements Observer {
                 userCRUDView.error_lbl.setText("User was created successfully");
             }
         }
-        //TODO - make it show the result after update, create and
-        //TODO - try to make it show the new information after we finish with update
+        //TODO - make it show the result after update, create and (DONE???)
+        //TODO - try to make it show the new information after we finish with update (DONE???)
     }
 
     public void showStage(){

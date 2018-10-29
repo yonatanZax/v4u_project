@@ -19,10 +19,12 @@ public abstract class ATableManager<T> implements ITableManager<T> {
 
     protected abstract PreparedStatement getInsertPreparedStatement(T object, Connection connection);
 
-    //todo - change to string args
-    protected abstract PreparedStatement getUpdatePreparedStatement(String[] set, String [] values, String [] where, Connection connection);
-
+    //TODO - implement here getDeletePreparedStatement
     protected abstract PreparedStatement getDeletePreparedStatement(String id, Connection connection);
+
+    //TODO (DONE) - change to string args
+    //TODO - implement here getUpdatePreparedStatement
+    protected abstract PreparedStatement getUpdatePreparedStatement(String[] set, String [] values, String [] where, Connection connection);
 
 
     // protected abstract PreparedStatement getDeletePreparedStatement(String id, Connection connection);
@@ -60,6 +62,7 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return list;
     }
 
+    //TODO - merge with delete function
     @Override
     public DBResult updateData(String [] set, String [] values, String [] where) {
         DBResult result = DBResult.NONE;
@@ -124,8 +127,8 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         }
         return result;
     }
-    //TODO - CHANGE THE INPUT FROM STRING TO --> SELECTION, PROJECTION "FOR MORE GENERIC APPROACH"
 
+    //TODO - CHANGE THE INPUT FROM STRING TO --> SELECTION, PROJECTION "FOR MORE GENERIC APPROACH"
     public DBResult deleteFromTable(String id) {
         DBResult result = DBResult.NONE;
         Connection connection = db.connect();

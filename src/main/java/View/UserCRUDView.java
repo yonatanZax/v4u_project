@@ -49,5 +49,5 @@ public class UserCRUDView extends Observable implements Initializable {
     public void deleteUser(ActionEvent actionEvent) {
         notifyController("deleteUser");
     }
-    //TODO - make this class the view of the main window
+    //TODO (DONE!) - make this class the view of the main window
 }
