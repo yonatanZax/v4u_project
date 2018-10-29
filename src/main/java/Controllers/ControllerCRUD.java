@@ -8,7 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
+import MainPackage.Enum_CRUD;
 import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
@@ -17,7 +17,7 @@ import java.util.Observer;
 public class ControllerCRUD implements Observer {
 
     private ControllerCreateUser controllerCreateUser;
-    private UserCRUDView userCRUDView;
+    private UserCRUDView myView;
     private UserModel myModel;
     private Stage stage;
     private Parent root;
@@ -40,18 +40,16 @@ public class ControllerCRUD implements Observer {
         Scene scene = new Scene(root,400,400);
         stage.setScene(scene);
 
-        userCRUDView = fxmlLoader.getController();
-        userCRUDView.addObserver(this);
+        myView = fxmlLoader.getController();
+        myView.addObserver(this);
 
     }
 
 
     public void readUser() {
-        userCRUDView.error_lbl.setText("");
-        userCRUDView.info_lbl.setText("");
-        String textField = userCRUDView.userName.getText();
-        if (textField == "" || textField == " "){
-            userCRUDView.error_lbl.setText("Please insert a valid userName..");
+        String textField = myView.userName.getText().trim();
+        if (textField.equals("")){
+            myView.status_lbl.setText("Please insert a valid userName..");
         }
         else{
             String userName = textField;
@@ -59,11 +57,11 @@ public class ControllerCRUD implements Observer {
             if (user == null) {
                 // Empty list means that not even one of the list was in the db
 
-                userCRUDView.error_lbl.setText(textField + " is not stored in DB..");
+                myView.status_lbl.setText(textField + " is not stored in DB..");
 
             } else {
                 // Generate the list of users as String to print
-                userCRUDView.info_lbl.setText(user.toString());
+                myView.info_lbl.setText(myView.info_lblTitle + user.toString());
             }
         }
 
@@ -82,25 +80,24 @@ public class ControllerCRUD implements Observer {
 
 
 
-
     public void createUser() throws Exception{
-        userCRUDView.info_lbl.setText(userCRUDView.info_lblTitle);
+//        myView.info_lbl.setText(myView.info_lblTitle);
         controllerCreateUser.openCreate();
     }
 
 
     public void updateUser() throws Exception{
-        String userName = userCRUDView.userName.getText();
+        String userName = myView.userName.getText();
         User user = myModel.readUser(userName);
         if (user == null){
-            userCRUDView.info_lbl.setText(userCRUDView.info_lblTitle + userName + "Doesn't exist");
+            myView.info_lbl.setText(myView.info_lblTitle + userName + " Doesn't exist");
         }else{
             controllerCreateUser.openUpdate(user);
         }
     }
 
     public void deleteUser() {
-        String id = userCRUDView.userName.getText();
+        String id = myView.userName.getText();
         myModel.deleteUser(id);
     }
 
@@ -108,33 +105,37 @@ public class ControllerCRUD implements Observer {
     @Override
     public void update(Observable o, Object arg){
         System.out.println("ControllerCRUD: update by UserCRUDView");
-        if(arg.equals("readUser")) {
+        if(arg.equals(Enum_CRUD.READ)) {
             readUser();
-        } else if(arg.equals("createUser")) {
+        } else if(arg.equals(Enum_CRUD.CREATE)) {
             try {
                 createUser();
             } catch (Exception e){
                 e.printStackTrace();
             }
-        } else if(arg.equals("updateUser")) {
+        } else if(arg.equals(Enum_CRUD.UPDATE)) {
             try {
                 updateUser();
             } catch (Exception e){
                 e.printStackTrace();
             }
-        } else if(arg.equals("deleteUser")) {
+        } else if(arg.equals(Enum_CRUD.DELETE)) {
             deleteUser();
         }
 
         else if(o == myModel){
+            myView.resetLabels();
             if(arg == DBResult.UPDATED){
-                userCRUDView.error_lbl.setText("User was updated successfully");
+                myView.status_lbl.setText("User was updated successfully");
             }
             else if ( arg == DBResult.DELETED){
-                userCRUDView.error_lbl.setText("User was deleted successfully");
+                myView.status_lbl.setText("User was deleted successfully");
+            }
+            else if(arg == DBResult.NOTHING_TO_DELETE){
+                myView.status_lbl.setText("User wasn't in DB");
             }
             else if(arg == DBResult.ADDED){
-                userCRUDView.error_lbl.setText("User was created successfully");
+                myView.status_lbl.setText("User was created successfully");
             }
         }
         //TODO - make it show the result after update, create and (DONE???)

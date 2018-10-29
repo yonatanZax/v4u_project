@@ -9,22 +9,21 @@ import java.util.List;
 import java.util.Map;
 
 
-
 public abstract class ATableManager<T> implements ITableManager<T> {
 
     protected IDBManager db;
     public final String TABLE_NAME;
 
-    protected abstract List<T> transformListMapToList(List<Map<String,String>> listMap);
+    protected abstract List<T> transformListMapToList(List<Map<String, String>> listMap);
 
     protected abstract PreparedStatement getInsertPreparedStatement(T object, Connection connection);
 
     //TODO - implement here getDeletePreparedStatement
-    protected abstract PreparedStatement getDeletePreparedStatement(String id, Connection connection);
+    protected abstract PreparedStatement getDeletePreparedStatement(String where, Connection connection);
 
     //TODO (DONE) - change to string args
     //TODO - implement here getUpdatePreparedStatement
-    protected abstract PreparedStatement getUpdatePreparedStatement(String[] set, String [] values, String [] where, Connection connection);
+    protected abstract PreparedStatement getUpdatePreparedStatement(String[] set, String[] values, String[] where, Connection connection);
 
 
     // protected abstract PreparedStatement getDeletePreparedStatement(String id, Connection connection);
@@ -35,7 +34,6 @@ public abstract class ATableManager<T> implements ITableManager<T> {
     }
 
     /**
-     *
      * @param projection
      * @param selection
      * @param orderBy
@@ -47,15 +45,14 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         System.out.println(sqlQuery);
         Connection connection = db.connect();
         List<T> list = null;
-        if(connection != null){
+        if (connection != null) {
             try {
                 PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 list = getDataList(resultSet);
-            }catch ( SQLException e){
+            } catch (SQLException e) {
                 e.printStackTrace();
-            }
-            finally {
+            } finally {
                 db.closeConnection(connection);
             }
         }
@@ -64,16 +61,16 @@ public abstract class ATableManager<T> implements ITableManager<T> {
 
     //TODO - merge with delete function
     @Override
-    public DBResult updateData(String [] set, String [] values, String [] where) {
+    public DBResult updateData(String[] set, String[] values, String[] where) {
         DBResult result = DBResult.NONE;
         Connection connection = db.connect();
-        if(connection != null) {
-            PreparedStatement preparedStatement = getUpdatePreparedStatement( set, values, where, connection);
-            if(preparedStatement != null){
-                try{
-                    if(1 == preparedStatement.executeUpdate())
+        if (connection != null) {
+            PreparedStatement preparedStatement = getUpdatePreparedStatement(set, values, where, connection);
+            if (preparedStatement != null) {
+                try {
+                    if (1 == preparedStatement.executeUpdate())
                         result = DBResult.UPDATED;
-                }catch (SQLException e){
+                } catch (SQLException e) {
                     int errorCode = e.getErrorCode();
                     if (errorCode == 19)
                         result = DBResult.ALREADY_EXIST;
@@ -81,7 +78,7 @@ public abstract class ATableManager<T> implements ITableManager<T> {
                         e.printStackTrace();
                         result = DBResult.ERROR;
                     }
-                }finally {
+                } finally {
                     closeStatement(preparedStatement);
                     if (db.closeConnection(connection) != DBResult.CONNECTION_CLOSED)
                         result = DBResult.ERROR;
@@ -92,7 +89,7 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return result;
     }
 
-    protected DBResult createTable(String[] parameters){
+    protected DBResult createTable(String[] parameters) {
         return db.createTable(TABLE_NAME, parameters);
     }
 
@@ -100,13 +97,13 @@ public abstract class ATableManager<T> implements ITableManager<T> {
     public DBResult InsertToTable(T object) {
         DBResult result = DBResult.NONE;
         Connection connection = db.connect();
-        if(connection != null) {
+        if (connection != null) {
             PreparedStatement preparedStatement = getInsertPreparedStatement(object, connection);
-            if(preparedStatement != null){
-                try{
-                    if(1 == preparedStatement.executeUpdate())
+            if (preparedStatement != null) {
+                try {
+                    if (1 == preparedStatement.executeUpdate())
                         result = DBResult.ADDED;
-                }catch (SQLException e){
+                } catch (SQLException e) {
                     /*
                     errorCode(vendorCode) 19 is: name = SQLITE_CONSTRAINT_PRIMARYKEY, messeage =  A PRIMARY KEY constraint failed.
                      */
@@ -114,10 +111,10 @@ public abstract class ATableManager<T> implements ITableManager<T> {
                     if (errorCode == 19)
                         result = DBResult.ALREADY_EXIST;
                     else {
-                    e.printStackTrace();
+                        e.printStackTrace();
                         result = DBResult.ERROR;
                     }
-                }finally {
+                } finally {
                     closeStatement(preparedStatement);
                     if (db.closeConnection(connection) != DBResult.CONNECTION_CLOSED)
                         result = DBResult.ERROR;
@@ -128,12 +125,11 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return result;
     }
 
-    //TODO - CHANGE THE INPUT FROM STRING TO --> SELECTION, PROJECTION "FOR MORE GENERIC APPROACH"
-    public DBResult deleteFromTable(String id) {
+    public DBResult deleteFromTable(String where) {
         DBResult result = DBResult.NONE;
         Connection connection = db.connect();
         if (connection != null) {
-            PreparedStatement preparedStatement = getDeletePreparedStatement(id, connection);
+            PreparedStatement preparedStatement = getDeletePreparedStatement(where, connection);
             if (preparedStatement != null) {
                 try {
                     if (1 == preparedStatement.executeUpdate())
@@ -154,8 +150,8 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return result;
     }
 
-    private void closeStatement(Statement statement){
-        if(statement != null) {
+    private void closeStatement(Statement statement) {
+        if (statement != null) {
             try {
                 statement.closeOnCompletion();
             } catch (SQLException e) {
@@ -164,8 +160,8 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         }
     }
 
-    private void closeResultSet(ResultSet rs){
-        if(rs != null ){
+    private void closeResultSet(ResultSet rs) {
+        if (rs != null) {
             try {
                 rs.close();
             } catch (SQLException e) {
@@ -174,16 +170,16 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         }
     }
 
-    private List<T> getDataList(ResultSet rs){
+    private List<T> getDataList(ResultSet rs) {
         List<T> list = null;
         try {
-            List<Map<String,String>>  mapList = map(rs);
+            List<Map<String, String>> mapList = map(rs);
             closeResultSet(rs);
             rs = null;
             list = transformListMapToList(mapList);
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             closeResultSet(rs);
         }
         return list;
@@ -191,7 +187,7 @@ public abstract class ATableManager<T> implements ITableManager<T> {
 
     private static List<Map<String, String>> map(ResultSet rs) throws SQLException {
         List<Map<String, String>> results = new ArrayList<Map<String, String>>();
-        if(rs != null) {
+        if (rs != null) {
             try {
                 if (rs != null) {
                     ResultSetMetaData meta = rs.getMetaData();
@@ -217,22 +213,21 @@ public abstract class ATableManager<T> implements ITableManager<T> {
     private String createSQLSelect(String projection, String selection, String orderBy) {
         String sqlQuery = "SELECT ";
         // set the projection, if null or empty will auto assign '*'
-        if (projection != null && !projection.equals("")){
+        if (projection != null && !projection.equals("")) {
             sqlQuery += projection + " ";
-        }
-        else{
+        } else {
             sqlQuery += "* ";
         }
 
         sqlQuery += "FROM " + TABLE_NAME + " ";
 
         // set the selection. where selection[i] suppose to refer selectionArgs[i]
-        if(selection != null && selection.length() > 0 ){
+        if (selection != null && selection.length() > 0) {
             sqlQuery += "WHERE " + selection;
         }
 
         //set the Order By
-        if(orderBy != null && orderBy != ""){
+        if (orderBy != null && orderBy != "") {
             sqlQuery += " ORDER BY " + orderBy;
         }
         return sqlQuery;

@@ -19,7 +19,7 @@ public class User {
         this.birthDate = 2018;
     }
 
-    public User(String userName, String password, String firstName, String lastName, String city, int date){
+    public User(String userName, String password, String firstName, String lastName, String city, int date) {
         this.userName = userName;
         this.password = password;
         this.firstName = firstName;
@@ -76,15 +76,24 @@ public class User {
         return birthDate;
     }
 
+
+    private String changeDateString(int date) {
+        String birthDate = String.valueOf(date);
+        String year = birthDate.substring(0, 4);
+        String month = birthDate.substring(4, 6);
+        String day = birthDate.substring(6, 8);
+        return day + "/" + month + "/" + year;
+    }
+
     @Override
     public String toString() {
         String ans = "";
-        ans += "userName: " + userName + "\n";
-        ans += "password: " + password + "\n";
-        ans += "firstName: " + firstName + "\n";
-        ans += "lastName: " + lastName + "\n";
-        ans += "city: " + city + "\n";
-        ans += "birthDate: " + birthDate + "\n";
+        ans += "User Name: " + userName + "\n";
+        ans += "Password: " + password + "\n";
+        ans += "First Name: " + firstName + "\n";
+        ans += "Last Name: " + lastName + "\n";
+        ans += "City: " + city + "\n";
+        ans += "Birth Date: " + changeDateString(birthDate) + "\n";
         return ans;
 
     }

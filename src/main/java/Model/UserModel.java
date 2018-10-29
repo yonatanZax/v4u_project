@@ -61,8 +61,8 @@ public class UserModel extends Observable {
         notifyObservers(result);
     }
 
-    public void deleteUser(String id) {
-        DBResult result = userTable.deleteFromTable(id);
+    public void deleteUser(String userName) {
+        DBResult result = userTable.deleteFromTable(UserTable.COLUMN_USERTABLE_USER_NAME + " = " + "\"" + userName + "\"");
         setChanged();
         notifyObservers(result);
     }
