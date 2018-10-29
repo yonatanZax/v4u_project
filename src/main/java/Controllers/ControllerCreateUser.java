@@ -4,7 +4,6 @@ import Model.UserModel;
 import View.UserDetailsView;
 import db.DBResult;
 import Model.User;
-import db.UserTable;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -23,6 +22,7 @@ public class ControllerCreateUser implements Observer{
     private Parent root;
     private FXMLLoader fxmlLoader;
 
+    private String updateUserName = null;
 
     public ControllerCreateUser(UserModel myModel) {
         stage = new Stage();
@@ -40,7 +40,7 @@ public class ControllerCreateUser implements Observer{
         myModel.addObserver(this);
     }
 
-    public void openCreate() throws IOException {
+    public void openCreate() {
         status = "create";
         stage.setTitle("Create user");
 
@@ -52,9 +52,8 @@ public class ControllerCreateUser implements Observer{
         stage.show();
     }
 
-    private String updateUserName = null;
 
-    public void openUpdate(User user) throws IOException {
+    public void openUpdate(User user)  {
         myView.setResult_lbl("");
         updateUserName = user.getUserName();
         status = "update";
@@ -99,7 +98,7 @@ public class ControllerCreateUser implements Observer{
     private User generateUserFromFields(){
         System.out.println("ControllerCreateUser: generateUser");
         myView.setResult_lbl("");
-        String userName = myView.getUserName().trim();
+        String userName = myView.getUserName();
 
         String password = myView.getPassword();
         String firstName = myView.getFirstName();
@@ -113,7 +112,6 @@ public class ControllerCreateUser implements Observer{
         }
         return createUserIfValuesAreValid(values,date);
     }
-
 
 
     public void saveInfo() {
@@ -181,10 +179,10 @@ public class ControllerCreateUser implements Observer{
             System.out.println("ControllerCreateUser: update by userModel");
 
             if(arg.equals(DBResult.ADDED)) {
-                myView.setResult_lbl("User was added successfully");
+                myView.setResult_lbl("");
                 closeStage();
             }else if (arg.equals(DBResult.UPDATED)){
-                myView.setResult_lbl("User was Updated successfully");
+                myView.setResult_lbl("");
                 closeStage();
             }else if (arg.equals(DBResult.ALREADY_EXIST)){
                 myView.setResult_lbl("User already exists");

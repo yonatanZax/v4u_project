@@ -14,6 +14,6 @@ public interface ITableManager<T> {
 
     List<T> select(String projection, String selection, String orderBy);
 
-    DBResult updateData(String where, String set);
+    DBResult updateData(String [] set, String [] values, String [] where);
 
 }
