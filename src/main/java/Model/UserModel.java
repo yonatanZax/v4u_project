@@ -35,8 +35,6 @@ public class UserModel extends Observable {
 
 
     public List<User> readUsers(String[] listOfUsername) {
-        // ToDo (DONE) - change selection for an array of users
-
         // Generates the selection part
         // Example:     SELECT * FROM userInfo WHERE userName IN ("user1","user2")
         String selection = UserTable.COLUMN_USERTABLE_USER_NAME + " IN (";
@@ -52,14 +50,19 @@ public class UserModel extends Observable {
 
     public void updateUser(User user){
         DBResult result = DBResult.NONE;
-
-        result = userTable.updateUser(user);
+        String [] where = {userTable.COLUMN_USERTABLE_USER_NAME};
+        String [] set = {userTable.COLUMN_USERTABLE_USER_NAME, userTable.COLUMN_USERTABLE_PASS,
+                userTable.COLUMN_USERTABLE_FIRST_NAME, userTable.COLUMN_USERTABLE_LAST_NAME,
+                userTable.COLUMN_USERTABLE_CITY, userTable.COLUMN_USERTABLE_BIRTHDAY};
+        String [] values = {user.getUserName(), user.getPassword(), user.getFirstName(),
+                            user.getLastName(), user.getCity(), String.valueOf(user.getBirthDate()), user.getUserName()};
+        result = userTable.updateData(set , values, where);
         setChanged();
         notifyObservers(result);
     }
 
-    public void deleteUser(String id){
-        DBResult result = userTable.deleteFromTable(id);
+    public void deleteUser(String userName) {
+        DBResult result = userTable.deleteFromTable(UserTable.COLUMN_USERTABLE_USER_NAME + " = " + "\"" + userName + "\"");
         setChanged();
         notifyObservers(result);
     }

@@ -108,25 +108,17 @@ public class UserTable extends ATableManager<User> {
 
 
     @Override
-    protected PreparedStatement getUpdatePreparedStatement(User user, Connection connection) {
-        String sql = "UPDATE " + TABLE_NAME + " SET " + COLUMN_USERTABLE_USER_NAME + " = ? , "
-                + COLUMN_USERTABLE_PASS + " = ? , "
-                + COLUMN_USERTABLE_FIRST_NAME + " = ? , "
-                + COLUMN_USERTABLE_LAST_NAME + " = ? , "
-                + COLUMN_USERTABLE_CITY + " = ? , "
-                + COLUMN_USERTABLE_BIRTHDAY + " = ?  " +
-                "WHERE " + COLUMN_USERTABLE_USER_NAME + " = ?" ;
+    protected PreparedStatement getUpdatePreparedStatement(String[] set, String[] values, String [] where, Connection connection) {
+        String sql = "UPDATE " + TABLE_NAME + " SET ";
+        sql += appendSql(set);
+        sql += "WHERE " + appendSql(where);
         PreparedStatement pstmt = null;
         if (connection != null) {
             try {
                 pstmt = connection.prepareStatement(sql);
-                pstmt.setString(1, user.getUserName());
-                pstmt.setString(2, user.getPassword());
-                pstmt.setString(3, user.getFirstName());
-                pstmt.setString(4, user.getLastName());
-                pstmt.setString(5, user.getCity());
-                pstmt.setObject(6, user.getBirthDate());
-                pstmt.setString(7, user.getUserName());
+                for (int i = 0; i < values.length; i++) {
+                    pstmt.setString(i+1,values[i]);
+                }
                 return pstmt;
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -138,6 +130,16 @@ public class UserTable extends ATableManager<User> {
             }
         }
         return null;
+    }
+
+    private String appendSql(String[] strings) {
+        String s = "";
+        for (int i = 0; i < strings.length; i++) {
+            s+= strings[i] + " = ?";
+            if (i<strings.length-1)
+                s+=", ";
+        }
+        return s;
     }
 
     @Override
@@ -151,13 +153,12 @@ public class UserTable extends ATableManager<User> {
         return super.createTable(parameters);
     }
 
-    protected PreparedStatement getDeletePreparedStatement(String id, Connection connection){
-        String sql = "DELETE FROM "+ TABLE_NAME + " WHERE " +  COLUMN_USERTABLE_USER_NAME + " =  ?" ;
+    protected PreparedStatement getDeletePreparedStatement(String where, Connection connection){
+        String sql = "DELETE FROM "+ TABLE_NAME + " WHERE " +  where ;
         PreparedStatement pstmt;
         if (connection != null) {
             try {
                 pstmt = connection.prepareStatement(sql);
-                pstmt.setString(1, id);
                 return pstmt;
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -171,31 +172,5 @@ public class UserTable extends ATableManager<User> {
         return null;
     }
 
-
-
-
-
-
-    public static void main(String[] args) {
-        UserTable userTable = getInstance();
-        userTable.createTable();
-        User user = new User();
-        user.setUserName("USERNAME1");
-        user.setPassword("PASSWORD");
-        user.setFirstName("FNAME");
-        user.setLastName("LNAME");
-        user.setCity("CITY");
-        java.util.Date today = new java.util.Date();
-        java.sql.Date sqlDate = new java.sql.Date(today.getTime());
-        user.setBirthDate(20101105);
-        userTable.InsertToTable(user);
-        String projection = null;
-        String selection = null;
-        String orderBy = null;
-
-        List<User> userList = userTable.select(projection,selection,orderBy);
-
-        System.out.println(userList);
-    }
 
 }

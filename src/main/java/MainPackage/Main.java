@@ -1,5 +1,9 @@
 package MainPackage;
 
+import Controllers.ControllerCRUD;
+import Model.UserModel;
+import View.UserCRUDView;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,12 +14,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        System.out.println();
 
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("user_crud_view.fxml"));
-        primaryStage.setTitle("User CRUD");
-        primaryStage.setScene(new Scene(root, 400, 400));
-        primaryStage.show();
+
+        ControllerCRUD controllerCRUD = new ControllerCRUD();
+        controllerCRUD.showStage();
     }
 
 
@@ -24,9 +26,3 @@ public class Main extends Application {
     }
 }
 //TODO - learn how to work with java log and add it
-
-//TODO (DONE) - add check criteria to create new user, checking user doesn't exist already, and all the information is valid
-
-//TODO (DONE) - add enums to returning and calling functions and act accordingly
-
-//TODO (DONE) - fix the views appearance

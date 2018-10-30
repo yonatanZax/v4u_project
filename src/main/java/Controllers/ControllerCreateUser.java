@@ -4,7 +4,6 @@ import Model.UserModel;
 import View.UserDetailsView;
 import db.DBResult;
 import Model.User;
-import db.UserTable;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -23,8 +22,9 @@ public class ControllerCreateUser implements Observer{
     private Parent root;
     private FXMLLoader fxmlLoader;
 
+    private String updateUserName = null;
 
-    public ControllerCreateUser() {
+    public ControllerCreateUser(UserModel myModel) {
         stage = new Stage();
         fxmlLoader = new FXMLLoader(getClass().getResource("/createUser_view.fxml"));
         try {
@@ -36,35 +36,28 @@ public class ControllerCreateUser implements Observer{
         stage.setScene(scene);
         myView = fxmlLoader.getController();
 
-        myModel = new UserModel();
+        this.myModel = myModel;
         myModel.addObserver(this);
     }
 
-    public void openCreate() throws IOException {
+    public void openCreate() {
         status = "create";
-        //stage = new Stage();
         stage.setTitle("Create user");
-        //FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/createUser_view.fxml"));
 
-        //root = fxmlLoader.load();
         UserDetailsView userDetailsView = fxmlLoader.getController();
         userDetailsView.resetAll();
         userDetailsView.addObserver(this);
 
-        //Scene scene = new Scene(root,400,400);
-        //stage.setScene(scene);
+        updateUserName = null;
         stage.show();
     }
 
-    private String updateUserName = null;
 
-    public void openUpdate(User user) throws IOException {
+    public void openUpdate(User user)  {
+        myView.setResult_lbl("");
         updateUserName = user.getUserName();
-
         status = "update";
-        //stage = new Stage();
         stage.setTitle("Update user");
-        //root = fxmlLoader.load();
         myView = fxmlLoader.getController();
 
         myView.setUserName(user.getUserName());
@@ -91,7 +84,7 @@ public class ControllerCreateUser implements Observer{
         if (date <= 0)
             return null;
 
-        newUser.setUserName(values[0]);
+        newUser.setUserName(values[0].trim());
         newUser.setPassword(values[1]);
         newUser.setFirstName(values[2]);
         newUser.setLastName(values[3]);
@@ -106,21 +99,19 @@ public class ControllerCreateUser implements Observer{
         System.out.println("ControllerCreateUser: generateUser");
         myView.setResult_lbl("");
         String userName = myView.getUserName();
+
         String password = myView.getPassword();
         String firstName = myView.getFirstName();
         String lastName = myView.getLastName();
         String city = myView.getCityName();
         String[] values = {userName,password,firstName,lastName,city};
 
-        //int birthDay = 20180505;
         int date = 0;
         if (myView.getBirthday() != null){
             date = this.convertDateStringToInt(myView.getBirthday().toString());
         }
-        // TODO (DONE) - get date as int
         return createUserIfValuesAreValid(values,date);
     }
-
 
 
     public void saveInfo() {
@@ -132,24 +123,38 @@ public class ControllerCreateUser implements Observer{
         }else{
             myView.setResult_lbl("Please fill all the fields..");
         }
+    }
 
+
+    private void updateInfo() {
+        User newUser = generateUserFromFields();
+        if (newUser != null) {
+            if (!checkUpdateUserName(newUser.getUserName(), updateUserName)) {
+                myView.setResult_lbl("User name already exist");
+            }
+            else{
+                myModel.updateUser(newUser);
+            }
+        } else
+            myView.setResult_lbl("Please fill all the fields..");
 
     }
 
-    //TODO - make sure we make updateUserName null where ever its needed
-    private void updateInfo(){
 
-        String userName = myView.getUserName();
-        if(!userName.equals(updateUserName)){
-            //TODO - if the new name already exists show an error
+    /**
+     * checks if the new UserName is a valid UserName
+     * @param newUserName
+     * @param oldUserName
+     * @return - true if its valid. meaning its the same as the old. if it isn't the same it checks that the new name doesn't already exist in the DB
+     */
+    private boolean checkUpdateUserName(String newUserName, String oldUserName){
+        if(!newUserName.equals(oldUserName)){
+            User user = myModel.readUser(oldUserName);
+            if(user != null){
+                return false;
+            }
         }
-
-        User newUser = generateUserFromFields();
-        if (newUser != null){
-            myModel.updateUser(newUser);
-        }else
-            myView.setResult_lbl("Please fill all the fields..");
-
+        return true;
     }
 
     private int convertDateStringToInt(String str) {
@@ -174,10 +179,10 @@ public class ControllerCreateUser implements Observer{
             System.out.println("ControllerCreateUser: update by userModel");
 
             if(arg.equals(DBResult.ADDED)) {
-                myView.setResult_lbl("User was added successfully");
+                myView.setResult_lbl("");
                 closeStage();
             }else if (arg.equals(DBResult.UPDATED)){
-                myView.setResult_lbl("User was Updated successfully");
+                myView.setResult_lbl("");
                 closeStage();
             }else if (arg.equals(DBResult.ALREADY_EXIST)){
                 myView.setResult_lbl("User already exists");
