@@ -17,11 +17,7 @@ public abstract class ATableManager<T> implements ITableManager<T> {
 
     protected abstract List<T> transformListMapToList(List<Map<String,String>> listMap);
     protected abstract PreparedStatement getInsertPreparedStatement(T object, Connection connection);
-
-    //TODO - implement here getDeletePreparedStatement
     protected abstract PreparedStatement getDeletePreparedStatement(String where, Connection connection);
-
-    //TODO - implement here getUpdatePreparedStatement
     protected abstract PreparedStatement getUpdatePreparedStatement(String[] set, String[] values, String[] where, Connection connection);
 
 
@@ -59,7 +55,6 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return list;
     }
 
-    //TODO - merge with delete function
     @Override
     public DBResult updateData(String[] set, String[] values, String[] where) {
         DBResult result = DBResult.NONE;

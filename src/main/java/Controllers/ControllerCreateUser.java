@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -47,6 +48,8 @@ public class ControllerCreateUser implements Observer{
         UserDetailsView userDetailsView = fxmlLoader.getController();
         userDetailsView.resetAll();
         userDetailsView.addObserver(this);
+
+        myView.create_datePicker.setValue(LocalDate.now().minusYears(25));
 
         updateUserName = null;
         stage.show();
@@ -107,8 +110,15 @@ public class ControllerCreateUser implements Observer{
         String[] values = {userName,password,firstName,lastName,city};
 
         int date = 0;
-        if (myView.getBirthday() != null){
-            date = this.convertDateStringToInt(myView.getBirthday().toString());
+        LocalDate birthDay = myView.getBirthday();
+        if (birthDay != null){
+            LocalDate eighteenYears = LocalDate.now().minusYears(18);
+            if(birthDay.isBefore(eighteenYears)){
+                date = this.convertDateStringToInt(birthDay.toString());
+            }else{
+                return null;
+            }
+
         }
         return createUserIfValuesAreValid(values,date);
     }
@@ -121,7 +131,7 @@ public class ControllerCreateUser implements Observer{
         if (newUser != null){
             myModel.createUser(newUser);
         }else{
-            myView.setResult_lbl("Please fill all the fields..");
+            myView.setResult_lbl("Please fill all the fields correctly..");
         }
     }
 

@@ -86,6 +86,11 @@ public class ControllerCRUD implements Observer {
 
 
     public void updateUser(){
+        String textField = myView.userName.getText().trim();
+        if (textField.equals("")) {
+            myView.status_lbl.setText("Please insert a valid userName..");
+            return;
+        }
         String userName = myView.userName.getText().trim();
         User user = myModel.readUser(userName);
         if (user == null){

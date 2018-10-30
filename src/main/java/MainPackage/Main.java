@@ -25,4 +25,3 @@ public class Main extends Application {
         launch(args);
     }
 }
-//TODO - learn how to work with java log and add it
