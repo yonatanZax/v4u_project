@@ -69,6 +69,15 @@ public class UserDetailsView extends Observable implements Initializable {
         return city_textInput.getText().trim();
     }
 
+
+    private int convertDateFromStringToInt(String dateAsString){
+        int day = Integer.valueOf(dateAsString.substring(dateAsString.length() - 2, dateAsString.length()));
+        int month = Integer.valueOf(dateAsString.substring(dateAsString.length() - 4, dateAsString.length() - 2));
+        int year =  Integer.valueOf(dateAsString.substring(0, dateAsString.length() - 4));
+
+        return year*10000 + month*100 + day;
+    }
+
     public void setBirthdate(String birthdate){
         int day = Integer.valueOf(birthdate.substring(birthdate.length() - 2, birthdate.length()));
         int month = Integer.valueOf(birthdate.substring(birthdate.length() - 4, birthdate.length() - 2));
