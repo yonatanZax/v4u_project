@@ -1,6 +1,7 @@
-package db;
+package db.Tables;
 
-import Model.User;
+import Model.User.User;
+import db.DBResult;
 import db.Managers.ATableManager;
 import db.Managers.DBManager;
 
@@ -16,7 +17,6 @@ public class UserTable extends ATableManager<User> {
 
     private static UserTable ourInstance;
 
-    public static final String COLUMN_USERTABLE_USER_NAME = "userName";
     public static final String COLUMN_USERTABLE_PASS = "password";
     public static final String COLUMN_USERTABLE_FIRST_NAME = "firstName";
     public static final String COLUMN_USERTABLE_LAST_NAME = "lastName";
@@ -62,7 +62,7 @@ public class UserTable extends ATableManager<User> {
                         user.setLastName( entry.getValue());
 
                         break;
-                    case COLUMN_USERTABLE_USER_NAME:
+                    case COLUMN_TABLE_KEY:
                         user.setUserName( entry.getValue());
                         break;
                     case COLUMN_USERTABLE_PASS:
@@ -82,7 +82,7 @@ public class UserTable extends ATableManager<User> {
 
     @Override
     protected PreparedStatement getInsertPreparedStatement(User object, Connection connection) {
-        String sql = "INSERT INTO " + TABLE_NAME + "(" + COLUMN_USERTABLE_USER_NAME + "," + COLUMN_USERTABLE_PASS + "," + COLUMN_USERTABLE_FIRST_NAME + "," + COLUMN_USERTABLE_LAST_NAME + "," + COLUMN_USERTABLE_CITY + "," + COLUMN_USERTABLE_BIRTHDAY + ") VALUES(?,?,?,?,?,?)";
+        String sql = "INSERT INTO " + TABLE_NAME + "(" + COLUMN_TABLE_KEY + "," + COLUMN_USERTABLE_PASS + "," + COLUMN_USERTABLE_FIRST_NAME + "," + COLUMN_USERTABLE_LAST_NAME + "," + COLUMN_USERTABLE_CITY + "," + COLUMN_USERTABLE_BIRTHDAY + ") VALUES(?,?,?,?,?,?)";
         PreparedStatement pstmt = null;
         if (connection != null) {
             try {
@@ -107,44 +107,44 @@ public class UserTable extends ATableManager<User> {
     }
 
 
-    @Override
-    protected PreparedStatement getUpdatePreparedStatement(String[] set, String[] values, String [] where, Connection connection) {
-        String sql = "UPDATE " + TABLE_NAME + " SET ";
-        sql += appendSql(set);
-        sql += "WHERE " + appendSql(where);
-        PreparedStatement pstmt = null;
-        if (connection != null) {
-            try {
-                pstmt = connection.prepareStatement(sql);
-                for (int i = 0; i < values.length; i++) {
-                    pstmt.setString(i+1,values[i]);
-                }
-                return pstmt;
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
-                try {
-                    connection.rollback();
-                } catch (SQLException ex) {
-                    System.out.println(ex.getMessage());
-                }
-            }
-        }
-        return null;
-    }
-
-    private String appendSql(String[] strings) {
-        String s = "";
-        for (int i = 0; i < strings.length; i++) {
-            s+= strings[i] + " = ?";
-            if (i<strings.length-1)
-                s+=", ";
-        }
-        return s;
-    }
+//    @Override
+//    protected PreparedStatement getUpdatePreparedStatement(String[] set, String[] values, String [] where, Connection connection) {
+//        String sql = "UPDATE " + TABLE_NAME + " SET ";
+//        sql += appendSql(set);
+//        sql += "WHERE " + appendSql(where);
+//        PreparedStatement pstmt = null;
+//        if (connection != null) {
+//            try {
+//                pstmt = connection.prepareStatement(sql);
+//                for (int i = 0; i < values.length; i++) {
+//                    pstmt.setString(i+1,values[i]);
+//                }
+//                return pstmt;
+//            } catch (SQLException e) {
+//                System.out.println(e.getMessage());
+//                try {
+//                    connection.rollback();
+//                } catch (SQLException ex) {
+//                    System.out.println(ex.getMessage());
+//                }
+//            }
+//        }
+//        return null;
+//    }
+//
+//    private String appendSql(String[] strings) {
+//        String s = "";
+//        for (int i = 0; i < strings.length; i++) {
+//            s+= strings[i] + " = ?";
+//            if (i<strings.length-1)
+//                s+=", ";
+//        }
+//        return s;
+//    }
 
     @Override
     public DBResult createTable() {
-        String[] parameters = {COLUMN_USERTABLE_USER_NAME + " text PRIMARY KEY"
+        String[] parameters = {COLUMN_TABLE_KEY + " text PRIMARY KEY"
                 , COLUMN_USERTABLE_PASS + " text NOT NULL"
                 , COLUMN_USERTABLE_FIRST_NAME + " text NOT NULL"
                 , COLUMN_USERTABLE_LAST_NAME + " text NOT NULL"
@@ -153,24 +153,24 @@ public class UserTable extends ATableManager<User> {
         return super.createTable(parameters);
     }
 
-    protected PreparedStatement getDeletePreparedStatement(String where, Connection connection){
-        String sql = "DELETE FROM "+ TABLE_NAME + " WHERE " +  where ;
-        PreparedStatement pstmt;
-        if (connection != null) {
-            try {
-                pstmt = connection.prepareStatement(sql);
-                return pstmt;
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
-                try {
-                    connection.rollback();
-                } catch (SQLException ex) {
-                    System.out.println(ex.getMessage());
-                }
-            }
-        }
-        return null;
-    }
+//    protected PreparedStatement getDeletePreparedStatement(String where, Connection connection){
+//        String sql = "DELETE FROM "+ TABLE_NAME + " WHERE " +  where ;
+//        PreparedStatement pstmt;
+//        if (connection != null) {
+//            try {
+//                pstmt = connection.prepareStatement(sql);
+//                return pstmt;
+//            } catch (SQLException e) {
+//                System.out.println(e.getMessage());
+//                try {
+//                    connection.rollback();
+//                } catch (SQLException ex) {
+//                    System.out.println(ex.getMessage());
+//                }
+//            }
+//        }
+//        return null;
+//    }
 
 
 }

@@ -1,9 +1,10 @@
 package Controllers;
 
-import Model.UserModel;
-import View.UserCRUDView;
+import Model.ACRUDModel;
+import Model.User.UserModel;
+import View.CRUDViews.UserCRUDView;
 import db.DBResult;
-import Model.User;
+import Model.User.User;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,7 +19,7 @@ public class ControllerCRUD implements Observer {
 
     private ControllerCreateUser controllerCreateUser;
     private UserCRUDView myView;
-    private UserModel myModel;
+    private ACRUDModel myModel;
     private Stage stage;
     private Parent root;
     private FXMLLoader fxmlLoader;
@@ -53,7 +54,7 @@ public class ControllerCRUD implements Observer {
         }
         else{
             String userName = textField;
-            User user = myModel.readUser(userName);
+            User user = ((UserModel)myModel).readUser(userName);
             if (user == null) {
                 // Empty list means that not even one of the list was in the db
                 myView.info_lbl.setText(myView.info_lblTitle + "");
@@ -92,7 +93,7 @@ public class ControllerCRUD implements Observer {
             return;
         }
         String userName = myView.userName.getText().trim();
-        User user = myModel.readUser(userName);
+        User user = ((UserModel)myModel).readUser(userName);
         if (user == null){
             myView.info_lbl.setText(myView.info_lblTitle + "");
             myView.status_lbl.setText(myView.info_lblTitle + userName + " Doesn't exist");
@@ -103,7 +104,7 @@ public class ControllerCRUD implements Observer {
 
     public void deleteUser() {
         String id = myView.userName.getText();
-        myModel.deleteUser(id);
+        myModel.deleteDataFromDB(id);
     }
 
 

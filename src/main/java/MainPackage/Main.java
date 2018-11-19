@@ -1,21 +1,20 @@
 package MainPackage;
 
 import Controllers.ControllerCRUD;
-import Model.UserModel;
-import View.UserCRUDView;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.io.File;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-
+        File directory = new File("db");
+        if (! directory.exists())
+            directory.mkdir();
         ControllerCRUD controllerCRUD = new ControllerCRUD();
         controllerCRUD.showStage();
     }

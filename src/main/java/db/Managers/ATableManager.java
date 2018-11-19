@@ -14,14 +14,70 @@ public abstract class ATableManager<T> implements ITableManager<T> {
 
     protected IDBManager db;
     public final String TABLE_NAME;
+    public final String COLUMN_TABLE_KEY = "key";
 
     protected abstract List<T> transformListMapToList(List<Map<String,String>> listMap);
     protected abstract PreparedStatement getInsertPreparedStatement(T object, Connection connection);
-    protected abstract PreparedStatement getDeletePreparedStatement(String where, Connection connection);
-    protected abstract PreparedStatement getUpdatePreparedStatement(String[] set, String[] values, String[] where, Connection connection);
 
 
-   // protected abstract PreparedStatement getDeletePreparedStatement(String id, Connection connection);
+
+    protected PreparedStatement getDeletePreparedStatement(String where, Connection connection){
+        String sql = "DELETE FROM "+ TABLE_NAME + " WHERE " +  where ;
+        PreparedStatement pstmt;
+        if (connection != null) {
+            try {
+                pstmt = connection.prepareStatement(sql);
+                return pstmt;
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+                try {
+                    connection.rollback();
+                } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        }
+        return null;
+    }
+
+
+
+    protected PreparedStatement getUpdatePreparedStatement(String[] set, String[] values, String[] where, Connection connection){
+        String sql = "UPDATE " + TABLE_NAME + " SET ";
+        sql += appendSql(set);
+        sql += "WHERE " + appendSql(where);
+        PreparedStatement pstmt = null;
+        if (connection != null) {
+            try {
+                pstmt = connection.prepareStatement(sql);
+                for (int i = 0; i < values.length; i++) {
+                    pstmt.setString(i+1,values[i]);
+                }
+                return pstmt;
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+                try {
+                    connection.rollback();
+                } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        }
+        return null;
+    }
+
+    private String appendSql(String[] strings) {
+        String s = "";
+        for (int i = 0; i < strings.length; i++) {
+            s+= strings[i] + " = ?";
+            if (i<strings.length-1)
+                s+=", ";
+        }
+        return s;
+    }
+
+
+
 
     protected ATableManager(IDBManager db, String table_name) {
         this.db = db;
