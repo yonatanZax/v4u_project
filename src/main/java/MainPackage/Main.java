@@ -1,7 +1,9 @@
 package MainPackage;
 
-import Controllers.ControllerCRUD;
+import Controllers.ControllerUserCRUD;
 
+import db.Tables.RequestTable;
+import db.Tables.VacationTable;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -15,8 +17,11 @@ public class Main extends Application {
         File directory = new File("db");
         if (! directory.exists())
             directory.mkdir();
-        ControllerCRUD controllerCRUD = new ControllerCRUD();
-        controllerCRUD.showStage();
+        ControllerUserCRUD controllerUserCRUD = new ControllerUserCRUD();
+        controllerUserCRUD.showStage();
+        VacationTable.getInstance().createTable();
+        RequestTable requestTable = RequestTable.getInstance();
+        requestTable.createTable();
     }
 
 

@@ -1,7 +1,9 @@
 package Model;
 
+import Model.User.User;
 import db.DBResult;
 import db.Managers.ATableManager;
+import db.Tables.UserTable;
 
 import java.util.List;
 import java.util.Observable;
@@ -26,31 +28,16 @@ public abstract class ACRUDModel<T> extends Observable{
     }
 
 
-    public List<T> readDataFromDB(String[] listOfKeys){
-        // Generates the selection part
-        // Example:     SELECT * FROM <TableName> WHERE key IN ("key1","key2")
-        String selection = TableManager.COLUMN_TABLE_KEY + " IN (";
-        for (int i=0 ; i < listOfKeys.length - 1; i++) {
-            selection += "\"" + listOfKeys[i] + "\",";
-        }
-        selection += "\"" + listOfKeys[listOfKeys.length-1] + "\")";
 
-        // Get the list of users from the database
-        List<T> dataList = TableManager.select(null,selection,null);
-        return dataList;
-    }
 
 
 
     abstract public void updateTable(T t);
+    abstract public List<T> readDataFromDB(String[] listOfKeys);
+    abstract public void deleteDataFromDB(String keys[][]);
 
 
 
-    public void deleteDataFromDB(String key) {
-        DBResult result = TableManager.deleteFromTable(TableManager.COLUMN_TABLE_KEY + " = " + "\"" + key + "\"");
-        setChanged();
-        notifyObservers(result);
-    }
 
 
 }

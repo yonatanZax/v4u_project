@@ -15,6 +15,7 @@ public class VacationTable extends ATableManager<Vacation> {
 
 
     private static VacationTable ourInstance;
+    public final String COLUMN_VACATIONTABLE_KEY = "key";
 
     // Todo - add more columns
 
@@ -36,10 +37,12 @@ public class VacationTable extends ATableManager<Vacation> {
     @Override
     public DBResult createTable() {
         // Todo - add parameters
-        String[] parameters = {COLUMN_TABLE_KEY + " text PRIMARY KEY"
-//                , COLUMN_USERTABLE_PASS + " text NOT NULL"};
-        };
-        return super.createTable(parameters);
+        String[] primaryKeys = {COLUMN_VACATIONTABLE_KEY};
+        String[] foreignKeys = {};
+        String[] stringFields = {};
+        String[] intFields = {};
+        String[] doubleFields = {};
+        return super.createTable(primaryKeys, foreignKeys,stringFields,intFields,doubleFields);
     }
 
 
@@ -54,23 +57,23 @@ public class VacationTable extends ATableManager<Vacation> {
     @Override
     protected PreparedStatement getInsertPreparedStatement(Vacation object, Connection connection) {
         /*
-        * Key
-        * SellerID
-        * Price
-        * FlightNo
-        * FlightCompany
-        * Origin
-        * Dest
-        * FromDate
-        * ToDate
+        * vacationKey
+        * sellerKey
+        * price
+        * flightNo
+        * flightCompany
+        * origin
+        * dest
+        * fromDate
+        * toDate
         * numOfTickets
-        * FlightBack
+        * flightBack
         *
         *
         * */
 
 
-        String sql = "INSERT INTO " + TABLE_NAME + "(" + COLUMN_TABLE_KEY + "," + ") VALUES(?,)";
+        String sql = "INSERT INTO " + TABLE_NAME + "(" + COLUMN_VACATIONTABLE_KEY + "," + ") VALUES(?,)";
         PreparedStatement pstmt = null;
         if (connection != null) {
             try {

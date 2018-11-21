@@ -14,7 +14,6 @@ public abstract class ATableManager<T> implements ITableManager<T> {
 
     protected IDBManager db;
     public final String TABLE_NAME;
-    public final String COLUMN_TABLE_KEY = "key";
 
     protected abstract List<T> transformListMapToList(List<Map<String,String>> listMap);
     protected abstract PreparedStatement getInsertPreparedStatement(T object, Connection connection);
@@ -140,8 +139,8 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return result;
     }
 
-    protected DBResult createTable(String[] parameters){
-        return db.createTable(TABLE_NAME, parameters);
+    protected DBResult createTable(String[] primaryKeys, String[] foreignKeys, String[] stringFields,String[] intFields, String[] doubleFields){
+        return db.createTable(TABLE_NAME,primaryKeys,foreignKeys, stringFields, intFields, doubleFields);
     }
 
     @Override

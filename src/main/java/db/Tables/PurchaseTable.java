@@ -15,6 +15,8 @@ public class PurchaseTable extends ATableManager<Purchase> {
 
     private static PurchaseTable ourInstance;
 
+    public final String COLUMN_PURCHASETABLE_KEY = "key";
+
     // Todo - add more columns
 
 
@@ -43,15 +45,17 @@ public class PurchaseTable extends ATableManager<Purchase> {
     @Override
     public DBResult createTable() {
         // Todo - add parameters
-        String[] parameters = {COLUMN_TABLE_KEY + " text PRIMARY KEY"
-//                , COLUMN_USERTABLE_PASS + " text NOT NULL"};
-        };
-        return super.createTable(parameters);
+        String[] primaryKeys = {COLUMN_PURCHASETABLE_KEY};
+        String[] foreignKeys = {};
+        String[] stringFields = {};
+        String[] intFields = {};
+        String[] doubleFields = {};
+        return super.createTable(primaryKeys, foreignKeys,stringFields,intFields,doubleFields);
     }
 
     @Override
     protected PreparedStatement getInsertPreparedStatement(Purchase object, Connection connection) {
-        String sql = "INSERT INTO " + TABLE_NAME + "(" + COLUMN_TABLE_KEY + "," + ") VALUES(?,)";
+        String sql = "INSERT INTO " + TABLE_NAME + "(" + COLUMN_PURCHASETABLE_KEY + "," + ") VALUES(?,)";
         PreparedStatement pstmt = null;
         if (connection != null) {
             try {

@@ -15,7 +15,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 
-public class ControllerCRUD implements Observer {
+public class ControllerUserCRUD implements Observer {
 
     private ControllerCreateUser controllerCreateUser;
     private UserCRUDView myView;
@@ -25,7 +25,7 @@ public class ControllerCRUD implements Observer {
     private FXMLLoader fxmlLoader;
 
 
-    public ControllerCRUD() {
+    public ControllerUserCRUD() {
         myModel = new UserModel();
         myModel.addObserver(this);
         controllerCreateUser = new ControllerCreateUser(myModel);
@@ -104,13 +104,13 @@ public class ControllerCRUD implements Observer {
 
     public void deleteUser() {
         String id = myView.userName.getText();
-        myModel.deleteDataFromDB(id);
+        ((UserModel)myModel).deleteUser(id);
     }
 
 
     @Override
     public void update(Observable o, Object arg){
-        System.out.println("ControllerCRUD: update by UserCRUDView");
+        System.out.println("ControllerUserCRUD: update by UserCRUDView");
         if(arg.equals(Enum_CRUD.READ)) {
             readUser();
         } else if(arg.equals(Enum_CRUD.CREATE)) {
