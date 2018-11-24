@@ -27,7 +27,7 @@
             <Font name="Arial" size="24" />
         </font>
         <GridPane.margin>
-            <Insets bottom="20" left="0" right="0" top="20" />
+            <Insets bottom="20" top="20" />
         </GridPane.margin>
     </Label>
     <Label text="Flight number : " GridPane.columnIndex="1" GridPane.rowIndex="2">
@@ -67,7 +67,7 @@
     <!--<TextField fx:id="price" prefHeight="40" GridPane.columnIndex="2" GridPane.rowIndex="1" />-->
     <!--<TextField fx:id="flightNumber" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />-->
     <!--<TextField fx:id="airline" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />-->
-    <TextField fx:id="destination" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+    <ChoiceBox fx:id="destination" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
     <!--<TextField fx:id="numberOfTickets" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="9" />-->
     <!--<Label fx:id="errorMessage_d_date" text="Check Field" textFill="RED" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="5" />-->
     <!--<Label fx:id="errorMessage_r_time" text="Check Field" textFill="RED" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="8" />-->

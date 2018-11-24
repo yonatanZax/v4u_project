@@ -11,7 +11,7 @@ public class CreateVacationView {
 //    public TextField price;
 //    public TextField flightNumber;
 //    public TextField airline;
-    public TextField destination;
+    public ChoiceBox destination;
 //    public TextField numberOfTickets;
 //    public ChoiceBox vacation_type_choice;
 //    public ChoiceBox accommodation_type_choice;
@@ -22,6 +22,7 @@ public class CreateVacationView {
 //    public TextArea freeText;
 
     public void handleCancelButtonAction(ActionEvent actionEvent) {
+
     }
 
     public void handleSubmitButtonAction(ActionEvent actionEvent) {
