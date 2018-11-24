@@ -2,7 +2,6 @@ package Model.Vacation;
 
 public class Vacation {
 
-    // Todo - add more fields ( also getters and setters )
     private String vacationKey;
     private String sellerKey;
     private String origin;

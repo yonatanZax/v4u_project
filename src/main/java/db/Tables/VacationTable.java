@@ -1,6 +1,5 @@
 package db.Tables;
 
-import Model.Request.Request;
 import Model.Vacation.Vacation;
 import db.DBResult;
 import db.Managers.ATableManager;
@@ -19,7 +18,7 @@ public class VacationTable extends ATableManager<Vacation> {
     private static VacationTable ourInstance;
     public static final String COLUMN_VACATIONTABLE_KEY = "key";
     public static final String COLUMN_VACATIONTABLE_SELLERKEY = "sellerKey";
-    private static final String FOREIGNKEY_SELLERKEY = "(" + COLUMN_VACATIONTABLE_SELLERKEY + ") references userInfo(key)";
+    private final String FOREIGNKEY_SELLERKEY = "(" + COLUMN_VACATIONTABLE_SELLERKEY + ") references userInfo(key)";
     public static final String COLUMN_VACATIONTABLE_VISIBLE = "visible";
     public static final String COLUMN_VACATIONTABLE_DESTINATION = "destination";
     public static final String COLUMN_VACATIONTABLE_ORIGIN = "origin";
@@ -45,8 +44,8 @@ public class VacationTable extends ATableManager<Vacation> {
     public DBResult createTable() {
         String[] primaryKeys = {COLUMN_VACATIONTABLE_KEY};
         String[] foreignKeys = {FOREIGNKEY_SELLERKEY};
-        String[] stringFields = {COLUMN_VACATIONTABLE_SELLERKEY, COLUMN_VACATIONTABLE_ORIGIN, COLUMN_VACATIONTABLE_DESTINATION};
-        String[] intFields = {COLUMN_VACATIONTABLE_TIMESTAMP, COLUMN_VACATIONTABLE_VISIBLE};
+        String[] stringFields = {COLUMN_VACATIONTABLE_SELLERKEY, COLUMN_VACATIONTABLE_ORIGIN, COLUMN_VACATIONTABLE_DESTINATION, COLUMN_VACATIONTABLE_VISIBLE};
+        String[] intFields = {COLUMN_VACATIONTABLE_TIMESTAMP};
         String[] doubleFields = {};
         return super.createTable(primaryKeys, foreignKeys, stringFields, intFields, doubleFields);
     }

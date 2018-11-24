@@ -9,7 +9,8 @@ import java.util.List;
 
 public class VacationModel extends ACRUDModel<Vacation> {
 
-    public VacationModel(){ VacationTable.getInstance();}
+    public VacationModel(){
+        super.setTableManager(VacationTable.getInstance());}
 
 
     @Override
