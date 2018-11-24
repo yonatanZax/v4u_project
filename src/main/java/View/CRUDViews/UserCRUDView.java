@@ -2,8 +2,12 @@ package View.CRUDViews;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import Controllers.VacationSearchController;
 import MainPackage.Enum_CRUD;
 
+import javafx.event.ActionEvent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 
 public class UserCRUDView extends ACRUDView {
@@ -37,4 +41,8 @@ public class UserCRUDView extends ACRUDView {
     }
 
 
+    public void search(ActionEvent event) {
+        setChanged();
+        notifyObservers("Search");
+    }
 }

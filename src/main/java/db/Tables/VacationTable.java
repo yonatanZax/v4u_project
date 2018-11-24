@@ -83,7 +83,7 @@ public class VacationTable extends ATableManager<Vacation> {
                         break;
 
                     case COLUMN_VACATIONTABLE_VISIBLE:
-                        vacation.setVisible(entry.getValue().equals("1"));
+                        vacation.setVisible(entry.getValue().equals("true"));
                         break;
                 }
 

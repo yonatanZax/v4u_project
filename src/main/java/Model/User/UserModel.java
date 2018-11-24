@@ -14,6 +14,18 @@ public class UserModel extends ACRUDModel<User> {
     }
 
 
+    public boolean tryToLogin(String userName, String password){
+        String where = UserTable.COLUMN_USERTABLE_KEY + " = " + userName;
+               where += " AND ";
+                where += UserTable.COLUMN_USERTABLE_PASS + " = " + password;
+        List<User> list = UserTable.getInstance().select(null,where,null);
+        if (list.size() > 0)
+            return true;
+
+        return false;
+    }
+
+
     public User readUser(String primaryKey){
         String[][] listOfUserNames = {{UserTable.COLUMN_USERTABLE_KEY,primaryKey}};
         List<User> userList = readDataFromDB(listOfUserNames);

@@ -1,5 +1,6 @@
 package MainPackage;
 
+import Controllers.ControllerHome;
 import Controllers.ControllerUserCRUD;
 
 import Model.Request.Request;
@@ -20,6 +21,8 @@ import java.util.List;
 public class Main extends Application {
 
 
+
+    public static String user = null;
 
 
     private void initProject(){
@@ -60,8 +63,11 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         initProject();
-        ControllerUserCRUD controllerUserCRUD = new ControllerUserCRUD();
-        controllerUserCRUD.showStage();
+        ControllerHome home = new ControllerHome();
+        home.showStage();
+
+        //ControllerUserCRUD controllerUserCRUD = new ControllerUserCRUD();
+        //controllerUserCRUD.showStage();
     }
 
 

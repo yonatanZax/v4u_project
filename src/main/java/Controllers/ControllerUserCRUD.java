@@ -3,6 +3,7 @@ package Controllers;
 import Model.ACRUDModel;
 import Model.User.UserModel;
 import View.CRUDViews.UserCRUDView;
+import View.LoginView;
 import db.DBResult;
 import Model.User.User;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +20,7 @@ public class ControllerUserCRUD implements Observer {
 
     private ControllerCreateUser controllerCreateUser;
     private UserCRUDView myView;
+    private LoginView loginView;
     private ACRUDModel myModel;
     private Stage stage;
     private Parent root;
@@ -37,7 +39,7 @@ public class ControllerUserCRUD implements Observer {
             root = fxmlLoader.load();
         } catch (IOException e) {
             e.printStackTrace();
-    }
+        }
         Scene scene = new Scene(root,400,400);
         stage.setScene(scene);
 
@@ -111,23 +113,32 @@ public class ControllerUserCRUD implements Observer {
     @Override
     public void update(Observable o, Object arg){
         System.out.println("ControllerUserCRUD: update by UserCRUDView");
-        if(arg.equals(Enum_CRUD.READ)) {
-            readUser();
-        } else if(arg.equals(Enum_CRUD.CREATE)) {
-            try {
-                createUser();
-            } catch (Exception e){
-                e.printStackTrace();
+
+        if (o.equals(myView)){
+            if (arg.equals("Search")){
+                VacationSearchController controller = new VacationSearchController();
+                controller.start(stage);
             }
-        } else if(arg.equals(Enum_CRUD.UPDATE)) {
-            try {
-                updateUser();
-            } catch (Exception e){
-                e.printStackTrace();
+
+            if(arg.equals(Enum_CRUD.READ)) {
+                readUser();
+            } else if(arg.equals(Enum_CRUD.CREATE)) {
+                try {
+                    createUser();
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            } else if(arg.equals(Enum_CRUD.UPDATE)) {
+                try {
+                    updateUser();
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            } else if(arg.equals(Enum_CRUD.DELETE)) {
+                deleteUser();
             }
-        } else if(arg.equals(Enum_CRUD.DELETE)) {
-            deleteUser();
         }
+
 
         else if(o == myModel){
             myView.resetLabels();
