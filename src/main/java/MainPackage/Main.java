@@ -50,6 +50,7 @@ public class Main extends Application {
         requestModel.deleteDataFromDB(deleteData);
 
 
+
         System.out.println("***     Init project successfully   ***");
     }
 
