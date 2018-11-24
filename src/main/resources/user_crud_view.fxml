@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.UserCRUDView">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.CRUDViews.UserCRUDView">
    <children>
       <Label text="Welcome">
          <font>
@@ -39,22 +39,22 @@
          <children>
             <VBox alignment="BASELINE_CENTER">
                <children>
-                  <Button fx:id="readUser_btn" mnemonicParsing="false" onAction="#readUser" prefHeight="31.0" prefWidth="73.0" text="Read">
+                  <Button fx:id="readUser_btn" mnemonicParsing="false" onAction="#read" prefHeight="31.0" prefWidth="73.0" text="Read">
                      <VBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="createUser_btn" mnemonicParsing="false" onAction="#createUser" prefHeight="31.0" prefWidth="73.0" text="Create">
+                  <Button fx:id="createUser_btn" mnemonicParsing="false" onAction="#create" prefHeight="31.0" prefWidth="73.0" text="Create">
                      <VBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="updateUser_btn" mnemonicParsing="false" onAction="#updateUser" prefHeight="31.0" prefWidth="73.0" text="Update">
+                  <Button fx:id="updateUser_btn" mnemonicParsing="false" onAction="#update" prefHeight="31.0" prefWidth="73.0" text="Update">
                      <VBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="deleteUser_btn" mnemonicParsing="false" onAction="#deleteUser" prefWidth="73.0" text="Delete">
+                  <Button fx:id="deleteUser_btn" mnemonicParsing="false" onAction="#delete" prefWidth="73.0" text="Delete">
                      <VBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </VBox.margin>

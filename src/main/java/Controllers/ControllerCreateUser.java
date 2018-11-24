@@ -1,9 +1,10 @@
 package Controllers;
 
-import Model.UserModel;
+import Model.ACRUDModel;
+import Model.User.UserModel;
 import View.UserDetailsView;
 import db.DBResult;
-import Model.User;
+import Model.User.User;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -17,7 +18,7 @@ import java.util.Observer;
 public class ControllerCreateUser implements Observer{
 
     private UserDetailsView myView;
-    private UserModel myModel;
+    private ACRUDModel myModel;
     private String status;
     private Stage stage;
     private Parent root;
@@ -25,7 +26,7 @@ public class ControllerCreateUser implements Observer{
 
     private String updateUserName = null;
 
-    public ControllerCreateUser(UserModel myModel) {
+    public ControllerCreateUser(ACRUDModel myModel) {
         stage = new Stage();
         fxmlLoader = new FXMLLoader(getClass().getResource("/createUser_view.fxml"));
         try {
@@ -129,7 +130,7 @@ public class ControllerCreateUser implements Observer{
 
         User newUser = generateUserFromFields();
         if (newUser != null){
-            myModel.createUser(newUser);
+            myModel.createNewData(newUser);
         }else{
             myView.setResult_lbl("Please fill all the fields correctly..");
         }
@@ -143,7 +144,7 @@ public class ControllerCreateUser implements Observer{
                 myView.setResult_lbl("User name already exist");
             }
             else{
-                myModel.updateUser(newUser);
+                myModel.updateTable(newUser);
             }
         } else
             myView.setResult_lbl("Please fill all the fields..");
@@ -159,7 +160,7 @@ public class ControllerCreateUser implements Observer{
      */
     private boolean checkUpdateUserName(String newUserName, String oldUserName){
         if(!newUserName.equals(oldUserName)){
-            User user = myModel.readUser(oldUserName);
+            User user = ((UserModel)myModel).readUser(oldUserName);
             if(user != null){
                 return false;
             }

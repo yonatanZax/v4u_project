@@ -10,10 +10,10 @@ public interface ITableManager<T> {
 
     DBResult InsertToTable(T object);
 
-    DBResult deleteFromTable(String id);
+    DBResult deleteFromTable(String key);
 
     List<T> select(String projection, String selection, String orderBy);
 
-    DBResult updateData(String [] set, String [] values, String [] where);
+    DBResult updateData(String [] set, String [] values, String [] whereFields, String[] whereValues);
 
 }
