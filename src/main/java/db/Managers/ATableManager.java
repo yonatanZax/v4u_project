@@ -18,14 +18,78 @@ public abstract class ATableManager<T> implements ITableManager<T> {
     protected abstract List<T> transformListMapToList(List<Map<String,String>> listMap);
     protected abstract PreparedStatement getInsertPreparedStatement(T object, Connection connection);
 
-    //TODO - implement here getDeletePreparedStatement
-    protected abstract PreparedStatement getDeletePreparedStatement(String where, Connection connection);
-
-    //TODO - implement here getUpdatePreparedStatement
-    protected abstract PreparedStatement getUpdatePreparedStatement(String[] set, String[] values, String[] where, Connection connection);
 
 
-   // protected abstract PreparedStatement getDeletePreparedStatement(String id, Connection connection);
+    protected PreparedStatement getDeletePreparedStatement(String where, Connection connection){
+        String sql = "DELETE FROM "+ TABLE_NAME + " WHERE " +  where ;
+        PreparedStatement pstmt;
+        if (connection != null) {
+            try {
+                pstmt = connection.prepareStatement(sql);
+                return pstmt;
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+                try {
+                    connection.rollback();
+                } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        }
+        return null;
+    }
+
+
+
+    protected PreparedStatement getUpdatePreparedStatement(String[] set, String[] values, String[] whereFields, String[] whereValues, Connection connection){
+        String sql = "UPDATE " + TABLE_NAME + " SET ";
+        sql += appendSql(set);
+        sql += " WHERE " + appendWhereSQL(whereFields);
+        PreparedStatement pstmt = null;
+        if (connection != null) {
+            try {
+                pstmt = connection.prepareStatement(sql);
+                for (int i = 0; i < values.length; i++) {
+                    pstmt.setObject(i+1,values[i]);
+                }
+                for (int i = 0; i < whereValues.length; i++) {
+                    pstmt.setObject(i+1,whereValues[i]);
+                }
+                return pstmt;
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+                try {
+                    connection.rollback();
+                } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        }
+        return null;
+    }
+
+    private String appendSql(String[] strings) {
+        String s = "";
+        for (int i = 0; i < strings.length; i++) {
+            s+= strings[i] + " = ?";
+            if (i<strings.length-1)
+                s+=", ";
+        }
+        return s;
+    }
+
+    private String appendWhereSQL(String[] whereFields){
+        String s = "";
+        for (int i = 0; i < whereFields.length; i++) {
+            s+= whereFields[i] + " = ?";
+            if (i<whereFields.length-1)
+                s+=" AND ";
+        }
+        return s;
+    }
+
+
+
 
     protected ATableManager(IDBManager db, String table_name) {
         this.db = db;
@@ -59,13 +123,12 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return list;
     }
 
-    //TODO - merge with delete function
     @Override
-    public DBResult updateData(String[] set, String[] values, String[] where) {
+    public DBResult updateData(String[] set, String[] values, String[] whereFields, String[] whereValues) {
         DBResult result = DBResult.NONE;
         Connection connection = db.connect();
         if (connection != null) {
-            PreparedStatement preparedStatement = getUpdatePreparedStatement(set, values, where, connection);
+            PreparedStatement preparedStatement = getUpdatePreparedStatement(set, values, whereFields,whereValues, connection);
             if (preparedStatement != null) {
                 try {
                     if (1 == preparedStatement.executeUpdate())
@@ -89,8 +152,8 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return result;
     }
 
-    protected DBResult createTable(String[] parameters){
-        return db.createTable(TABLE_NAME, parameters);
+    protected DBResult createTable(String[] primaryKeys, String[] foreignKeys, String[] stringFields,String[] intFields, String[] doubleFields){
+        return db.createTable(TABLE_NAME,primaryKeys,foreignKeys, stringFields, intFields, doubleFields);
     }
 
     @Override
@@ -125,11 +188,11 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return result;
     }
 
-    public DBResult deleteFromTable(String where) {
+    public DBResult deleteFromTable(String key) {
         DBResult result = DBResult.NONE;
         Connection connection = db.connect();
         if (connection != null) {
-            PreparedStatement preparedStatement = getDeletePreparedStatement(where, connection);
+            PreparedStatement preparedStatement = getDeletePreparedStatement(key, connection);
             if (preparedStatement != null) {
                 try {
                     if (1 == preparedStatement.executeUpdate())

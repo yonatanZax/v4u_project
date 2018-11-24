@@ -1,14 +1,16 @@
 package Controllers;
 
-import Model.UserModel;
+import Model.ACRUDModel;
+import Model.User.UserModel;
 import View.UserDetailsView;
 import db.DBResult;
-import Model.User;
+import Model.User.User;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -16,7 +18,7 @@ import java.util.Observer;
 public class ControllerCreateUser implements Observer{
 
     private UserDetailsView myView;
-    private UserModel myModel;
+    private ACRUDModel myModel;
     private String status;
     private Stage stage;
     private Parent root;
@@ -24,7 +26,7 @@ public class ControllerCreateUser implements Observer{
 
     private String updateUserName = null;
 
-    public ControllerCreateUser(UserModel myModel) {
+    public ControllerCreateUser(ACRUDModel myModel) {
         stage = new Stage();
         fxmlLoader = new FXMLLoader(getClass().getResource("/createUser_view.fxml"));
         try {
@@ -47,6 +49,8 @@ public class ControllerCreateUser implements Observer{
         UserDetailsView userDetailsView = fxmlLoader.getController();
         userDetailsView.resetAll();
         userDetailsView.addObserver(this);
+
+        myView.create_datePicker.setValue(LocalDate.now().minusYears(25));
 
         updateUserName = null;
         stage.show();
@@ -107,8 +111,15 @@ public class ControllerCreateUser implements Observer{
         String[] values = {userName,password,firstName,lastName,city};
 
         int date = 0;
-        if (myView.getBirthday() != null){
-            date = this.convertDateStringToInt(myView.getBirthday().toString());
+        LocalDate birthDay = myView.getBirthday();
+        if (birthDay != null){
+            LocalDate eighteenYears = LocalDate.now().minusYears(18);
+            if(birthDay.isBefore(eighteenYears)){
+                date = this.convertDateStringToInt(birthDay.toString());
+            }else{
+                return null;
+            }
+
         }
         return createUserIfValuesAreValid(values,date);
     }
@@ -119,9 +130,9 @@ public class ControllerCreateUser implements Observer{
 
         User newUser = generateUserFromFields();
         if (newUser != null){
-            myModel.createUser(newUser);
+            myModel.createNewData(newUser);
         }else{
-            myView.setResult_lbl("Please fill all the fields..");
+            myView.setResult_lbl("Please fill all the fields correctly..");
         }
     }
 
@@ -133,7 +144,7 @@ public class ControllerCreateUser implements Observer{
                 myView.setResult_lbl("User name already exist");
             }
             else{
-                myModel.updateUser(newUser);
+                myModel.updateTable(newUser);
             }
         } else
             myView.setResult_lbl("Please fill all the fields..");
@@ -149,7 +160,7 @@ public class ControllerCreateUser implements Observer{
      */
     private boolean checkUpdateUserName(String newUserName, String oldUserName){
         if(!newUserName.equals(oldUserName)){
-            User user = myModel.readUser(oldUserName);
+            User user = ((UserModel)myModel).readUser(oldUserName);
             if(user != null){
                 return false;
             }

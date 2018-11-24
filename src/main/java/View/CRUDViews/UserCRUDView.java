@@ -1,17 +1,12 @@
-package View;
-
-import Controllers.ControllerCRUD;
-import javafx.fxml.Initializable;
+package View.CRUDViews;
 
 import java.net.URL;
-import java.util.Observable;
 import java.util.ResourceBundle;
 import MainPackage.Enum_CRUD;
 
-import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 
-public class UserCRUDView extends Observable implements Initializable {
+public class UserCRUDView extends ACRUDView {
 
     public Button readUser_btn;
     public Button createUser_btn;
@@ -36,24 +31,11 @@ public class UserCRUDView extends Observable implements Initializable {
         notifyObservers(arg);
     }
 
-    public void readUser() {
-        notifyController(Enum_CRUD.READ);
-    }
 
     public void resetLabels() {
         info_lbl.setText(info_lblTitle + "");
         status_lbl.setText("");
     }
 
-    public void createUser() {
-        notifyController(Enum_CRUD.CREATE);
-    }
 
-    public void updateUser() {
-        notifyController(Enum_CRUD.UPDATE);
-    }
-
-    public void deleteUser() {
-        notifyController(Enum_CRUD.DELETE);
-    }
 }

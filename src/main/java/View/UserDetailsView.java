@@ -27,6 +27,8 @@ public class UserDetailsView extends Observable implements Initializable {
     public Button save_btn;
 
     public Label result_lbl;
+
+
     private static final String result_lblTitle = "Info from DB:\t";
 
     public void setUserName(String userName){
@@ -67,6 +69,15 @@ public class UserDetailsView extends Observable implements Initializable {
 
     public String getCityName(){
         return city_textInput.getText().trim();
+    }
+
+
+    private int convertDateFromStringToInt(String dateAsString){
+        int day = Integer.valueOf(dateAsString.substring(dateAsString.length() - 2, dateAsString.length()));
+        int month = Integer.valueOf(dateAsString.substring(dateAsString.length() - 4, dateAsString.length() - 2));
+        int year =  Integer.valueOf(dateAsString.substring(0, dateAsString.length() - 4));
+
+        return year*10000 + month*100 + day;
     }
 
     public void setBirthdate(String birthdate){

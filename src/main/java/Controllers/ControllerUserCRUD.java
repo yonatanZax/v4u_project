@@ -1,9 +1,10 @@
 package Controllers;
 
-import Model.UserModel;
-import View.UserCRUDView;
+import Model.ACRUDModel;
+import Model.User.UserModel;
+import View.CRUDViews.UserCRUDView;
 import db.DBResult;
-import Model.User;
+import Model.User.User;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,17 +15,17 @@ import java.util.Observable;
 import java.util.Observer;
 
 
-public class ControllerCRUD implements Observer {
+public class ControllerUserCRUD implements Observer {
 
     private ControllerCreateUser controllerCreateUser;
     private UserCRUDView myView;
-    private UserModel myModel;
+    private ACRUDModel myModel;
     private Stage stage;
     private Parent root;
     private FXMLLoader fxmlLoader;
 
 
-    public ControllerCRUD() {
+    public ControllerUserCRUD() {
         myModel = new UserModel();
         myModel.addObserver(this);
         controllerCreateUser = new ControllerCreateUser(myModel);
@@ -53,7 +54,7 @@ public class ControllerCRUD implements Observer {
         }
         else{
             String userName = textField;
-            User user = myModel.readUser(userName);
+            User user = ((UserModel)myModel).readUser(userName);
             if (user == null) {
                 // Empty list means that not even one of the list was in the db
                 myView.info_lbl.setText(myView.info_lblTitle + "");
@@ -86,8 +87,13 @@ public class ControllerCRUD implements Observer {
 
 
     public void updateUser(){
+        String textField = myView.userName.getText().trim();
+        if (textField.equals("")) {
+            myView.status_lbl.setText("Please insert a valid userName..");
+            return;
+        }
         String userName = myView.userName.getText().trim();
-        User user = myModel.readUser(userName);
+        User user = ((UserModel)myModel).readUser(userName);
         if (user == null){
             myView.info_lbl.setText(myView.info_lblTitle + "");
             myView.status_lbl.setText(myView.info_lblTitle + userName + " Doesn't exist");
@@ -98,13 +104,13 @@ public class ControllerCRUD implements Observer {
 
     public void deleteUser() {
         String id = myView.userName.getText();
-        myModel.deleteUser(id);
+        ((UserModel)myModel).deleteUser(id);
     }
 
 
     @Override
     public void update(Observable o, Object arg){
-        System.out.println("ControllerCRUD: update by UserCRUDView");
+        System.out.println("ControllerUserCRUD: update by UserCRUDView");
         if(arg.equals(Enum_CRUD.READ)) {
             readUser();
         } else if(arg.equals(Enum_CRUD.CREATE)) {
@@ -137,6 +143,8 @@ public class ControllerCRUD implements Observer {
             else if(arg == DBResult.ADDED){
                 myView.status_lbl.setText("User was created successfully");
             }
+
+            // Todo - add not updated message
         }
 
     }
