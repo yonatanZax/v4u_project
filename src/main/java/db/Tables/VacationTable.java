@@ -90,7 +90,7 @@ public class VacationTable extends ATableManager<Vacation> {
                 pstmt.setString(2, object.getSellerKey());
                 pstmt.setString(3, object.getOrigin());
                 pstmt.setString(4, object.getDestination());
-                pstmt.setObject(5, object.isVisible()? 1 : 0);
+                pstmt.setInt(5, object.isVisible()? 1 : 0);
                 pstmt.setObject(6, object.getTimeStamp());
                 return pstmt;
             } catch (SQLException e) {
@@ -104,6 +104,5 @@ public class VacationTable extends ATableManager<Vacation> {
         }
         return null;
     }
-
 
 }

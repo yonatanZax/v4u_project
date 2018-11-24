@@ -5,12 +5,12 @@ public class Request {
     private String vacationKey;
     private String sellerKey;
     private String buyerKey;
-    private String approved;
+    private boolean approved;
     private int timestamp;
 
     public Request(){}
 
-    public Request(String vacationKey, String sellerKey, String buyerKey, String approved, int timestamp) {
+    public Request(String vacationKey, String sellerKey, String buyerKey, boolean approved, int timestamp) {
         this.vacationKey = vacationKey;
         this.sellerKey = sellerKey;
         this.buyerKey = buyerKey;
@@ -42,12 +42,16 @@ public class Request {
         this.buyerKey = buyerKey;
     }
 
-    public String getApproved() {
+    public boolean getApproved() {
         return approved;
     }
 
-    public void setApproved(String approved) {
+    public void setApproved(boolean approved) {
         this.approved = approved;
+    }
+
+    public void setApproved(String approved){
+        this.approved = Boolean.valueOf(approved);
     }
 
     public int getTimestamp() {
@@ -56,5 +60,9 @@ public class Request {
 
     public void setTimestamp(int timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public void setTimestamp(String timestamp){
+        this.timestamp = Integer.valueOf(timestamp);
     }
 }

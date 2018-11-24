@@ -53,9 +53,7 @@ public class RequestTable extends ATableManager<Request> {
                 String key = entry.getKey();
                 switch (key){
                     case COLUMN_REQUESTTABLE_TIMESTAMP:
-                        String timestampAsString = entry.getValue();
-                        int timestampAsInt = Integer.parseInt(timestampAsString);
-                        request.setTimestamp(timestampAsInt);
+                        request.setTimestamp(entry.getValue());
                         break;
                     case COLUMN_REQUESTTABLE_VACATIONKEY:
                         request.setVacationKey( entry.getValue());
@@ -70,7 +68,7 @@ public class RequestTable extends ATableManager<Request> {
                         break;
 
                     case COLUMN_REQUESTTABLE_APPROVED:
-                        request.setApproved( entry.getValue());
+                        request.setApproved(entry.getValue());
                         break;
                 }
 
@@ -90,7 +88,7 @@ public class RequestTable extends ATableManager<Request> {
                 pstmt.setString(1, object.getVacationKey());
                 pstmt.setString(2, object.getSellerKey());
                 pstmt.setString(3, object.getBuyerKey());
-                pstmt.setString(4, object.getApproved());
+                pstmt.setString(4, object.getApproved() + "");
                 pstmt.setInt(5, object.getTimestamp());
                 return pstmt;
             } catch (SQLException e) {
@@ -110,8 +108,8 @@ public class RequestTable extends ATableManager<Request> {
         // Todo (DONE) - add parameters
         String[] primaryKeys = {COLUMN_REQUESTTABLE_VACATIONKEY,COLUMN_REQUESTTABLE_SELLERKEY,COLUMN_REQUESTTABLE_BUYERKEY};
         String[] foreignKeys = {FOREIGNKEY_VACATIONKEY,FOREIGNKEY_SELLERKEY,FOREIGNKEY_BUYERKEY};
-        String[] stringFields = {COLUMN_REQUESTTABLE_APPROVED};
-        String[] intFields = {COLUMN_REQUESTTABLE_TIMESTAMP};
+        String[] stringFields = {};
+        String[] intFields = {COLUMN_REQUESTTABLE_APPROVED,COLUMN_REQUESTTABLE_TIMESTAMP};
         String[] doubleFields = {};
         return super.createTable(primaryKeys, foreignKeys,stringFields,intFields,doubleFields);
     }

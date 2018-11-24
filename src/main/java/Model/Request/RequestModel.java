@@ -34,7 +34,7 @@ public class RequestModel extends ACRUDModel<Request> {
         String [] values = {request.getVacationKey(),
                             request.getSellerKey(),
                             request.getBuyerKey(),
-                            request.getApproved(),
+                            String.valueOf(request.getApproved()),
                             String.valueOf(request.getTimestamp())};
 
 
