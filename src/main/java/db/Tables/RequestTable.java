@@ -5,6 +5,7 @@ import Model.User.User;
 import db.DBResult;
 import db.Managers.ATableManager;
 import db.Managers.DBManager;
+import db.Managers.IDBManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
