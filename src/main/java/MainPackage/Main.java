@@ -40,8 +40,8 @@ public class Main extends Application {
         User user2 = new User("user2","p","p","p","p",19920101);
         userTable.InsertToTable(user1);
         userTable.InsertToTable(user2);
-        Vacation vacation1 = new Vacation("TLV");
-        Request request1 = new Request("TLV","user1","user2","False",1025);
+        Vacation vacation1 = new Vacation("TLV","user1","TLV", "LAS",true,1025);
+        Request request1 = new Request("TLV","user1","user2",false,1025);
         requestModel.createNewData(request1);
         request1.setTimestamp(2020);
         //requestModel.updateTable(request1);

@@ -90,7 +90,7 @@ public class RequestTable extends ATableManager<Request> {
                 pstmt.setString(1, object.getVacationKey());
                 pstmt.setString(2, object.getSellerKey());
                 pstmt.setString(3, object.getBuyerKey());
-                pstmt.setString(4, object.getApproved());
+                pstmt.setString(4, object.getApproved()+"");
                 pstmt.setInt(5, object.getTimestamp());
                 return pstmt;
             } catch (SQLException e) {

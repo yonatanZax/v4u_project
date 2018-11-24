@@ -10,6 +10,8 @@ public class Vacation {
     private boolean visible;
     private int timeStamp;
 
+    public Vacation() {}
+
     public Vacation(String vacationKey, String sellerKey, String origin, String destination, boolean visible, int timeStamp) {
         this.vacationKey = vacationKey;
         this.sellerKey = sellerKey;
@@ -57,6 +59,10 @@ public class Vacation {
 
     public void setVisible(boolean visible) {
         this.visible = visible;
+    }
+
+    public void setVisible(String visible) {
+        this.visible = Boolean.getBoolean(visible);
     }
 
     public int getTimeStamp() {

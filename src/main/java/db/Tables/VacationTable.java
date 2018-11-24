@@ -1,5 +1,6 @@
 package db.Tables;
 
+import Model.Request.Request;
 import Model.Vacation.Vacation;
 import db.DBResult;
 import db.Managers.ATableManager;
@@ -8,6 +9,7 @@ import db.Managers.DBManager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,15 +17,15 @@ public class VacationTable extends ATableManager<Vacation> {
 
 
     private static VacationTable ourInstance;
-    public final String COLUMN_VACATIONTABLE_KEY = "key";
+    public static final String COLUMN_VACATIONTABLE_KEY = "key";
     public static final String COLUMN_VACATIONTABLE_SELLERKEY = "sellerKey";
-    private final String FOREIGNKEY_SELLERKEY = "(" + COLUMN_VACATIONTABLE_SELLERKEY + ") references userInfo(key)";
+    private static final String FOREIGNKEY_SELLERKEY = "(" + COLUMN_VACATIONTABLE_SELLERKEY + ") references userInfo(key)";
     public static final String COLUMN_VACATIONTABLE_VISIBLE = "visible";
     public static final String COLUMN_VACATIONTABLE_DESTINATION = "destination";
     public static final String COLUMN_VACATIONTABLE_ORIGIN = "origin";
     public static final String COLUMN_VACATIONTABLE_TIMESTAMP = "timestamp";
 
-    // Todo - add more columns
+
 
 
     // Singleton
@@ -53,7 +55,45 @@ public class VacationTable extends ATableManager<Vacation> {
     // Todo - implement
     @Override
     protected List<Vacation> transformListMapToList(List<Map<String, String>> listMap) {
-        return null;
+        List<Vacation> list = new ArrayList<>(listMap.size());
+        for(Map<String,String> map : listMap){
+            Vacation vacation = new Vacation();
+            for(Map.Entry<String,String> entry : map.entrySet()){
+                String key = entry.getKey();
+                switch (key){
+                    case COLUMN_VACATIONTABLE_TIMESTAMP:
+                        String timestampAsString = entry.getValue();
+                        int timestampAsInt = Integer.parseInt(timestampAsString);
+                        vacation.setTimeStamp(timestampAsInt);
+                        break;
+
+                    case COLUMN_VACATIONTABLE_KEY:
+                        vacation.setVacationKey( entry.getValue());
+                        break;
+
+                    case COLUMN_VACATIONTABLE_SELLERKEY:
+                        vacation.setSellerKey( entry.getValue());
+                        break;
+
+                    case COLUMN_VACATIONTABLE_DESTINATION:
+                        vacation.setDestination(entry.getValue());
+                        break;
+
+                    case COLUMN_VACATIONTABLE_ORIGIN:
+                        vacation.setOrigin(entry.getValue());
+                        break;
+
+                    case COLUMN_VACATIONTABLE_VISIBLE:
+                        vacation.setVisible(entry.getValue().equals("1"));
+                        break;
+                }
+
+            }
+            list.add(vacation);
+        }
+        return list;
+
+
     }
 
 
@@ -90,8 +130,8 @@ public class VacationTable extends ATableManager<Vacation> {
                 pstmt.setString(2, object.getSellerKey());
                 pstmt.setString(3, object.getOrigin());
                 pstmt.setString(4, object.getDestination());
-                pstmt.setObject(5, object.isVisible()? 1 : 0);
-                pstmt.setObject(6, object.getTimeStamp());
+                pstmt.setString(5, object.isVisible()+"");
+                pstmt.setInt(6, object.getTimeStamp());
                 return pstmt;
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
