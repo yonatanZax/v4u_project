@@ -33,10 +33,10 @@
     <Label text="Flight number : " GridPane.columnIndex="1" GridPane.rowIndex="2">
     </Label>
     <!-- Add Name Text Field -->
-    <TextField fx:id="BaggagePerTicket" prefHeight="40" GridPane.columnIndex="2" GridPane.rowIndex="10" />
+    <!--<TextField fx:id="BaggagePerTicket" prefHeight="40" GridPane.columnIndex="2" GridPane.rowIndex="10" />-->
     <Label text="Airline : " GridPane.columnIndex="1" GridPane.rowIndex="3">
     </Label>
-    <TextField fx:id="ConnectionFlight" prefHeight="40" promptText="if none leave empty" GridPane.columnIndex="2" GridPane.rowIndex="11" />
+    <!--<TextField fx:id="ConnectionFlight" prefHeight="40" promptText="if none leave empty" GridPane.columnIndex="2" GridPane.rowIndex="11" />-->
    <Label text="Price :" GridPane.columnIndex="1" GridPane.rowIndex="1">
       <opaqueInsets>
          <Insets />
@@ -46,39 +46,39 @@
    <Label text="Number of tickets:" GridPane.columnIndex="1" GridPane.rowIndex="9" />
    <Label text="Return time :" GridPane.columnIndex="1" GridPane.rowIndex="8" />
    <Label text="Return date : " GridPane.columnIndex="1" GridPane.rowIndex="7" />
-    <DatePicker fx:id="return_datePicker" prefHeight="25.0" prefWidth="202.0" GridPane.columnIndex="2" GridPane.rowIndex="7">
-        <GridPane.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-        </GridPane.margin>
-    </DatePicker>
+    <!--<DatePicker fx:id="return_datePicker" prefHeight="25.0" prefWidth="202.0" GridPane.columnIndex="2" GridPane.rowIndex="7">-->
+        <!--<GridPane.margin>-->
+            <!--<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />-->
+        <!--</GridPane.margin>-->
+    <!--</DatePicker>-->
    <Label text="Depart date : " GridPane.columnIndex="1" GridPane.rowIndex="5" />
-    <DatePicker fx:id="depart_datePicker" prefHeight="25.0" prefWidth="198.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
-        <GridPane.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-        </GridPane.margin>
-    </DatePicker>
+    <!--<DatePicker fx:id="depart_datePicker" prefHeight="25.0" prefWidth="198.0" GridPane.columnIndex="2" GridPane.rowIndex="5">-->
+        <!--<GridPane.margin>-->
+            <!--<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />-->
+        <!--</GridPane.margin>-->
+    <!--</DatePicker>-->
    <Button defaultButton="true" layoutX="370.0" layoutY="470.0" onAction="#handleCancelButtonAction" prefHeight="40" prefWidth="100" text="Cancel" GridPane.columnIndex="3" GridPane.rowIndex="16" />
    <Button defaultButton="true" onAction="#handleSubmitButtonAction" prefHeight="40" prefWidth="100" text="Submit" GridPane.columnIndex="1" GridPane.rowIndex="16" />
-   <Label text="Depart time : " GridPane.columnIndex="1" GridPane.rowIndex="6" />
    <Label text="Baggage per ticket :" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-   <Label text="Vacation type:" GridPane.columnIndex="1" GridPane.rowIndex="12" />
-   <Label text="Connection Flight :" GridPane.columnIndex="1" GridPane.rowIndex="11" />
-   <Label text="Accommodation type :" GridPane.columnIndex="1" GridPane.rowIndex="13" />
-   <TextField fx:id="price" prefHeight="40" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-   <TextField fx:id="flightNumber" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-   <TextField fx:id="airline" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-   <TextField fx:id="destination" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-   <TextField fx:id="numberOfTickets" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="9" />
-   <Label fx:id="errorMessage_d_date" text="Check Field" textFill="RED" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-   <Label fx:id="errorMessage_r_time" text="Check Field" textFill="RED" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="8" />
-   <Label fx:id="errorMessage_r_date" text="Check Field" textFill="RED" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="7" />
-   <Label fx:id="errorMessage_d_time" text="Check Field" textFill="RED" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="6" />
-   <ChoiceBox fx:id="vacation_type_choice" prefHeight="25.0" prefWidth="208.0" GridPane.columnIndex="2" GridPane.rowIndex="12" />
-   <ChoiceBox fx:id="accommodation_type_choice" prefHeight="25.0" prefWidth="208.0" GridPane.columnIndex="2" GridPane.rowIndex="13" />
-   <TextField fx:id="depart_time" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-   <TextField fx:id="return_time" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="8" />
-   <TextArea fx:id="freeText" prefHeight="77.0" prefWidth="319.0" promptText="Add here more info" GridPane.columnIndex="2" GridPane.rowIndex="14" />
-   <Label text="Additional Info:" GridPane.columnIndex="1" GridPane.rowIndex="14" />
+    <Label text="Vacation type:" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+    <Label text="Connection Flight :" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+    <Label text="Accommodation type :" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+    <Label text="Depart time : " GridPane.columnIndex="1" GridPane.rowIndex="6" />
+    <!--<TextField fx:id="price" prefHeight="40" GridPane.columnIndex="2" GridPane.rowIndex="1" />-->
+    <!--<TextField fx:id="flightNumber" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />-->
+    <!--<TextField fx:id="airline" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />-->
+    <TextField fx:id="destination" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+    <!--<TextField fx:id="numberOfTickets" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="9" />-->
+    <!--<Label fx:id="errorMessage_d_date" text="Check Field" textFill="RED" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="5" />-->
+    <!--<Label fx:id="errorMessage_r_time" text="Check Field" textFill="RED" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="8" />-->
+    <!--<Label fx:id="errorMessage_r_date" text="Check Field" textFill="RED" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="7" />-->
+    <!--<Label fx:id="errorMessage_d_time" text="Check Field" textFill="RED" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="6" />-->
+    <!--<ChoiceBox fx:id="vacation_type_choice" prefHeight="25.0" prefWidth="208.0" GridPane.columnIndex="2" GridPane.rowIndex="12" />-->
+    <!--<ChoiceBox fx:id="accommodation_type_choice" prefHeight="25.0" prefWidth="208.0" GridPane.columnIndex="2" GridPane.rowIndex="13" />-->
+    <!--<TextField fx:id="depart_time" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />-->
+   <!--<TextField fx:id="return_time" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="8" />-->
+   <!--<TextArea fx:id="freeText" prefHeight="77.0" prefWidth="319.0" promptText="Add here more info" GridPane.columnIndex="2" GridPane.rowIndex="14" />-->
+   <!--<Label text="Additional Info:" GridPane.columnIndex="1" GridPane.rowIndex="14" />-->
    <rowConstraints>
       <RowConstraints minHeight="10.0" prefHeight="30.0" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" />
