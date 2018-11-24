@@ -9,23 +9,32 @@ import java.util.List;
 
 public class VacationModel extends ACRUDModel<Vacation> {
 
-    private VacationTable vacationTable;
-
-    public VacationModel(){ VacationTable.getInstance();}
+    public VacationModel(){
+        super.setTableManager(VacationTable.getInstance());}
 
 
     @Override
     public void updateTable(Vacation vacation) {
         DBResult result = DBResult.NONE;
-        String [] whereFields = {vacationTable.COLUMN_VACATIONTABLE_KEY};
+        String [] whereFields = {VacationTable.COLUMN_VACATIONTABLE_KEY};
         String [] whereValues = {vacation.getVacationKey()};
 
         // Todo - implement set and values
-        String [] set = {vacationTable.COLUMN_VACATIONTABLE_KEY};
-        String [] values = {vacation.getVacationKey()};
+        String [] set = {VacationTable.COLUMN_VACATIONTABLE_KEY,
+                         VacationTable.COLUMN_VACATIONTABLE_SELLERKEY,
+                         VacationTable.COLUMN_VACATIONTABLE_ORIGIN,
+                         VacationTable.COLUMN_VACATIONTABLE_DESTINATION,
+                         VacationTable.COLUMN_VACATIONTABLE_TIMESTAMP,
+                         VacationTable.COLUMN_VACATIONTABLE_VISIBLE};
+        String [] values = {vacation.getVacationKey(),
+                            vacation.getSellerKey(),
+                            vacation.getOrigin(),
+                            vacation.getDestination(),
+                            String.valueOf(vacation.getTimeStamp()),
+                            String.valueOf(vacation.isVisible())};
 
 
-        result = vacationTable.updateData(set , values, whereFields,whereValues);
+        result = tableManager.updateData(set , values, whereFields,whereValues);
         setChanged();
         notifyObservers(result);
     }
@@ -35,7 +44,7 @@ public class VacationModel extends ACRUDModel<Vacation> {
         return null;
     }
 
-    @Override
+    /*@Override
     public void deleteDataFromDB(String[][] keys) {
         String where = keys[keys.length - 1][0] + " = " + "\"" + keys[keys.length - 1][1] + "\"";
         DBResult result = vacationTable.deleteFromTable(where);
@@ -46,5 +55,5 @@ public class VacationModel extends ACRUDModel<Vacation> {
     public void deleteVacation(String key){
         String[][] keys = {{vacationTable.COLUMN_VACATIONTABLE_KEY,key}};
         deleteDataFromDB(keys);
-    }
+    }*/
 }

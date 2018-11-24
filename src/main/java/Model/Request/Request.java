@@ -46,12 +46,12 @@ public class Request {
         return approved;
     }
 
-    public void setApproved(boolean approved) {
-        this.approved = approved;
+    public void setApproved(String approved) {
+        this.approved = Boolean.getBoolean(approved);
     }
 
-    public void setApproved(String approved){
-        this.approved = Boolean.valueOf(approved);
+    public void setApproved(boolean approved) {
+        this.approved = approved;
     }
 
     public int getTimestamp() {
