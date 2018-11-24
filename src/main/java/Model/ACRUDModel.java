@@ -1,40 +1,51 @@
 package Model;
 
-import Model.User.User;
 import db.DBResult;
 import db.Managers.ATableManager;
-import db.Tables.UserTable;
 
 import java.util.List;
 import java.util.Observable;
 
 public abstract class ACRUDModel<T> extends Observable{
 
-    private ATableManager TableManager;
+    protected ATableManager tableManager;
 
 
     public void setTableManager(ATableManager tableManager) {
-        TableManager = tableManager;
+        this.tableManager = tableManager;
+    }
+
+
+    public List<T> getAllData(){
+        return tableManager.select(null,null,null);
     }
 
     public void createNewData(T t){
         DBResult result = DBResult.NONE;
 
         if (t != null) {
-            result = TableManager.InsertToTable(t);
+            result = tableManager.InsertToTable(t);
             setChanged();
             notifyObservers(result);
         }
     }
 
 
+    public void deleteDataFromDB(String[][] keys) {
+        // Todo - implement
+        String where = "";
+        for (int i = 0; keys.length > 1 && i < keys.length - 1 ; i++)
+            where += keys[i][0] + " = " + "\"" + keys[i][1] + "\"" + " AND \n";
+        where += keys[keys.length - 1][0] + " = " + "\"" + keys[keys.length - 1][1] + "\"";
+        tableManager.deleteFromTable(where);
 
+    }
 
 
 
     abstract public void updateTable(T t);
-    abstract public List<T> readDataFromDB(String[] listOfKeys);
-    abstract public void deleteDataFromDB(String keys[][]);
+    abstract public List<T> readDataFromDB(String[][] listOfKeys);
+    //abstract public void deleteDataFromDB(String keys[][]);
 
 
 

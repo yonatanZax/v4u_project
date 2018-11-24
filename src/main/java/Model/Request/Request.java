@@ -1,4 +1,4 @@
-package Model;
+package Model.Request;
 
 public class Request {
 
@@ -6,14 +6,16 @@ public class Request {
     private String sellerKey;
     private String buyerKey;
     private String approved;
-    private int timeStamp;
+    private int timestamp;
 
-    public Request(String vacationKey, String sellerKey, String buyerKey, String approved, int timeStamp) {
+    public Request(){}
+
+    public Request(String vacationKey, String sellerKey, String buyerKey, String approved, int timestamp) {
         this.vacationKey = vacationKey;
         this.sellerKey = sellerKey;
         this.buyerKey = buyerKey;
         this.approved = approved;
-        this.timeStamp = timeStamp;
+        this.timestamp = timestamp;
     }
 
     public String getVacationKey() {
@@ -48,11 +50,11 @@ public class Request {
         this.approved = approved;
     }
 
-    public int getTimeStamp() {
-        return timeStamp;
+    public int getTimestamp() {
+        return timestamp;
     }
 
-    public void setTimeStamp(int timeStamp) {
-        this.timeStamp = timeStamp;
+    public void setTimestamp(int timestamp) {
+        this.timestamp = timestamp;
     }
 }

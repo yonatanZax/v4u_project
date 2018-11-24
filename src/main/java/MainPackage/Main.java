@@ -2,26 +2,63 @@ package MainPackage;
 
 import Controllers.ControllerUserCRUD;
 
+import Model.Request.Request;
+import Model.Request.RequestModel;
+import Model.User.User;
+import Model.Vacation.Vacation;
+import db.Tables.PurchaseTable;
 import db.Tables.RequestTable;
+import db.Tables.UserTable;
 import db.Tables.VacationTable;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.List;
 
 public class Main extends Application {
+
+
+
+
+    private void initProject(){
+        File directory = new File("db");
+        if (! directory.exists())
+            directory.mkdir();
+
+        UserTable.getInstance().createTable();
+        VacationTable.getInstance().createTable();
+        PurchaseTable.getInstance().createTable();
+        RequestTable.getInstance().createTable();
+
+        UserTable userTable = UserTable.getInstance();
+        VacationTable vacationTable = VacationTable.getInstance();
+        PurchaseTable purchaseTable = PurchaseTable.getInstance();
+        RequestTable requestTable = RequestTable.getInstance();
+        RequestModel requestModel = new RequestModel();
+        User user1 = new User("user1","p","p","p","p",19920101);
+        User user2 = new User("user2","p","p","p","p",19920101);
+        userTable.InsertToTable(user1);
+        userTable.InsertToTable(user2);
+        Vacation vacation1 = new Vacation("TLV");
+        Request request1 = new Request("TLV","user1","user2","False",1025);
+        requestModel.createNewData(request1);
+        request1.setTimestamp(2020);
+        //requestModel.updateTable(request1);
+        List<Request> list1 = requestModel.getAllData();
+        String[][] deleteData = {{RequestTable.COLUMN_REQUESTTABLE_VACATIONKEY,"TLV"},{RequestTable.COLUMN_REQUESTTABLE_SELLERKEY,"user1"}};
+        requestModel.deleteDataFromDB(deleteData);
+
+
+        System.out.println("***     Init project successfully   ***");
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-        File directory = new File("db");
-        if (! directory.exists())
-            directory.mkdir();
+        initProject();
         ControllerUserCRUD controllerUserCRUD = new ControllerUserCRUD();
         controllerUserCRUD.showStage();
-        VacationTable.getInstance().createTable();
-        RequestTable requestTable = RequestTable.getInstance();
-        requestTable.createTable();
     }
 
 

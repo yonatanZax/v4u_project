@@ -17,20 +17,21 @@ public class VacationModel extends ACRUDModel<Vacation> {
     @Override
     public void updateTable(Vacation vacation) {
         DBResult result = DBResult.NONE;
-        String [] where = {vacationTable.COLUMN_VACATIONTABLE_KEY};
+        String [] whereFields = {vacationTable.COLUMN_VACATIONTABLE_KEY};
+        String [] whereValues = {vacation.getVacationKey()};
 
         // Todo - implement set and values
         String [] set = {vacationTable.COLUMN_VACATIONTABLE_KEY};
         String [] values = {vacation.getVacationKey()};
 
 
-        result = vacationTable.updateData(set , values, where);
+        result = vacationTable.updateData(set , values, whereFields,whereValues);
         setChanged();
         notifyObservers(result);
     }
 
     @Override
-    public List<Vacation> readDataFromDB(String[] listOfKeys) {
+    public List<Vacation> readDataFromDB(String[][] listOfKeys) {
         return null;
     }
 

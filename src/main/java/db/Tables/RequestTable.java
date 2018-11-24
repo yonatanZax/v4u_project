@@ -1,14 +1,15 @@
 package db.Tables;
 
-import Model.Request;
+import Model.Request.Request;
+import Model.User.User;
 import db.DBResult;
 import db.Managers.ATableManager;
 import db.Managers.DBManager;
-import db.Managers.IDBManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -42,12 +43,45 @@ public class RequestTable extends ATableManager<Request> {
 
     @Override
     protected List<Request> transformListMapToList(List<Map<String, String>> listMap) {
-        return null;
+        // Todo (DONE) - implement
+
+        List<Request> list = new ArrayList<>(listMap.size());
+        for(Map<String,String> map : listMap){
+            Request request = new Request();
+            for(Map.Entry<String,String> entry : map.entrySet()){
+                String key = entry.getKey();
+                switch (key){
+                    case COLUMN_REQUESTTABLE_TIMESTAMP:
+                        String timestampAsString = entry.getValue();
+                        int timestampAsInt = Integer.parseInt(timestampAsString);
+                        request.setTimestamp(timestampAsInt);
+                        break;
+                    case COLUMN_REQUESTTABLE_VACATIONKEY:
+                        request.setVacationKey( entry.getValue());
+                        break;
+
+                    case COLUMN_REQUESTTABLE_SELLERKEY:
+                        request.setSellerKey( entry.getValue());
+                        break;
+
+                    case COLUMN_REQUESTTABLE_BUYERKEY:
+                        request.setBuyerKey( entry.getValue());
+                        break;
+
+                    case COLUMN_REQUESTTABLE_APPROVED:
+                        request.setApproved( entry.getValue());
+                        break;
+                }
+
+            }
+            list.add(request);
+        }
+        return list;
     }
 
     @Override
     protected PreparedStatement getInsertPreparedStatement(Request object, Connection connection) {
-        String sql = "INSERT INTO " + TABLE_NAME + "(" + COLUMN_REQUESTTABLE_VACATIONKEY + "," + COLUMN_REQUESTTABLE_SELLERKEY+ "," + COLUMN_REQUESTTABLE_BUYERKEY+ "," + COLUMN_REQUESTTABLE_APPROVED + "," + COLUMN_REQUESTTABLE_TIMESTAMP + ") VALUES(?,?,?,?,?,?)";
+        String sql = "INSERT INTO " + TABLE_NAME + "(" + COLUMN_REQUESTTABLE_VACATIONKEY + "," + COLUMN_REQUESTTABLE_SELLERKEY+ "," + COLUMN_REQUESTTABLE_BUYERKEY+ "," + COLUMN_REQUESTTABLE_APPROVED + "," + COLUMN_REQUESTTABLE_TIMESTAMP + ") VALUES(?,?,?,?,?)";
         PreparedStatement pstmt = null;
         if (connection != null) {
             try {
@@ -56,7 +90,7 @@ public class RequestTable extends ATableManager<Request> {
                 pstmt.setString(2, object.getSellerKey());
                 pstmt.setString(3, object.getBuyerKey());
                 pstmt.setString(4, object.getApproved());
-                pstmt.setObject(5, object.getTimeStamp());
+                pstmt.setInt(5, object.getTimestamp());
                 return pstmt;
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -72,7 +106,7 @@ public class RequestTable extends ATableManager<Request> {
 
     @Override
     public DBResult createTable() {
-        // Todo - add parameters
+        // Todo (DONE) - add parameters
         String[] primaryKeys = {COLUMN_REQUESTTABLE_VACATIONKEY,COLUMN_REQUESTTABLE_SELLERKEY,COLUMN_REQUESTTABLE_BUYERKEY};
         String[] foreignKeys = {FOREIGNKEY_VACATIONKEY,FOREIGNKEY_SELLERKEY,FOREIGNKEY_BUYERKEY};
         String[] stringFields = {COLUMN_REQUESTTABLE_APPROVED};

@@ -143,6 +143,8 @@ public class ControllerUserCRUD implements Observer {
             else if(arg == DBResult.ADDED){
                 myView.status_lbl.setText("User was created successfully");
             }
+
+            // Todo - add not updated message
         }
 
     }
