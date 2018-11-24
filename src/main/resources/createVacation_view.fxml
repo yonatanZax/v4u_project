@@ -5,13 +5,14 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="center" hgap="10" prefHeight="604.0" prefWidth="554.0" vgap="10" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.CreateVacationView">
+<GridPane alignment="center" hgap="10" prefHeight="714.0" prefWidth="565.0" vgap="10" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.CreateVacationView">
     <padding><Insets bottom="40" left="40" right="40" top="40" /></padding>
     <columnConstraints>
         <ColumnConstraints>
@@ -56,8 +57,8 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
         </GridPane.margin>
     </DatePicker>
-   <Button defaultButton="true" layoutX="370.0" layoutY="470.0" onAction="#handleCancelButtonAction" prefHeight="40" prefWidth="100" text="Cancel" GridPane.columnIndex="3" GridPane.rowIndex="15" />
-   <Button defaultButton="true" onAction="#handleSubmitButtonAction" prefHeight="40" prefWidth="100" text="Submit" GridPane.columnIndex="1" GridPane.rowIndex="15" />
+   <Button defaultButton="true" layoutX="370.0" layoutY="470.0" onAction="#handleCancelButtonAction" prefHeight="40" prefWidth="100" text="Cancel" GridPane.columnIndex="3" GridPane.rowIndex="16" />
+   <Button defaultButton="true" onAction="#handleSubmitButtonAction" prefHeight="40" prefWidth="100" text="Submit" GridPane.columnIndex="1" GridPane.rowIndex="16" />
    <Label text="Depart time : " GridPane.columnIndex="1" GridPane.rowIndex="6" />
    <Label text="Baggage per ticket :" GridPane.columnIndex="1" GridPane.rowIndex="10" />
    <Label text="Vacation type:" GridPane.columnIndex="1" GridPane.rowIndex="12" />
@@ -76,6 +77,8 @@
    <ChoiceBox fx:id="accommodation_type_choice" prefHeight="25.0" prefWidth="208.0" GridPane.columnIndex="2" GridPane.rowIndex="13" />
    <TextField fx:id="depart_time" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
    <TextField fx:id="return_time" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+   <TextArea fx:id="freeText" prefHeight="77.0" prefWidth="319.0" promptText="Add here more info" GridPane.columnIndex="2" GridPane.rowIndex="14" />
+   <Label text="Additional Info:" GridPane.columnIndex="1" GridPane.rowIndex="14" />
    <rowConstraints>
       <RowConstraints minHeight="10.0" prefHeight="30.0" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" />
@@ -91,6 +94,7 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" />
+      <RowConstraints minHeight="10.0" prefHeight="80.0" />
       <RowConstraints />
       <RowConstraints prefHeight="30.0" />
    </rowConstraints>

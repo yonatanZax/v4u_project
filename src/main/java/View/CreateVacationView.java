@@ -1,9 +1,7 @@
 package View;
 
 import javafx.event.ActionEvent;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 public class CreateVacationView {
     public Label errorMessage_d_date;
@@ -19,6 +17,9 @@ public class CreateVacationView {
     public ChoiceBox accommodation_type_choice;
     public TextField depart_time;
     public TextField return_time;
+    public DatePicker return_datePicker;
+    public DatePicker depart_datePicker;
+    public TextArea freeText;
 
     public void handleCancelButtonAction(ActionEvent actionEvent) {
     }
