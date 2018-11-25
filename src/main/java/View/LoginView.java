@@ -26,13 +26,17 @@ public class LoginView extends Observable implements Initializable {
     @FXML
     private Label errorMessage;
 
+    // Todo - implement in ControllerLogin - DONE
     @FXML
     protected void processLogin() {
-
-        // Todo - implement in ControllerLogin - DONE
-        // Todo - add Create user to "Login" scene
         setChanged();
         notifyObservers("CheckLogin");
+    }
+
+    // Todo - add Create user to "Login" scene - DONE
+    public void CreateAccount() {
+        setChanged();
+        notifyObservers("SignIn");
     }
 
     @Override

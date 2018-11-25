@@ -7,6 +7,7 @@ import View.LoginView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -20,7 +21,7 @@ public class ControllerLogin implements Observer {
     private Stage stage;
     private Parent root;
     private FXMLLoader fxmlLoader;
-
+    private ControllerUserCRUD controllerUserCRUD = new ControllerUserCRUD();
 
     public ControllerLogin(UserModel model){
         stage = new Stage();
@@ -59,6 +60,8 @@ public class ControllerLogin implements Observer {
             } else {
                 loginView.setErrorMessageVisble(true);
             }
+        } else if (o.equals(loginView) && arg.equals("SignIn")){
+            controllerUserCRUD.createUser();
         }
     }
 }
