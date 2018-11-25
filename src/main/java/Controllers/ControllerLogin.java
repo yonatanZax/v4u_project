@@ -1,6 +1,7 @@
 package Controllers;
 
 import MainPackage.Main;
+import Model.User.User;
 import Model.User.UserModel;
 import View.LoginView;
 import javafx.fxml.FXMLLoader;
@@ -31,15 +32,12 @@ public class ControllerLogin implements Observer {
         }
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        userModel = model;
         loginView = fxmlLoader.getController();
         loginView.addObserver(this);
-
-
-
-        this.userModel = model;
-        this.loginView = new LoginView();
-        this.loginView.addObserver(this);
     }
+
+
 
 
     public void showStage(){
@@ -49,13 +47,17 @@ public class ControllerLogin implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (o.equals(loginView) && arg.equals("CheckLogin")){
-            String userName = loginView.getUserId();
-            String password = loginView.getPassword();
+            String userName = "\"" + loginView.getUserId() + "\"";
+            String password = "\"" + loginView.getPassword() + "\"";
             boolean checkUser = this.userModel.tryToLogin(userName, password);
 
             // Static variable - Main.user
             if (checkUser){
-                Main.user = userName;
+                userName = loginView.getUserId();
+                userModel.setUserName(userName);
+                loginView.closeWindow();
+            } else {
+                loginView.setErrorMessageVisble(true);
             }
         }
     }
