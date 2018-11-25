@@ -36,7 +36,7 @@ public class ControllerLogin implements Observer {
 
 
 
-        this.userModel = model;
+        this.userModel = new UserModel();
         this.loginView = new LoginView();
         this.loginView.addObserver(this);
     }

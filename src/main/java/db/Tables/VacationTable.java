@@ -42,6 +42,7 @@ public class VacationTable extends ATableManager<Vacation> {
 
     @Override
     public DBResult createTable() {
+        // todo - change vacationKey to increment value
         String[] primaryKeys = {COLUMN_VACATIONTABLE_KEY};
         String[] foreignKeys = {FOREIGNKEY_SELLERKEY};
         String[] stringFields = {COLUMN_VACATIONTABLE_SELLERKEY, COLUMN_VACATIONTABLE_ORIGIN, COLUMN_VACATIONTABLE_DESTINATION, COLUMN_VACATIONTABLE_VISIBLE};
@@ -118,13 +119,14 @@ public class VacationTable extends ATableManager<Vacation> {
                 + "," + COLUMN_VACATIONTABLE_SELLERKEY
                 + "," + COLUMN_VACATIONTABLE_ORIGIN
                 + "," + COLUMN_VACATIONTABLE_DESTINATION
-                + "," + COLUMN_VACATIONTABLE_TIMESTAMP
                 + "," + COLUMN_VACATIONTABLE_VISIBLE
+                + "," + COLUMN_VACATIONTABLE_TIMESTAMP
                 + ") VALUES(?,?,?,?,?,?)";
         PreparedStatement pstmt = null;
         if (connection != null) {
             try {
                 pstmt = connection.prepareStatement(sql);
+                // todo - change key to null after VacationTable key is increment
                 pstmt.setString(1, object.getVacationKey());
                 pstmt.setString(2, object.getSellerKey());
                 pstmt.setString(3, object.getOrigin());

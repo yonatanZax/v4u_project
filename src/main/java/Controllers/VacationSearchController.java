@@ -40,8 +40,9 @@ public class VacationSearchController extends Application implements Observer {
         scene = new Scene(root);
         myView = fxmlLoader.getController();
 
-        //List<Vacation> vacationList = vacationModel.getAllData();
-        //Vacation[] list = (Vacation[]) vacationList.toArray();
+//        List<Vacation> vacationList = vacationModel.getAllData();
+//        Vacation[] list = (Vacation[]) vacationList.toArray();
+//        myView.setVacations_listview(list);
         myView.setVacations_listview(startVacationList());
 
         myView.addObserver(this);
