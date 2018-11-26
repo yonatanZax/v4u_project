@@ -42,7 +42,7 @@ public class VacationTable extends ATableManager<Vacation> {
 
     @Override
     public DBResult createTable() {
-        String[] primaryKeys = {COLUMN_VACATIONTABLE_KEY};
+        String[] primaryKeys = {COLUMN_VACATIONTABLE_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT"};
         String[] foreignKeys = {FOREIGNKEY_SELLERKEY};
         String[] stringFields = {COLUMN_VACATIONTABLE_SELLERKEY, COLUMN_VACATIONTABLE_ORIGIN, COLUMN_VACATIONTABLE_DESTINATION, COLUMN_VACATIONTABLE_VISIBLE};
         String[] intFields = {COLUMN_VACATIONTABLE_TIMESTAMP};
