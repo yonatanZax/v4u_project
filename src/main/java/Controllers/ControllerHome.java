@@ -25,6 +25,9 @@ public class ControllerHome implements Observer{
     private ControllerLogin controllerLogin;
     private ControllerCreateVacation controllerCreateVacation;
     private HomeView homeView = new HomeView();
+    private UserModel userModel = new UserModel();
+    private VacationModel vacationModel = new VacationModel();
+
 
     public ControllerHome(){
         stage = new Stage();
@@ -40,8 +43,8 @@ public class ControllerHome implements Observer{
         homeView = fxmlLoader.getController();
         homeView.addObserver(this);
 
-        controllerLogin = new ControllerLogin(new UserModel());
-        controllerCreateVacation = new ControllerCreateVacation((new VacationModel()));
+        controllerLogin = new ControllerLogin(userModel);
+        controllerCreateVacation = new ControllerCreateVacation(vacationModel);
 
 
     }
