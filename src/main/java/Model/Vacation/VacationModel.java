@@ -22,12 +22,14 @@ public class VacationModel extends ACRUDModel<Vacation> {
         // Todo - implement set and values
         String [] set = {VacationTable.COLUMN_VACATIONTABLE_KEY,
                          VacationTable.COLUMN_VACATIONTABLE_SELLERKEY,
+                         VacationTable.COLUMN_VACATIONTABLE_PRICE,
                          VacationTable.COLUMN_VACATIONTABLE_ORIGIN,
                          VacationTable.COLUMN_VACATIONTABLE_DESTINATION,
                          VacationTable.COLUMN_VACATIONTABLE_TIMESTAMP,
                          VacationTable.COLUMN_VACATIONTABLE_VISIBLE};
         String [] values = {vacation.getVacationKey(),
                             vacation.getSellerKey(),
+                            String.valueOf(vacation.getPrice()),
                             vacation.getOrigin(),
                             vacation.getDestination(),
                             String.valueOf(vacation.getTimeStamp()),

@@ -40,9 +40,12 @@ public class VacationSearchController extends Application implements Observer {
         scene = new Scene(root);
         myView = fxmlLoader.getController();
 
-        //List<Vacation> vacationList = vacationModel.getAllData();
-        //Vacation[] list = (Vacation[]) vacationList.toArray();
-        myView.setVacations_listview(startVacationList());
+        // TODO - PAY ATTENTION: added to vacationTable price (double) -> constructor changed!
+
+        List<Vacation> vacationList = vacationModel.getAllData();
+//        Vacation[] vacations = (Vacation[]) vacationList.toArray();
+//        myView.setVacations_listview(vacations);
+//        myView.setVacations_listview(startVacationList());
 
         myView.addObserver(this);
 
@@ -69,16 +72,16 @@ public class VacationSearchController extends Application implements Observer {
 
     }
 
-    private Vacation[] startVacationList() {
-        Vacation[] vacations = new Vacation[6];
-        int i = 0;
-        for ( i = 0;i <5; i++){
-            vacations[i] = new Vacation(""+i,""+i,""+i,""+i,true,i);
-
-        }
-        vacations[5] =  new Vacation(""+i,""+i,""+i,""+i,false,i);
-        return vacations;
-    }
+//    private Vacation[] startVacationList() {
+////        Vacation[] vacations = new Vacation[6];
+////        int i = 0;
+////        for ( i = 0;i <5; i++){
+////            vacations[i] = new Vacation(""+i,""+i,""+i,""+i,true,i);
+////
+////        }
+////        vacations[5] =  new Vacation(""+i,""+i,""+i,""+i,false,i);
+////        return vacations;
+//    }
 
     public static void main(String[] args) {
         launch(args);

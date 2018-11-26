@@ -18,6 +18,7 @@ public class VacationTable extends ATableManager<Vacation> {
     private static VacationTable ourInstance;
     public static final String COLUMN_VACATIONTABLE_KEY = "key";
     public static final String COLUMN_VACATIONTABLE_SELLERKEY = "sellerKey";
+    public static final String COLUMN_VACATIONTABLE_PRICE = "price";
     private final String FOREIGNKEY_SELLERKEY = "(" + COLUMN_VACATIONTABLE_SELLERKEY + ") references userInfo(key)";
     public static final String COLUMN_VACATIONTABLE_VISIBLE = "visible";
     public static final String COLUMN_VACATIONTABLE_DESTINATION = "destination";
@@ -46,7 +47,7 @@ public class VacationTable extends ATableManager<Vacation> {
         String[] foreignKeys = {FOREIGNKEY_SELLERKEY};
         String[] stringFields = {COLUMN_VACATIONTABLE_SELLERKEY, COLUMN_VACATIONTABLE_ORIGIN, COLUMN_VACATIONTABLE_DESTINATION, COLUMN_VACATIONTABLE_VISIBLE};
         String[] intFields = {COLUMN_VACATIONTABLE_TIMESTAMP};
-        String[] doubleFields = {};
+        String[] doubleFields = {COLUMN_VACATIONTABLE_PRICE};
         return super.createTable(primaryKeys, foreignKeys, stringFields, intFields, doubleFields);
     }
 
@@ -85,6 +86,9 @@ public class VacationTable extends ATableManager<Vacation> {
                     case COLUMN_VACATIONTABLE_VISIBLE:
                         vacation.setVisible(entry.getValue().equals("true"));
                         break;
+                    case COLUMN_VACATIONTABLE_PRICE:
+                        vacation.setPrice(Double.parseDouble(entry.getValue()));
+                        break;
                 }
 
             }
@@ -120,7 +124,8 @@ public class VacationTable extends ATableManager<Vacation> {
                 + "," + COLUMN_VACATIONTABLE_DESTINATION
                 + "," + COLUMN_VACATIONTABLE_VISIBLE
                 + "," + COLUMN_VACATIONTABLE_TIMESTAMP
-                + ") VALUES(?,?,?,?,?,?)";
+                + "," + COLUMN_VACATIONTABLE_PRICE
+                + ") VALUES(?,?,?,?,?,?,?)";
         PreparedStatement pstmt = null;
         if (connection != null) {
             try {
@@ -131,6 +136,7 @@ public class VacationTable extends ATableManager<Vacation> {
                 pstmt.setString(4, object.getDestination());
                 pstmt.setString(5, object.isVisible()+"");
                 pstmt.setInt(6, object.getTimeStamp());
+                pstmt.setDouble(7,object.getPrice());
                 return pstmt;
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
