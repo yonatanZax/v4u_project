@@ -118,8 +118,8 @@ public class VacationTable extends ATableManager<Vacation> {
                 + "," + COLUMN_VACATIONTABLE_SELLERKEY
                 + "," + COLUMN_VACATIONTABLE_ORIGIN
                 + "," + COLUMN_VACATIONTABLE_DESTINATION
-                + "," + COLUMN_VACATIONTABLE_TIMESTAMP
                 + "," + COLUMN_VACATIONTABLE_VISIBLE
+                + "," + COLUMN_VACATIONTABLE_TIMESTAMP
                 + ") VALUES(?,?,?,?,?,?)";
         PreparedStatement pstmt = null;
         if (connection != null) {
