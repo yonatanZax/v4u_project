@@ -2,10 +2,13 @@ package Controllers;
 
 import MainPackage.Enum_CRUD;
 import Model.Vacation.VacationModel;
+import View.CRUDViews.ACRUDView;
 import View.CRUDViews.VacationCRUDView;
+import db.DBResult;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -20,7 +23,7 @@ public class ControllerCreateVacation implements Observer {
     public VacationCRUDView vacationView;
     public VacationModel vacationModel;
 
-    // Todo - implement here
+    // Todo - implement here -> DONE
 
     public void showStage() {
         vacationView.price.setText("500");
@@ -28,7 +31,7 @@ public class ControllerCreateVacation implements Observer {
         stage.show();
     }
 
-    public ControllerCreateVacation(VacationModel model){
+    public ControllerCreateVacation(VacationModel model) {
         stage = new Stage();
         fxmlLoader = new FXMLLoader(getClass().getResource("/createVacation_view.fxml"));
         try {
@@ -43,28 +46,45 @@ public class ControllerCreateVacation implements Observer {
         vacationView.addObserver(this);
     }
 
-    private boolean checkNumber(String num){
-        try{
+    private boolean checkNumber(String num) {
+        try {
             Double.parseDouble(num);
             return true;
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return false;
         }
+    }
+
+    private void showAlertWithoutHeaderText(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
     @Override
     public void update(Observable o, Object arg) {
 
-        if (o.equals(vacationModel)){
+        if (o.equals(vacationModel)) {
 
-        }else if (o.equals(vacationView)){
-            if (arg.equals(Enum_CRUD.CREATE)){
-                if(!checkNumber(vacationView.price.getText())){
+        } else if (o.equals(vacationView)) {
+            if (arg.equals(Enum_CRUD.CREATE)) {
+                if (!checkNumber(vacationView.price.getText())) {
                     vacationView.createVacationSetPriceError(true);
-                } else { // TODO - how do we check the destination
-                vacationView.closeWindow();
+                } else { // TODO - how do we check the destination (OR NOT)
+                    double price = Double.parseDouble(vacationView.price.getText());
+                    vacationModel.insertVacationToTable(vacationView.destination.getText(), price);
+                    System.out.println("ControllerCreateVacation: update by vacationModel");
+                    System.out.println("ControllerCreateVacation: " + vacationModel.getUserName() + " registered vacation to " + vacationView.destination.getText());
+                    vacationView.closeWindow();
                 }
+            } else {
+                String title = "houston we have a problem";
+                String content = "We have some problems right now.. \n Please try again later..";
+                showAlertWithoutHeaderText(title, content);
             }
         }
     }
 }
+

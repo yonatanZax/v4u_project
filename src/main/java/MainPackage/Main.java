@@ -6,6 +6,7 @@ import Controllers.ControllerUserCRUD;
 import Model.Request.Request;
 import Model.Request.RequestModel;
 import Model.User.User;
+import Model.User.UserModel;
 import Model.Vacation.Vacation;
 import Model.Vacation.VacationModel;
 import db.Tables.PurchaseTable;
@@ -39,8 +40,9 @@ public class Main extends Application {
         VacationTable vacationTable = VacationTable.getInstance();
         PurchaseTable purchaseTable = PurchaseTable.getInstance();
         RequestTable requestTable = RequestTable.getInstance();
+        UserModel userModel = new UserModel();
         RequestModel requestModel = new RequestModel();
-        VacationModel vacationModel = new VacationModel();
+        VacationModel vacationModel = new VacationModel(userModel);
         User user1 = new User("user1","p","p","p","p",19920101);
         User user2 = new User("user2","p","p","p","p",19920101);
         userTable.InsertToTable(user1);

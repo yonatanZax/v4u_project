@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import Model.User.UserModel;
 import Model.Vacation.Vacation;
 import Model.Vacation.VacationModel;
 import View.VacationSearchView;
@@ -21,8 +22,9 @@ import javafx.stage.Stage;
  */
 public class VacationSearchController extends Application implements Observer {
 
+    private UserModel userModel;
     private VacationSearchView myView;
-    private VacationModel vacationModel = new VacationModel();
+    private VacationModel vacationModel = new VacationModel(userModel);
     private String status;
     private Scene scene;
     private Parent root;

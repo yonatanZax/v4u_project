@@ -26,7 +26,7 @@ public class ControllerHome implements Observer{
     private ControllerCreateVacation controllerCreateVacation;
     private HomeView homeView = new HomeView();
     private UserModel userModel = new UserModel();
-    private VacationModel vacationModel = new VacationModel();
+    private VacationModel vacationModel = new VacationModel(userModel);
 
 
     public ControllerHome(){
