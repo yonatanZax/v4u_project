@@ -1,6 +1,7 @@
 package Controllers;
 
 import Model.User.UserModel;
+import Model.Vacation.VacationModel;
 import View.HomeView;
 import View.LoginView;
 import javafx.event.ActionEvent;
@@ -22,6 +23,7 @@ public class ControllerHome implements Observer{
     private ControllerUserCRUD controllerUserCRUD = new ControllerUserCRUD();
     private VacationSearchController vacationSearchController = new VacationSearchController();
     private ControllerLogin controllerLogin;
+    private ControllerCreateVacation controllerCreateVacation;
     private HomeView homeView = new HomeView();
 
     public ControllerHome(){
@@ -39,7 +41,7 @@ public class ControllerHome implements Observer{
         homeView.addObserver(this);
 
         controllerLogin = new ControllerLogin(new UserModel());
-
+        controllerCreateVacation = new ControllerCreateVacation((new VacationModel()));
 
 
     }
@@ -59,7 +61,11 @@ public class ControllerHome implements Observer{
                 vacationSearchController.start(stage);
 
             }else if (arg.equals("CreateVacation")){
-
+                if (controllerLogin.checkIfUserLoggedIn()) {
+                    controllerCreateVacation.showStage();
+                } else {
+                    controllerLogin.errorMessageNotLoggedIn();
+                }
             }
         }
     }

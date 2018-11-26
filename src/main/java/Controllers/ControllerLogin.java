@@ -1,13 +1,11 @@
 package Controllers;
 
-import MainPackage.Main;
-import Model.User.User;
 import Model.User.UserModel;
 import View.LoginView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Modality;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -23,7 +21,7 @@ public class ControllerLogin implements Observer {
     private FXMLLoader fxmlLoader;
     private ControllerUserCRUD controllerUserCRUD = new ControllerUserCRUD();
 
-    public ControllerLogin(UserModel model){
+    public ControllerLogin(UserModel model) {
         stage = new Stage();
         fxmlLoader = new FXMLLoader(getClass().getResource("/login_view.fxml"));
         try {
@@ -38,29 +36,44 @@ public class ControllerLogin implements Observer {
         loginView.addObserver(this);
     }
 
+    public boolean checkIfUserLoggedIn() {
+        if (userModel.getUserName() != null)
+            return true;
+        return false;
+    }
+
+    public void errorMessageNotLoggedIn(){
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText("You are NOT Logged in!");
+            errorAlert.setContentText("Only Registered User can publish new vacation for sale.");
+            errorAlert.showAndWait();
+    }
+
+    public String getUserName() {
+        return userModel.getUserName();
+    }
 
 
-
-    public void showStage(){
+    public void showStage() {
         stage.show();
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        if (o.equals(loginView) && arg.equals("CheckLogin")){
+        if (o.equals(loginView) && arg.equals("CheckLogin")) {
             String userName = "\"" + loginView.getUserId() + "\"";
             String password = "\"" + loginView.getPassword() + "\"";
             boolean checkUser = this.userModel.tryToLogin(userName, password);
 
             // Static variable - Main.user
-            if (checkUser){
+            if (checkUser) {
                 userName = loginView.getUserId();
                 userModel.setUserName(userName);
                 loginView.closeWindow();
             } else {
                 loginView.setErrorMessageVisble(true);
             }
-        } else if (o.equals(loginView) && arg.equals("SignIn")){
+        } else if (o.equals(loginView) && arg.equals("SignIn")) {
             controllerUserCRUD.createUser();
         }
     }

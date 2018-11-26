@@ -59,7 +59,7 @@ public class LoginView extends Observable implements Initializable {
         return password.getText();
     }
 
-    public void startLoginProcessAgain(InputMethodEvent inputMethodEvent) {
+    public void startLoginProcessAgain() {
         setErrorMessageVisble(false);
     }
 
