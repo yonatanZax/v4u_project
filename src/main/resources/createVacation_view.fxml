@@ -27,7 +27,7 @@
             <Font name="Arial" size="24" />
         </font>
         <GridPane.margin>
-            <Insets bottom="20" left="0" right="0" top="20" />
+            <Insets bottom="20" top="20" />
         </GridPane.margin>
     </Label>
     <Label text="Flight number : " GridPane.columnIndex="1" GridPane.rowIndex="2">
@@ -64,7 +64,7 @@
     <Label text="Connection Flight :" GridPane.columnIndex="1" GridPane.rowIndex="11" />
     <Label text="Accommodation type :" GridPane.columnIndex="1" GridPane.rowIndex="13" />
     <Label text="Depart time : " GridPane.columnIndex="1" GridPane.rowIndex="6" />
-    <!--<TextField fx:id="price" prefHeight="40" GridPane.columnIndex="2" GridPane.rowIndex="1" />-->
+    <TextField fx:id="price" prefHeight="40" GridPane.columnIndex="2" GridPane.rowIndex="1" />
     <!--<TextField fx:id="flightNumber" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />-->
     <!--<TextField fx:id="airline" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />-->
     <TextField fx:id="destination" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />

@@ -10,8 +10,8 @@ import java.util.Observer;
 public class ControllerCreateVacation implements Observer {
 
 
-    VacationCRUDView vacationView = new VacationCRUDView();
-    VacationModel vacationModel = new VacationModel();
+    public VacationCRUDView vacationView = new VacationCRUDView();
+    public VacationModel vacationModel = new VacationModel();
 
     // Todo - implement here
 

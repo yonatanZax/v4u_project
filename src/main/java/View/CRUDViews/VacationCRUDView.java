@@ -2,6 +2,7 @@ package View.CRUDViews;
 
 import MainPackage.Enum_CRUD;
 import javafx.event.ActionEvent;
+import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -9,10 +10,13 @@ import java.util.ResourceBundle;
 public class VacationCRUDView extends ACRUDView {
 
 
+    public TextField price;
+    public TextField destination;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        price.setText("Spain");
+        destination.setText("500$");
     }
 
 
