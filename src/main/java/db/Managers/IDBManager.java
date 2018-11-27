@@ -6,7 +6,7 @@ import java.sql.Connection;
 
 public interface IDBManager {
 
-    DBResult createTable(String tableName, String[] primaryKeys, String[] foreignKeys, String[] stringFields,String[] intFields, String[] doubleFields);
+    DBResult createTable(String sql);
 
     Connection connect();
 

@@ -18,6 +18,7 @@ public class VacationTable extends ATableManager<Vacation> {
     private static VacationTable ourInstance;
     public static final String COLUMN_VACATIONTABLE_KEY = "key";
     public static final String COLUMN_VACATIONTABLE_SELLERKEY = "sellerKey";
+    public static final String COLUMN_VACATIONTABLE_PRICE = "price";
     private final String FOREIGNKEY_SELLERKEY = "(" + COLUMN_VACATIONTABLE_SELLERKEY + ") references userInfo(key)";
     public static final String COLUMN_VACATIONTABLE_VISIBLE = "visible";
     public static final String COLUMN_VACATIONTABLE_DESTINATION = "destination";
@@ -42,13 +43,53 @@ public class VacationTable extends ATableManager<Vacation> {
 
     @Override
     public DBResult createTable() {
-        // todo - change vacationKey to increment value
-        String[] primaryKeys = {COLUMN_VACATIONTABLE_KEY};
+        String[] primaryKeys = {COLUMN_VACATIONTABLE_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT"};
         String[] foreignKeys = {FOREIGNKEY_SELLERKEY};
         String[] stringFields = {COLUMN_VACATIONTABLE_SELLERKEY, COLUMN_VACATIONTABLE_ORIGIN, COLUMN_VACATIONTABLE_DESTINATION, COLUMN_VACATIONTABLE_VISIBLE};
         String[] intFields = {COLUMN_VACATIONTABLE_TIMESTAMP};
-        String[] doubleFields = {};
+        String[] doubleFields = {COLUMN_VACATIONTABLE_PRICE};
         return super.createTable(primaryKeys, foreignKeys, stringFields, intFields, doubleFields);
+    }
+
+
+    // Todo - Make this concrete.. Ilan
+    @Override
+    protected String getCreateTableSQLString(String[] primaryKeys, String[] foreignKeys, String[] stringFields,String[] intFields, String[] doubleFields) {
+        if(primaryKeys != null) {
+            String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (\n";
+            boolean specialPrimaryKey = false;
+            for (String key: primaryKeys)
+                if (key.contains("INTEGER PRIMARY KEY AUTOINCREMENT")){
+                    specialPrimaryKey = true;
+                    sql += key + " ,\n";
+                } else {
+                    sql += key + " TEXT NOT NULL,\n";
+                }
+            for (String str: stringFields)
+                sql += str + " TEXT NOT NULL,\n";
+            for (String i: intFields)
+                sql += i + " INTEGER NOT NULL,\n";
+            for (String d: doubleFields)
+                sql += d + " REAL NOT NULL,\n";
+            if (!specialPrimaryKey) {
+                sql += "primary key (";
+                for (String primaryKey : primaryKeys)
+                    sql += primaryKey + ",";
+
+                sql = sql.substring(0, sql.length() - 1);
+                sql += ')';
+                if (foreignKeys.length > 0)
+                    sql += ',';
+            }
+
+            // foreign key (house_id) references houses(id),
+            for (String foreignKey: foreignKeys)
+                sql += "foreign key " + foreignKey + "\n";
+
+            sql += "\n);";
+            return sql;
+        }
+        return null;
     }
 
 
@@ -86,6 +127,9 @@ public class VacationTable extends ATableManager<Vacation> {
                     case COLUMN_VACATIONTABLE_VISIBLE:
                         vacation.setVisible(entry.getValue().equals("true"));
                         break;
+                    case COLUMN_VACATIONTABLE_PRICE:
+                        vacation.setPrice(Double.parseDouble(entry.getValue()));
+                        break;
                 }
 
             }
@@ -121,18 +165,19 @@ public class VacationTable extends ATableManager<Vacation> {
                 + "," + COLUMN_VACATIONTABLE_DESTINATION
                 + "," + COLUMN_VACATIONTABLE_VISIBLE
                 + "," + COLUMN_VACATIONTABLE_TIMESTAMP
-                + ") VALUES(?,?,?,?,?,?)";
+                + "," + COLUMN_VACATIONTABLE_PRICE
+                + ") VALUES(?,?,?,?,?,?,?)";
         PreparedStatement pstmt = null;
         if (connection != null) {
             try {
                 pstmt = connection.prepareStatement(sql);
-                // todo - change key to null after VacationTable key is increment
                 pstmt.setString(1, object.getVacationKey());
                 pstmt.setString(2, object.getSellerKey());
                 pstmt.setString(3, object.getOrigin());
                 pstmt.setString(4, object.getDestination());
                 pstmt.setString(5, object.isVisible()+"");
                 pstmt.setInt(6, object.getTimeStamp());
+                pstmt.setDouble(7,object.getPrice());
                 return pstmt;
             } catch (SQLException e) {
                 System.out.println(e.getMessage());

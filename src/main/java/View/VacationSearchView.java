@@ -13,7 +13,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 
-
+import java.util.List;
 import java.util.Observable;
 
 public class VacationSearchView extends Observable {
@@ -97,7 +97,12 @@ public class VacationSearchView extends Observable {
         return pickedVacation;
     }
 
-    public void setVacations_listview(Vacation[] vacations) {
+
+    public void setVacations_listview(List<Vacation> vacationList) {
+        Vacation[] vacations = new Vacation[vacationList.size()];
+        for (int i = 0 ; i < vacations.length ; i++){
+            vacations[i] = vacationList.get(i);
+        }
         masterData.clear();
         masterData.addAll(vacations);
     }

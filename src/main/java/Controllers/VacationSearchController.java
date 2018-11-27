@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import Model.User.UserModel;
 import Model.Vacation.Vacation;
 import Model.Vacation.VacationModel;
 import View.VacationSearchView;
@@ -21,8 +22,9 @@ import javafx.stage.Stage;
  */
 public class VacationSearchController extends Application implements Observer {
 
+    private UserModel userModel;
     private VacationSearchView myView;
-    private VacationModel vacationModel = new VacationModel();
+    private VacationModel vacationModel = new VacationModel(userModel);
     private String status;
     private Scene scene;
     private Parent root;
@@ -40,10 +42,11 @@ public class VacationSearchController extends Application implements Observer {
         scene = new Scene(root);
         myView = fxmlLoader.getController();
 
-//        List<Vacation> vacationList = vacationModel.getAllData();
-//        Vacation[] list = (Vacation[]) vacationList.toArray();
-//        myView.setVacations_listview(list);
-        myView.setVacations_listview(startVacationList());
+        // TODO - PAY ATTENTION: added to vacationTable price (double) -> constructor changed!
+
+        List<Vacation> vacationList = vacationModel.getAllData();
+        myView.setVacations_listview(vacationList);
+//        myView.setVacations_listview(startVacationList());
 
         myView.addObserver(this);
 
@@ -70,16 +73,16 @@ public class VacationSearchController extends Application implements Observer {
 
     }
 
-    private Vacation[] startVacationList() {
-        Vacation[] vacations = new Vacation[6];
-        int i = 0;
-        for ( i = 0;i <5; i++){
-            vacations[i] = new Vacation(""+i,""+i,""+i,""+i,true,i);
-
-        }
-        vacations[5] =  new Vacation(""+i,""+i,""+i,""+i,false,i);
-        return vacations;
-    }
+//    private Vacation[] startVacationList() {
+////        Vacation[] vacations = new Vacation[6];
+////        int i = 0;
+////        for ( i = 0;i <5; i++){
+////            vacations[i] = new Vacation(""+i,""+i,""+i,""+i,true,i);
+////
+////        }
+////        vacations[5] =  new Vacation(""+i,""+i,""+i,""+i,false,i);
+////        return vacations;
+//    }
 
     public static void main(String[] args) {
         launch(args);

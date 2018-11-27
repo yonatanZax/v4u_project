@@ -1,42 +1,64 @@
 package Model.Vacation;
 
 import Model.ACRUDModel;
+import Model.User.UserModel;
 import db.DBResult;
-import db.Tables.UserTable;
 import db.Tables.VacationTable;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class VacationModel extends ACRUDModel<Vacation> {
 
-    public VacationModel(){
-        super.setTableManager(VacationTable.getInstance());}
+    private UserModel userModel;
 
+    private int getCurrentTimeStamp() {
+        String date = LocalDateTime.now().getYear() + "" + LocalDateTime.now().getMonthValue() + "" + LocalDateTime.now().getDayOfMonth();
+        return Integer.parseInt(date);
+    }
+
+    public VacationModel(UserModel model) {
+        super.setTableManager(VacationTable.getInstance());
+        userModel = model;
+    }
+
+
+    public void insertVacationToTable(String destination, double price) {
+        String userName = userModel.getUserName();
+        Vacation vacation = new Vacation(null, userName, "TLV", destination, true, getCurrentTimeStamp(), price);
+        createNewData(vacation);
+    }
 
     @Override
     public void updateTable(Vacation vacation) {
         DBResult result = DBResult.NONE;
-        String [] whereFields = {VacationTable.COLUMN_VACATIONTABLE_KEY};
-        String [] whereValues = {vacation.getVacationKey()};
+        String[] whereFields = {VacationTable.COLUMN_VACATIONTABLE_KEY};
+        String[] whereValues = {vacation.getVacationKey()};
 
-        // Todo - implement set and values
-        String [] set = {VacationTable.COLUMN_VACATIONTABLE_KEY,
-                         VacationTable.COLUMN_VACATIONTABLE_SELLERKEY,
-                         VacationTable.COLUMN_VACATIONTABLE_ORIGIN,
-                         VacationTable.COLUMN_VACATIONTABLE_DESTINATION,
-                         VacationTable.COLUMN_VACATIONTABLE_TIMESTAMP,
-                         VacationTable.COLUMN_VACATIONTABLE_VISIBLE};
-        String [] values = {vacation.getVacationKey(),
-                            vacation.getSellerKey(),
-                            vacation.getOrigin(),
-                            vacation.getDestination(),
-                            String.valueOf(vacation.getTimeStamp()),
-                            String.valueOf(vacation.isVisible())};
+        // Todo - implement set and values -> DONE
+        String[] set = {VacationTable.COLUMN_VACATIONTABLE_KEY,
+                VacationTable.COLUMN_VACATIONTABLE_SELLERKEY,
+                VacationTable.COLUMN_VACATIONTABLE_PRICE,
+                VacationTable.COLUMN_VACATIONTABLE_ORIGIN,
+                VacationTable.COLUMN_VACATIONTABLE_DESTINATION,
+                VacationTable.COLUMN_VACATIONTABLE_TIMESTAMP,
+                VacationTable.COLUMN_VACATIONTABLE_VISIBLE};
+        String[] values = {vacation.getVacationKey(),
+                vacation.getSellerKey(),
+                String.valueOf(vacation.getPrice()),
+                vacation.getOrigin(),
+                vacation.getDestination(),
+                String.valueOf(vacation.getTimeStamp()),
+                String.valueOf(vacation.isVisible())};
 
 
-        result = tableManager.updateData(set , values, whereFields,whereValues);
+        result = tableManager.updateData(set, values, whereFields, whereValues);
         setChanged();
         notifyObservers(result);
+    }
+
+    public String getUserName() {
+        return userModel.getUserName();
     }
 
     @Override
