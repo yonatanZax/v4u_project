@@ -6,6 +6,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -23,19 +24,28 @@
             </Label>
             <TableView fx:id="messageCenter_tableList" prefHeight="320.0" prefWidth="200.0">
               <columns>
-                <TableColumn prefWidth="116.0" text="Message type" />
-                <TableColumn prefWidth="277.0" text="Info" />
-                  <TableColumn minWidth="0.0" prefWidth="206.0" text="Actions" />
+                <TableColumn fx:id="messageType_col" prefWidth="116.0" text="Message type" />
+                <TableColumn fx:id="info_col" prefWidth="372.0" text="Info" />
               </columns>
             </TableView>
-            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#viewConversations" text="View Conversations History">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
+            <HBox prefHeight="40.0" prefWidth="200.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#refresh" text="Refresh">
+                     <HBox.margin>
+                        <Insets left="10.0" top="5.0" />
+                     </HBox.margin></Button>
+                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#viewConversations" text="View Conversations History">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <HBox.margin>
+                        <Insets left="365.0" top="5.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
                <VBox.margin>
-                  <Insets left="430.0" top="6.0" />
-               </VBox.margin>
-            </Button>
+                  <Insets />
+               </VBox.margin></HBox>
          </children>
       </VBox>
    </children>

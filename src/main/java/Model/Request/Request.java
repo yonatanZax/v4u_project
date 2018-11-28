@@ -1,5 +1,7 @@
 package Model.Request;
 
+import MainPackage.Enum_RequestState;
+
 public class Request {
 
     private String vacationKey;
@@ -7,6 +9,7 @@ public class Request {
     private String buyerKey;
     private boolean approved;
     private int timestamp;
+    private Enum_RequestState state;
 
     public Request(){}
 
@@ -64,5 +67,13 @@ public class Request {
 
     public void setTimestamp(String timestamp){
         this.timestamp = Integer.valueOf(timestamp);
+    }
+
+    public Enum_RequestState getState() {
+        return state;
+    }
+
+    public void setState(Enum_RequestState state) {
+        this.state = state;
     }
 }

@@ -1,5 +1,7 @@
 package Controllers;
 
+import Model.MessageCenter.MessageModel;
+import Model.Request.RequestModel;
 import Model.User.UserModel;
 import Model.Vacation.VacationModel;
 import View.HomeView;
@@ -24,9 +26,12 @@ public class ControllerHome implements Observer{
     private VacationSearchController vacationSearchController = new VacationSearchController();
     private ControllerLogin controllerLogin;
     private ControllerCreateVacation controllerCreateVacation;
+    private ControllerMessageCenter controllerMessageCenter;
     private HomeView homeView = new HomeView();
     private UserModel userModel = new UserModel();
+    private RequestModel requestModel = new RequestModel();
     private VacationModel vacationModel = new VacationModel(userModel);
+    private MessageModel messageModel = new MessageModel(userModel, requestModel,vacationModel);
 
 
     public ControllerHome(){
@@ -45,7 +50,7 @@ public class ControllerHome implements Observer{
 
         controllerLogin = new ControllerLogin(userModel);
         controllerCreateVacation = new ControllerCreateVacation(vacationModel);
-
+        controllerMessageCenter = new ControllerMessageCenter(messageModel);
 
     }
 
@@ -69,6 +74,8 @@ public class ControllerHome implements Observer{
                 } else {
                     controllerLogin.errorMessageNotLoggedIn();
                 }
+            } else if (arg.equals("MessageCenter")){
+                controllerMessageCenter.showStage();
             }
         }
     }

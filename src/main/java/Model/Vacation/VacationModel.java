@@ -1,6 +1,7 @@
 package Model.Vacation;
 
 import Model.ACRUDModel;
+import Model.Request.Request;
 import Model.User.UserModel;
 import db.DBResult;
 import db.Tables.VacationTable;
@@ -62,8 +63,16 @@ public class VacationModel extends ACRUDModel<Vacation> {
     }
 
     @Override
-    public List<Vacation> readDataFromDB(String[][] listOfKeys) {
-        return null;
+    public List<Vacation> readDataFromDB(String[][] parameters) {
+        //TODO - implement --> BETTER!
+        String selection = parameters[0] + " IN (";
+        for (int i=0 ; i < parameters.length - 1; i++) {
+            selection += "\"" + parameters[i][1] + "\",";
+        }
+        selection += "\"" + parameters[parameters.length-1][1] + "\")";
+
+        // Get the list of users from the database
+        return tableManager.select(null,selection,null);
     }
 
     /*@Override

@@ -44,9 +44,16 @@ public class RequestModel extends ACRUDModel<Request> {
     }
 
     @Override
-    public List<Request> readDataFromDB(String[][] listOfKeys) {
-        // Todo - implement
-        return null;
-    }
+    public List<Request> readDataFromDB(String[][] parameters) {
+        // Todo - implement --> BETTER!!
+        String selection = parameters[0] + " IN (";
+        for (int i=0 ; i < parameters.length - 1; i++) {
+            selection += "\"" + parameters[i][1] + "\",";
+        }
+        selection += "\"" + parameters[parameters.length-1][1] + "\")";
 
+        // Get the list of users from the database
+        List<Request> dataList = tableManager.select(null,selection,null);
+        return dataList;
+    }
 }

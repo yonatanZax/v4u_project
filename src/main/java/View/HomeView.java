@@ -36,5 +36,7 @@ public class HomeView extends Observable{
     }
 
     public void messageCenter(ActionEvent actionEvent) {
+        setChanged();
+        notifyObservers("MessageCenter");
     }
 }
