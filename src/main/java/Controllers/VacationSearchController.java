@@ -45,8 +45,7 @@ public class VacationSearchController extends Application implements Observer {
         // TODO - PAY ATTENTION: added to vacationTable price (double) -> constructor changed!
 
         List<Vacation> vacationList = vacationModel.getAllData();
-//        Vacation[] vacations = (Vacation[]) vacationList.toArray();
-//        myView.setVacations_listview(vacations);
+        myView.setVacations_listview(vacationList);
 //        myView.setVacations_listview(startVacationList());
 
         myView.addObserver(this);

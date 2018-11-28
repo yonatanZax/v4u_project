@@ -47,10 +47,12 @@ public class Main extends Application {
         User user2 = new User("user2","p","p","p","p",19920101);
         userTable.InsertToTable(user1);
         userTable.InsertToTable(user2);
-        Vacation vacation1 = new Vacation(null,"user1","TLV", "LAS",true,1025,200);
+        Vacation vacation1 = new Vacation(null,"user1","TLV", "NYC",true,1025,200);
+        Vacation vacation2 = new Vacation(null,"user1","TLV", "LAS",true,1025,200);
         Request request1 = new Request("TLV","user1","user2",false,1025);
         requestModel.createNewData(request1);
         vacationModel.createNewData(vacation1);
+        vacationModel.createNewData(vacation2);
         request1.setTimestamp(2020);
         //requestModel.updateTable(request1);
         List<Request> list1 = requestModel.getAllData();

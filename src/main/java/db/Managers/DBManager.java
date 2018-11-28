@@ -40,10 +40,8 @@ public class DBManager implements IDBManager {
         return result;
     }
 
-    @Override
-    public DBResult createTable(String tableName, String[] primaryKeys, String[] foreignKeys, String[] stringFields,String[] intFields, String[] doubleFields) {
+    public DBResult createTable(String sql) {
         DBResult result = DBResult.NONE;
-        String sql = getCreateTableSQLString(tableName,primaryKeys, foreignKeys, stringFields, intFields, doubleFields);
         Connection conn = connect();
         if(conn != null && sql != null) {
             try {
@@ -63,60 +61,6 @@ public class DBManager implements IDBManager {
         return result;
     }
 
-
-
-
-//
-//CREATE TABLE IF NOT EXISTS requestInfo (
-//  vacationKey TEXT NOT NULL,
-//  sellerKey TEXT NOT NULL,
-//  buyerKey TEXT NOT NULL,
-//  approved TEXT NOT NULL,
-//  timestamp INTEGER NOT NULL,
-//  primary key (vacationKey,sellerKey,buyerKey),
-//  foreign key (vacationKey) references vacationInfo(key)
-//  );
-
-
-
-
-    private String getCreateTableSQLString(String tableName, String[] primaryKeys, String[] foreignKeys, String[] stringFields,String[] intFields, String[] doubleFields) {
-        if(tableName != null && primaryKeys != null && !tableName.equals("")) {
-            String sql = "CREATE TABLE IF NOT EXISTS " + tableName + " (\n";
-            boolean specialPrimaryKey = false;
-            for (String key: primaryKeys)
-                if (key.contains("INTEGER PRIMARY KEY AUTOINCREMENT")){
-                    specialPrimaryKey = true;
-                    sql += key + " ,\n";
-                } else {
-                    sql += key + " TEXT NOT NULL,\n";
-                }
-            for (String str: stringFields)
-                sql += str + " TEXT NOT NULL,\n";
-            for (String i: intFields)
-                sql += i + " INTEGER NOT NULL,\n";
-            for (String d: doubleFields)
-                sql += d + " REAL NOT NULL,\n";
-            if (!specialPrimaryKey) {
-                sql += "primary key (";
-                for (String primaryKey : primaryKeys)
-                    sql += primaryKey + ",";
-
-                sql = sql.substring(0, sql.length() - 1);
-                sql += ')';
-                if (foreignKeys.length > 0)
-                    sql += ',';
-            }
-
-            // foreign key (house_id) references houses(id),
-            for (String foreignKey: foreignKeys)
-                sql += "foreign key " + foreignKey + "\n";
-
-            sql += "\n);";
-            return sql;
-        }
-        return null;
-    }
 
 
     @Override
