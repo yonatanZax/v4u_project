@@ -22,7 +22,7 @@ import javafx.stage.Window;
 /**
 
  */
-public class VacationSearchController implements Observer {
+public class VacationSearchController extends Observable implements Observer {
 
     private UserModel userModel;
     private VacationSearchView myView;
@@ -32,8 +32,9 @@ public class VacationSearchController implements Observer {
     private Parent root;
     private FXMLLoader fxmlLoader;
 
-
     private Vacation pickedVacation;
+
+    public static final String BTN_ADD = "add_btn";
 
     public VacationSearchController() {
         fxmlLoader = new FXMLLoader(getClass().getResource("/vacation_search_view.fxml"));
@@ -42,16 +43,11 @@ public class VacationSearchController implements Observer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        scene = new Scene(root);
         myView = fxmlLoader.getController();
 
         // TODO - PAY ATTENTION: added to vacationTable price (double) -> constructor changed!
 
-
-//        myView.setVacations_listview(startVacationList());
-
         myView.addObserver(this);
-
 
         updateSubScene();
 
@@ -76,9 +72,13 @@ public class VacationSearchController implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (o == myView){
-            if (arg.equals("vacationPicked")){
+            if (arg.equals(VacationSearchView.VACATION_PICKED)){
                 pickedVacation = myView.getPickedVacation();
-                System.out.println("VacationController - update");
+                vacationPicked();
+            }
+            else if (arg.equals(VacationSearchView.BTN_ADD)){
+                setChanged();
+                notifyObservers(BTN_ADD);
             }
         }
     }
