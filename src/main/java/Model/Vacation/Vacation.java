@@ -101,4 +101,12 @@ public class Vacation {
     public void setPrice(double price) {
         this.price = price;
     }
+
+    @Override
+    public String toString(){
+        String ans = "VacationDetails:\n";
+        ans += "\tDestination: " + this.getDestination() + '\n';
+        ans += "\tPrice: " + price;
+        return ans;
+    }
 }

@@ -44,7 +44,6 @@ public class RequestTable extends ATableManager<Request> {
 
     @Override
     protected List<Request> transformListMapToList(List<Map<String, String>> listMap) {
-        // Todo (DONE) - implement
 
         List<Request> list = new ArrayList<>(listMap.size());
         for(Map<String,String> map : listMap){
@@ -105,10 +104,9 @@ public class RequestTable extends ATableManager<Request> {
 
     @Override
     public DBResult createTable() {
-        // Todo (DONE) - add parameters
         String[] primaryKeys = {COLUMN_REQUESTTABLE_VACATIONKEY,COLUMN_REQUESTTABLE_SELLERKEY,COLUMN_REQUESTTABLE_BUYERKEY};
         String[] foreignKeys = {FOREIGNKEY_VACATIONKEY,FOREIGNKEY_SELLERKEY,FOREIGNKEY_BUYERKEY};
-        String[] stringFields = {};
+        String[] stringFields = {COLUMN_REQUESTTABLE_VACATIONKEY,COLUMN_REQUESTTABLE_SELLERKEY,COLUMN_REQUESTTABLE_BUYERKEY};
         String[] intFields = {COLUMN_REQUESTTABLE_APPROVED,COLUMN_REQUESTTABLE_TIMESTAMP};
         String[] doubleFields = {};
         return super.createTable(primaryKeys, foreignKeys,stringFields,intFields,doubleFields);

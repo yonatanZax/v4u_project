@@ -7,7 +7,6 @@ public class Purchase {
     private String buyerKey;
     private int timestamp;
 
-    // Todo (DONE)- add more fields
 
     public Purchase(){}
 

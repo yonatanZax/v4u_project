@@ -1,5 +1,6 @@
 package Model.User;
 
+
 import Model.ACRUDModel;
 import db.DBResult;
 import db.Tables.UserTable;
@@ -8,16 +9,12 @@ import java.util.List;
 
 public class UserModel extends ACRUDModel<User> {
 
-    private String userName = null;
     private static User loggedInUser = null;
 
     public UserModel() {
         super.setTableManager(UserTable.getInstance());
     }
 
-    public void setUserName(String name){ userName = name;}
-
-    public String getUserName(){ return userName;}
 
     public boolean tryToLogin(String userName, String password){
         String where = UserTable.COLUMN_USERTABLE_KEY + " = " + userName;
@@ -36,8 +33,17 @@ public class UserModel extends ACRUDModel<User> {
         return loggedInUser != null;
     }
 
-    public void logOff(){
+    public static void logOff(){
         loggedInUser = null;
+    }
+
+    public static String getUserName(){
+        return loggedInUser.getUserName();
+    }
+
+    public static void setLoggedInUserName(String userName){
+        loggedInUser = new User();
+        loggedInUser.setUserName(userName);
     }
 
 

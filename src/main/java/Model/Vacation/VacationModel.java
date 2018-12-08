@@ -1,7 +1,6 @@
 package Model.Vacation;
 
 import Model.ACRUDModel;
-import Model.Request.Request;
 import Model.User.UserModel;
 import db.DBResult;
 import db.Tables.VacationTable;
@@ -11,21 +10,19 @@ import java.util.List;
 
 public class VacationModel extends ACRUDModel<Vacation> {
 
-    private UserModel userModel;
 
     private int getCurrentTimeStamp() {
         String date = LocalDateTime.now().getYear() + "" + LocalDateTime.now().getMonthValue() + "" + LocalDateTime.now().getDayOfMonth();
         return Integer.parseInt(date);
     }
 
-    public VacationModel(UserModel model) {
+    public VacationModel() {
         super.setTableManager(VacationTable.getInstance());
-        userModel = model;
     }
 
 
     public void insertVacationToTable(String destination, double price) {
-        String userName = userModel.getUserName();
+        String userName = UserModel.getUserName();
         Vacation vacation = new Vacation(null, userName, "TLV", destination, true, getCurrentTimeStamp(), price);
         createNewData(vacation);
     }
@@ -59,7 +56,7 @@ public class VacationModel extends ACRUDModel<Vacation> {
     }
 
     public String getUserName() {
-        return userModel.getUserName();
+        return UserModel.getUserName();
     }
 
     @Override
