@@ -68,16 +68,17 @@ public class ControllerHome implements Observer{
 //            }else if (arg.equals("Search")){
 //                vacationSearchController.start(stage);
 
-            }else if (arg.equals("CreateVacation")){
-                if (controllerLogin.checkIfUserLoggedIn()) {
-                    controllerCreateVacation.showStage();
-                } else {
-                    controllerLogin.errorMessageNotLoggedIn();
-                }
+//            }else if (arg.equals("CreateVacation")){
+//                if (controllerLogin.checkIfUserLoggedIn()) {
+//                    controllerCreateVacation.showStage();
+//                } else {
+//                    controllerLogin.errorMessageNotLoggedIn();
+//                }
             } else if (arg.equals("MessageCenter")){
 //                controllerMessageCenter.showStage();
             }
         }
+
     }
 
     public void showStage(){

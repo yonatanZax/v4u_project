@@ -1,6 +1,10 @@
 package Controllers;
 
+import Model.Request.RequestModel;
+import Model.User.UserModel;
+import Model.Vacation.VacationModel;
 import View.HomeNewView;
+import View.HomeView;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -24,6 +28,11 @@ public class ControllerHomeNew extends Application implements Observer {
     private HomeNewView homeNewView;
 
     private VacationSearchController vacationSearchController = new VacationSearchController();
+    private ControllerLogin controllerLogin;
+    private ControllerCreateVacation controllerCreateVacation;
+    //    private ControllerMessageCenter controllerMessageCenter;
+
+
 
     public ControllerHomeNew() {
         stage = new Stage();
@@ -51,8 +60,30 @@ public class ControllerHomeNew extends Application implements Observer {
 
     }
 
+    /**
+     * changes the login status in the home view
+     * if userName is null: it means we are doing logout
+     * if userName isn't null: it means we successfully logged in
+     * @param userName the name of the new user or null it it's logout
+     */
+    public void changeLoginStatus(String userName){
+        homeNewView.setLoginStatusLabel(userName);
+    }
+
+
+
     @Override
     public void update(Observable o, Object arg) {
+        /*else*/ if (o.equals(vacationSearchController)) {
+            if (arg.equals(VacationSearchController.BTN_ADD)) {
+                if (controllerLogin.checkIfUserLoggedIn()) {
+                    controllerCreateVacation.showStage();
+                } else {
+                    controllerLogin.errorMessageNotLoggedIn();
+                }
+            }
+        }
+
 
     }
 

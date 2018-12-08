@@ -29,18 +29,30 @@ public class HomeNewView extends Observable {
     Label login_status_lbl;
 
 
-
     @FXML
     public void initialize() {
+        setLoginStatusLabel(null);
     }
 
     public void setSub_scene(Parent sub_scene) {
-
         this.sub_scene.setRoot(sub_scene);
     }
 
+    /**
+     * changes the login status in the home view
+     * if userName is null: it means we are doing logout
+     * if userName isn't null: it means we successfully logged in
+     * @param newLabel the name of the new user or null it it's logout
+     */
     public void setLoginStatusLabel(String newLabel){
-        login_status_lbl.setText(newLabel);
+        if (newLabel == null){
+            login_btn.setText("Login");
+            login_status_lbl.setText("Not Signed");
+        }
+        else {
+            login_btn.setText("Logout");
+            login_status_lbl.setText("Signed As: " + newLabel);
+        }
     }
 
     @FXML

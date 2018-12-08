@@ -38,6 +38,9 @@ public class VacationSearchView extends Observable{
 
     private Vacation pickedVacation;
 
+    public static final String BTN_ADD = "add_vacation";
+    public static final String VACATION_PICKED = "vacation_picked";
+
 
     @FXML
     public void initialize() {
@@ -51,7 +54,7 @@ public class VacationSearchView extends Observable{
                     System.out.println("Vacation picked: " + rowData.getVacationKey());
                     pickedVacation = rowData;
                     this.setChanged();
-                    this.notifyObservers("vacationPicked");
+                    this.notifyObservers(VACATION_PICKED);
                 }
             });
             return row ;
@@ -102,6 +105,12 @@ public class VacationSearchView extends Observable{
 
     public Vacation getPickedVacation() {
         return pickedVacation;
+    }
+
+
+    public void addVacationOnAction(){
+        setChanged();
+        notifyObservers(BTN_ADD);
     }
 
 

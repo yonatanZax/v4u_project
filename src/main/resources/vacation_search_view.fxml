@@ -39,7 +39,7 @@
                   </HBox>
                </children>
             </Group>
-            <Button layoutX="487.0" layoutY="15.0" mnemonicParsing="false" text="Add" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="7.0" />
+            <Button fx:id="add_vacation_btn" layoutX="487.0" layoutY="15.0" mnemonicParsing="false" onAction="#addVacationOnAction" text="Add" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="7.0" />
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="8.0" />
