@@ -23,7 +23,6 @@ public class PurchaseModel extends ACRUDModel<Purchase> {
         String[] whereValues = {purchase.getVacationKey(),purchase.getSellerKey(),purchase.getBuyerKey()};
 
 
-        // Todo (DONE) - implement set and values
         String [] set = {PurchaseTable.COLUMN_PURCHASETABLE_VACATIONKEY,
                 PurchaseTable.COLUMN_PURCHASETABLE_SELLERKEY,
                 PurchaseTable.COLUMN_PURCHASETABLE_BUYERKEY,

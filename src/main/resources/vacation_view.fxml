@@ -15,7 +15,7 @@
             <TextField fx:id="maxPriceField" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
         </children>
     </HBox>
-   <Button layoutX="477.0" layoutY="328.0" mnemonicParsing="false" text="Buy" />
+   <Button fx:id="buy_btn" layoutX="477.0" layoutY="328.0" mnemonicParsing="false" text="Buy" />
 
     
 

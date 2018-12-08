@@ -20,7 +20,6 @@ public class ControllerUserCRUD implements Observer {
 
     private ControllerCreateUser controllerCreateUser;
     private UserCRUDView myView;
-    private LoginView loginView;
     private ACRUDModel myModel;
     private Stage stage;
     private Parent root;

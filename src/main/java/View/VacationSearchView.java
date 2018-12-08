@@ -1,17 +1,17 @@
 package View;
 
+
+import Controllers.VacationSearchController;
 import Model.Vacation.Vacation;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.event.EventHandler;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
+
 
 
 import java.util.List;
@@ -38,9 +38,6 @@ public class VacationSearchView extends Observable{
 
     private Vacation pickedVacation;
 
-    public static final String BTN_ADD = "add_vacation";
-    public static final String VACATION_PICKED = "vacation_picked";
-
 
     @FXML
     public void initialize() {
@@ -54,7 +51,7 @@ public class VacationSearchView extends Observable{
                     System.out.println("Vacation picked: " + rowData.getVacationKey());
                     pickedVacation = rowData;
                     this.setChanged();
-                    this.notifyObservers(VACATION_PICKED);
+                    this.notifyObservers(VacationSearchController.VACATION_PICKED);
                 }
             });
             return row ;
@@ -110,7 +107,7 @@ public class VacationSearchView extends Observable{
 
     public void addVacationOnAction(){
         setChanged();
-        notifyObservers(BTN_ADD);
+        notifyObservers(VacationSearchController.BTN_ADD);
     }
 
 

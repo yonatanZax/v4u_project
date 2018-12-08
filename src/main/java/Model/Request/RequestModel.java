@@ -1,11 +1,8 @@
 package Model.Request;
 
 import Model.ACRUDModel;
-import Model.Purchase.Purchase;
 import db.DBResult;
-import db.Tables.PurchaseTable;
 import db.Tables.RequestTable;
-import db.Tables.UserTable;
 
 import java.util.List;
 
@@ -25,7 +22,6 @@ public class RequestModel extends ACRUDModel<Request> {
                 RequestTable.COLUMN_REQUESTTABLE_BUYERKEY};
         String[] whereValues = {request.getVacationKey(),request.getSellerKey(),request.getBuyerKey()};
 
-        // Todo (DONE) - implement set and values
         String [] set = {RequestTable.COLUMN_REQUESTTABLE_VACATIONKEY,
                 RequestTable.COLUMN_REQUESTTABLE_SELLERKEY,
                 RequestTable.COLUMN_REQUESTTABLE_BUYERKEY,
