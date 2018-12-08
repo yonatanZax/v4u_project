@@ -12,16 +12,25 @@ import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
-public class ControllerLogin implements Observer {
+public class ControllerLogin extends Observable implements Observer {
 
+
+    // Static Args
+    public static final String CONTROLLER_LOGIN_ARGS_LOGGEDIN = "LoggedIn";
+
+
+    // Class variables
     private LoginView loginView;
-    private UserModel userModel;
+    private UserModel userModel = new UserModel();
+    private ControllerUserCRUD controllerUserCRUD = new ControllerUserCRUD();
+
+    // GUI
     private Stage stage;
     private Parent root;
     private FXMLLoader fxmlLoader;
-    private ControllerUserCRUD controllerUserCRUD = new ControllerUserCRUD();
 
-    public ControllerLogin(UserModel model) {
+
+    public ControllerLogin() {
         stage = new Stage();
         fxmlLoader = new FXMLLoader(getClass().getResource("/login_view.fxml"));
         try {
@@ -31,26 +40,16 @@ public class ControllerLogin implements Observer {
         }
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        userModel = model;
         loginView = fxmlLoader.getController();
         loginView.addObserver(this);
     }
 
-    public boolean checkIfUserLoggedIn() {
-        if (userModel.getUserName() != null)
-            return true;
-        return false;
-    }
 
     public void errorMessageNotLoggedIn(){
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setHeaderText("You are NOT Logged in!");
             errorAlert.setContentText("Only Registered User can publish new vacation for sale.");
             errorAlert.showAndWait();
-    }
-
-    public String getUserName() {
-        return userModel.getUserName();
     }
 
 
@@ -60,21 +59,21 @@ public class ControllerLogin implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        if (o.equals(loginView) && arg.equals("CheckLogin")) {
+        if (o.equals(loginView) && arg.equals(LoginView.LOGINVIEW_CHECKLOGIN)) {
             String userName = "\"" + loginView.getUserId() + "\"";
             String password = "\"" + loginView.getPassword() + "\"";
-            boolean checkUser = this.userModel.tryToLogin(userName, password);
+            userModel.tryToLogin(userName, password);
 
-            // Static variable - Main.user
-            if (checkUser) {
-                userName = loginView.getUserId();
-                userModel.setUserName(userName);
-                loginView.closeWindow();
-            } else {
-                loginView.setErrorMessageVisble(true);
-            }
-        } else if (o.equals(loginView) && arg.equals("SignIn")) {
+        } else if (o.equals(loginView) && arg.equals(LoginView.LOGINVIEW_SIGNIN)) {
             controllerUserCRUD.createUser();
+        }else if (o.equals(userModel)){
+            if (arg.equals(CONTROLLER_LOGIN_ARGS_LOGGEDIN)){
+                notifyObservers(CONTROLLER_LOGIN_ARGS_LOGGEDIN);
+                loginView.closeWindow();
+            }else{
+                loginView.setErrorMessageVisble(true);
+
+            }
         }
     }
 }

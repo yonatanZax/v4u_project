@@ -17,7 +17,6 @@ public class PurchaseTable extends ATableManager<Purchase> {
 
     private static PurchaseTable ourInstance;
 
-    // Todo (DONE) - add foreign key
     public static final String COLUMN_PURCHASETABLE_VACATIONKEY = "vacationKey";
     private final String FOREIGNKEY_VACATIONKEY = "(" + COLUMN_PURCHASETABLE_VACATIONKEY + ") references vacationInfo(key)";
     public static final String COLUMN_PURCHASETABLE_SELLERKEY = "sellerKey";
@@ -43,8 +42,6 @@ public class PurchaseTable extends ATableManager<Purchase> {
 
     @Override
     protected List<Purchase> transformListMapToList(List<Map<String, String>> listMap) {
-
-        // Todo (DONE) - implement
 
         List<Purchase> list = new ArrayList<>(listMap.size());
         for(Map<String,String> map : listMap){
@@ -81,7 +78,6 @@ public class PurchaseTable extends ATableManager<Purchase> {
 
     @Override
     public DBResult createTable() {
-        // Todo (DONE) - add parameters
         String[] primaryKeys = {COLUMN_PURCHASETABLE_VACATIONKEY,COLUMN_PURCHASETABLE_SELLERKEY,COLUMN_PURCHASETABLE_BUYERKEY};
         String[] foreignKeys = {FOREIGNKEY_VACATIONKEY,FOREIGNKEY_SELLERKEY,FOREIGNKEY_BUYERKEY};
         String[] stringFields = {};

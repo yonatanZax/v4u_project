@@ -7,7 +7,6 @@ public class DBManager implements IDBManager {
 
     private static DBManager ourInstance;
 
-
     public static DBManager getInstance() {
         if(ourInstance == null) {
             ourInstance = new DBManager();

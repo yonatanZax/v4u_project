@@ -25,7 +25,6 @@ public class RequestModel extends ACRUDModel<Request> {
                 RequestTable.COLUMN_REQUESTTABLE_BUYERKEY};
         String[] whereValues = {request.getVacationKey(),request.getSellerKey(),request.getBuyerKey()};
 
-        // Todo (DONE) - implement set and values
         String [] set = {RequestTable.COLUMN_REQUESTTABLE_VACATIONKEY,
                          RequestTable.COLUMN_REQUESTTABLE_SELLERKEY,
                          RequestTable.COLUMN_REQUESTTABLE_BUYERKEY,
@@ -44,9 +43,16 @@ public class RequestModel extends ACRUDModel<Request> {
     }
 
     @Override
-    public List<Request> readDataFromDB(String[][] listOfKeys) {
-        // Todo - implement
-        return null;
-    }
+    public List<Request> readDataFromDB(String[][] parameters) {
+        // Todo - implement --> BETTER!!
+        String selection = parameters[0] + " IN (";
+        for (int i=0 ; i < parameters.length - 1; i++) {
+            selection += "\"" + parameters[i][1] + "\",";
+        }
+        selection += "\"" + parameters[parameters.length-1][1] + "\")";
 
+        // Get the list of users from the database
+        List<Request> dataList = tableManager.select(null,selection,null);
+        return dataList;
+    }
 }

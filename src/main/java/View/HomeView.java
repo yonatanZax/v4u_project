@@ -1,6 +1,7 @@
 package View;
 
 import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import java.util.Observable;
@@ -32,5 +33,10 @@ public class HomeView extends Observable{
     public void createVacation(ActionEvent event) {
         setChanged();
         notifyObservers("CreateVacation");
+    }
+
+    public void messageCenter(ActionEvent actionEvent) {
+        setChanged();
+        notifyObservers("MessageCenter");
     }
 }

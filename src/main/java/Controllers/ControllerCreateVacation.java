@@ -15,13 +15,13 @@ import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
-public class ControllerCreateVacation implements Observer {
+public class ControllerCreateVacation extends Observable implements Observer {
 
     private Stage stage;
     private Parent root;
     private FXMLLoader fxmlLoader;
     public VacationCRUDView vacationView;
-    public VacationModel vacationModel;
+    public VacationModel vacationModel = new VacationModel();
 
     // Todo - implement here -> DONE
 
@@ -31,7 +31,7 @@ public class ControllerCreateVacation implements Observer {
         stage.show();
     }
 
-    public ControllerCreateVacation(VacationModel model) {
+    public ControllerCreateVacation() {
         stage = new Stage();
         fxmlLoader = new FXMLLoader(getClass().getResource("/createVacation_view.fxml"));
         try {
@@ -41,7 +41,6 @@ public class ControllerCreateVacation implements Observer {
         }
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        vacationModel = model;
         vacationView = fxmlLoader.getController();
         vacationView.addObserver(this);
     }

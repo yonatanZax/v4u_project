@@ -20,7 +20,6 @@ public class ControllerUserCRUD implements Observer {
 
     private ControllerCreateUser controllerCreateUser;
     private UserCRUDView myView;
-    private LoginView loginView;
     private ACRUDModel myModel;
     private Stage stage;
     private Parent root;
@@ -115,11 +114,6 @@ public class ControllerUserCRUD implements Observer {
         System.out.println("ControllerUserCRUD: update by UserCRUDView");
 
         if (o.equals(myView)){
-            if (arg.equals("Search")){
-                VacationSearchController controller = new VacationSearchController();
-                controller.start(stage);
-            }
-
             if(arg.equals(Enum_CRUD.READ)) {
                 readUser();
             } else if(arg.equals(Enum_CRUD.CREATE)) {

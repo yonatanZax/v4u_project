@@ -20,17 +20,17 @@ import javafx.stage.Stage;
 /**
 
  */
-public class VacationSearchController extends Application implements Observer {
+public class VacationSearchController extends Observable implements Observer,SubScenable {
 
-    private UserModel userModel;
     private VacationSearchView myView;
-    private VacationModel vacationModel = new VacationModel(userModel);
-    private String status;
-    private Scene scene;
+    private VacationModel vacationModel = new VacationModel();
     private Parent root;
     private FXMLLoader fxmlLoader;
 
     private Vacation pickedVacation;
+
+    public static final String BTN_ADD = "add_btn";
+    public static final String VACATION_PICKED = "vacation_picked";
 
     public VacationSearchController() {
         fxmlLoader = new FXMLLoader(getClass().getResource("/vacation_search_view.fxml"));
@@ -39,61 +39,42 @@ public class VacationSearchController extends Application implements Observer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        scene = new Scene(root);
         myView = fxmlLoader.getController();
 
         // TODO - PAY ATTENTION: added to vacationTable price (double) -> constructor changed!
 
-        List<Vacation> vacationList = vacationModel.getAllData();
-        myView.setVacations_listview(vacationList);
-//        myView.setVacations_listview(startVacationList());
-
         myView.addObserver(this);
 
-    }
-
-    public void start(Stage primaryStage) {
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Sorting and Filtering");
-        primaryStage.show();
-
-//        try {
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vacation_search_view.fxml"));
-//            BorderPane page = (BorderPane) loader.load();
-//            Scene scene = new Scene(page);
-//            primaryStage.setScene(scene);
-//            myView = loader.getController();
-//            myView.addObserver(this);
-//            myView.setVacations_listview(startVacationList());
-//
-//            primaryStage.show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        updateSubScene();
 
     }
 
-//    private Vacation[] startVacationList() {
-////        Vacation[] vacations = new Vacation[6];
-////        int i = 0;
-////        for ( i = 0;i <5; i++){
-////            vacations[i] = new Vacation(""+i,""+i,""+i,""+i,true,i);
-////
-////        }
-////        vacations[5] =  new Vacation(""+i,""+i,""+i,""+i,false,i);
-////        return vacations;
-//    }
+    public Parent getRoot(){
+        return root;
+    }
 
-    public static void main(String[] args) {
-        launch(args);
+    public void updateSubScene(){
+        List<Vacation> vacationList = vacationModel.getAllData();
+        myView.setVacations_listview(vacationList);
+    }
+
+
+    private void vacationPicked(){
+        if (UserModel.isLoggedIn()){
+
+        }
     }
 
     @Override
     public void update(Observable o, Object arg) {
         if (o == myView){
-            if (arg.equals("vacationPicked")){
+            if (arg.equals(VACATION_PICKED)){
                 pickedVacation = myView.getPickedVacation();
-                System.out.println("VacationController - update");
+                vacationPicked();
+            }
+            else if (arg.equals(BTN_ADD)){
+                setChanged();
+                notifyObservers(BTN_ADD);
             }
         }
     }

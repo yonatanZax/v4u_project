@@ -191,7 +191,6 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return db.createTable(sql);
     }
 
-
     @Override
     public DBResult InsertToTable(T object) {
         DBResult result = DBResult.NONE;

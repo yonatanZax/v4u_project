@@ -14,8 +14,7 @@ public class Vacation {
     private int timeStamp;
     private double price;
 
-    public Vacation() {
-    }
+    public Vacation() {}
 
     public Vacation(String vacationKey, String sellerKey, String origin, String destination, boolean visible, int timeStamp, double price) {
         this.vacationKey = new SimpleStringProperty(vacationKey);

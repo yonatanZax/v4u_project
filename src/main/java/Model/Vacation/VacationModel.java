@@ -10,21 +10,19 @@ import java.util.List;
 
 public class VacationModel extends ACRUDModel<Vacation> {
 
-    private UserModel userModel;
 
     private int getCurrentTimeStamp() {
         String date = LocalDateTime.now().getYear() + "" + LocalDateTime.now().getMonthValue() + "" + LocalDateTime.now().getDayOfMonth();
         return Integer.parseInt(date);
     }
 
-    public VacationModel(UserModel model) {
+    public VacationModel() {
         super.setTableManager(VacationTable.getInstance());
-        userModel = model;
     }
 
 
     public void insertVacationToTable(String destination, double price) {
-        String userName = userModel.getUserName();
+        String userName = UserModel.getUserName();
         Vacation vacation = new Vacation(null, userName, "TLV", destination, true, getCurrentTimeStamp(), price);
         createNewData(vacation);
     }
@@ -37,19 +35,20 @@ public class VacationModel extends ACRUDModel<Vacation> {
 
         // Todo - implement set and values -> DONE
         String[] set = {VacationTable.COLUMN_VACATIONTABLE_KEY,
-                VacationTable.COLUMN_VACATIONTABLE_SELLERKEY,
-                VacationTable.COLUMN_VACATIONTABLE_PRICE,
-                VacationTable.COLUMN_VACATIONTABLE_ORIGIN,
-                VacationTable.COLUMN_VACATIONTABLE_DESTINATION,
-                VacationTable.COLUMN_VACATIONTABLE_TIMESTAMP,
-                VacationTable.COLUMN_VACATIONTABLE_VISIBLE};
-        String[] values = {vacation.getVacationKey(),
-                vacation.getSellerKey(),
-                String.valueOf(vacation.getPrice()),
-                vacation.getOrigin(),
-                vacation.getDestination(),
-                String.valueOf(vacation.getTimeStamp()),
-                String.valueOf(vacation.isVisible())};
+                        VacationTable.COLUMN_VACATIONTABLE_SELLERKEY,
+                        VacationTable.COLUMN_VACATIONTABLE_PRICE,
+                        VacationTable.COLUMN_VACATIONTABLE_ORIGIN,
+                        VacationTable.COLUMN_VACATIONTABLE_DESTINATION,
+                        VacationTable.COLUMN_VACATIONTABLE_TIMESTAMP,
+                        VacationTable.COLUMN_VACATIONTABLE_VISIBLE};
+
+        String[] values =  {vacation.getVacationKey(),
+                            vacation.getSellerKey(),
+                            String.valueOf(vacation.getPrice()),
+                            vacation.getOrigin(),
+                            vacation.getDestination(),
+                            String.valueOf(vacation.getTimeStamp()),
+                            String.valueOf(vacation.isVisible())};
 
 
         result = tableManager.updateData(set, values, whereFields, whereValues);
@@ -58,12 +57,20 @@ public class VacationModel extends ACRUDModel<Vacation> {
     }
 
     public String getUserName() {
-        return userModel.getUserName();
+        return UserModel.getUserName();
     }
 
     @Override
-    public List<Vacation> readDataFromDB(String[][] listOfKeys) {
-        return null;
+    public List<Vacation> readDataFromDB(String[][] parameters) {
+        //TODO - implement --> BETTER!
+        String selection = parameters[0] + " IN (";
+        for (int i=0 ; i < parameters.length - 1; i++) {
+            selection += "\"" + parameters[i][1] + "\",";
+        }
+        selection += "\"" + parameters[parameters.length-1][1] + "\")";
+
+        // Get the list of users from the database
+        return tableManager.select(null,selection,null);
     }
 
     /*@Override

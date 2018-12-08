@@ -1,5 +1,6 @@
 package Model.User;
 
+import Controllers.ControllerLogin;
 import Model.ACRUDModel;
 import db.DBResult;
 import db.Tables.UserTable;
@@ -8,25 +9,42 @@ import java.util.List;
 
 public class UserModel extends ACRUDModel<User> {
 
-    private String userName = null;
+    private static User loggedInUser = null;
 
     public UserModel() {
         super.setTableManager(UserTable.getInstance());
     }
 
-    public void setUserName(String name){ userName = name;}
 
-    public String getUserName(){ return userName;}
-
-    public boolean tryToLogin(String userName, String password){
+    public void tryToLogin(String userName, String password){
         String where = UserTable.COLUMN_USERTABLE_KEY + " = " + userName;
         where += " AND ";
         where += UserTable.COLUMN_USERTABLE_PASS + " = " + password;
         List<User> list = UserTable.getInstance().select(null,where,null);
-        if (list.size() > 0)
-            return true;
+        if (list.size() > 0) {
+            loggedInUser = list.get(0);
+            setChanged();
+            notifyObservers(ControllerLogin.CONTROLLER_LOGIN_ARGS_LOGGEDIN);
+        }
+        setChanged();
+        notifyObservers(ControllerLogin.CONTROLLER_LOGIN_ARGS_LOGGEDIN);
+    }
 
-        return false;
+    public static boolean isLoggedIn(){
+        return loggedInUser != null;
+    }
+
+    public static void logOff(){
+        loggedInUser = null;
+    }
+
+    public static String getUserName(){
+        return loggedInUser.getUserName();
+    }
+
+    public static void setLoggedInUserName(String userName){
+        loggedInUser = new User();
+        loggedInUser.setUserName(userName);
     }
 
 
@@ -82,5 +100,6 @@ public class UserModel extends ACRUDModel<User> {
         String[][] keys = {{UserTable.COLUMN_USERTABLE_KEY,key}};
         deleteDataFromDB(keys);
     }
+
 
 }

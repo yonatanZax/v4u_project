@@ -27,6 +27,8 @@ public class UserDetailsView extends Observable implements Initializable {
     public Button save_btn;
 
     public Label result_lbl;
+
+
     private static final String result_lblTitle = "Info from DB:\t";
 
     public void setUserName(String userName){

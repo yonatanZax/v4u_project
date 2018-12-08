@@ -1,6 +1,9 @@
 package View;
 
+import Controllers.ControllerLogin;
+import Controllers.VacationSearchController;
 import Model.Vacation.Vacation;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,7 +19,7 @@ import javafx.scene.input.MouseEvent;
 import java.util.List;
 import java.util.Observable;
 
-public class VacationSearchView extends Observable {
+public class VacationSearchView extends Observable{
 
     @FXML
     private TextField destinationField;
@@ -30,14 +33,21 @@ public class VacationSearchView extends Observable {
     @FXML
     public TableColumn<Vacation,String> originColumn;
 
+    @FXML
+    public TableColumn<Vacation,String> priceColumn;
+
     private ObservableList<Vacation> masterData = FXCollections.observableArrayList();
 
     private Vacation pickedVacation;
+
+    //public static final String BTN_ADD = "add_vacation";
+
 
 
     @FXML
     public void initialize() {
 
+        // set the table for double click
         vacations_tableview.setRowFactory(tv -> {
             TableRow<Vacation> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
@@ -46,7 +56,7 @@ public class VacationSearchView extends Observable {
                     System.out.println("Vacation picked: " + rowData.getVacationKey());
                     pickedVacation = rowData;
                     this.setChanged();
-                    this.notifyObservers("vacationPicked");
+                    this.notifyObservers(VacationSearchController.VACATION_PICKED);
                 }
             });
             return row ;
@@ -54,6 +64,8 @@ public class VacationSearchView extends Observable {
 
         destinationColumn.setCellValueFactory(cellData -> cellData.getValue().destinationProperty());
         originColumn.setCellValueFactory(cellData -> cellData.getValue().originProperty());
+        priceColumn.setCellValueFactory(cellData -> new SimpleStringProperty("" +cellData.getValue().getPrice()));
+
 
         // 1. Wrap the ObservableList in a FilteredList (initially display all data).
         FilteredList<Vacation> filteredData = new FilteredList<>(masterData, p -> true);
@@ -98,6 +110,12 @@ public class VacationSearchView extends Observable {
     }
 
 
+    public void addVacationOnAction(){
+        setChanged();
+        notifyObservers(VacationSearchController.BTN_ADD);
+    }
+
+
     public void setVacations_listview(List<Vacation> vacationList) {
         Vacation[] vacations = new Vacation[vacationList.size()];
         for (int i = 0 ; i < vacations.length ; i++){
@@ -107,3 +125,5 @@ public class VacationSearchView extends Observable {
         masterData.addAll(vacations);
     }
 }
+
+

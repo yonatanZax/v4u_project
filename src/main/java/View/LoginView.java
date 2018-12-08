@@ -4,9 +4,6 @@ import java.net.URL;
 import java.util.Observable;
 import java.util.ResourceBundle;
 
-import Controllers.ControllerUserCRUD;
-import Model.User.UserModel;
-import db.Tables.UserTable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,10 +11,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.InputMethodEvent;
 import javafx.stage.Stage;
 
 public class LoginView extends Observable implements Initializable {
+
+    // Static Args
+    public static final String LOGINVIEW_CHECKLOGIN = "CheckLogin";
+    public static final String LOGINVIEW_SIGNIN = "SignIn";
+
+
     public Button cancel;
     @FXML
     private TextField userId;
@@ -30,13 +32,13 @@ public class LoginView extends Observable implements Initializable {
     @FXML
     protected void processLogin() {
         setChanged();
-        notifyObservers("CheckLogin");
+        notifyObservers(LOGINVIEW_CHECKLOGIN);
     }
 
     // Todo - add Create user to "Login" scene - DONE
     public void CreateAccount() {
         setChanged();
-        notifyObservers("SignIn");
+        notifyObservers(LOGINVIEW_SIGNIN);
     }
 
     @Override
