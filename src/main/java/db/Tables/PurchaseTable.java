@@ -80,7 +80,7 @@ public class PurchaseTable extends ATableManager<Purchase> {
     public DBResult createTable() {
         String[] primaryKeys = {COLUMN_PURCHASETABLE_VACATIONKEY,COLUMN_PURCHASETABLE_SELLERKEY,COLUMN_PURCHASETABLE_BUYERKEY};
         String[] foreignKeys = {FOREIGNKEY_VACATIONKEY,FOREIGNKEY_SELLERKEY,FOREIGNKEY_BUYERKEY};
-        String[] stringFields = {};
+        String[] stringFields = {COLUMN_PURCHASETABLE_VACATIONKEY,COLUMN_PURCHASETABLE_SELLERKEY,COLUMN_PURCHASETABLE_BUYERKEY};
         String[] intFields = {COLUMN_PURCHASETABLE_TIMESTAMP};
         String[] doubleFields = {};
         return super.createTable(primaryKeys, foreignKeys,stringFields,intFields,doubleFields);
@@ -89,9 +89,9 @@ public class PurchaseTable extends ATableManager<Purchase> {
     @Override
     protected PreparedStatement getInsertPreparedStatement(Purchase object, Connection connection) {
         String sql = "INSERT INTO " + TABLE_NAME + "(" + COLUMN_PURCHASETABLE_VACATIONKEY + "," +
-                                                         COLUMN_PURCHASETABLE_SELLERKEY+ "," +
-                                                         COLUMN_PURCHASETABLE_BUYERKEY+ "," +
-                                                         COLUMN_PURCHASETABLE_TIMESTAMP + "," +") VALUES(?,?,?,?)";
+                COLUMN_PURCHASETABLE_SELLERKEY+ "," +
+                COLUMN_PURCHASETABLE_BUYERKEY+ "," +
+                COLUMN_PURCHASETABLE_TIMESTAMP + "," +") VALUES(?,?,?,?)";
         PreparedStatement pstmt = null;
         if (connection != null) {
             try {

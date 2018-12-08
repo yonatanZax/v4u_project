@@ -1,11 +1,8 @@
 package Model.Request;
 
 import Model.ACRUDModel;
-import Model.Purchase.Purchase;
 import db.DBResult;
-import db.Tables.PurchaseTable;
 import db.Tables.RequestTable;
-import db.Tables.UserTable;
 
 import java.util.List;
 

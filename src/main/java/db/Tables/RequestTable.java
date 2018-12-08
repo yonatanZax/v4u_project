@@ -106,7 +106,7 @@ public class RequestTable extends ATableManager<Request> {
     public DBResult createTable() {
         String[] primaryKeys = {COLUMN_REQUESTTABLE_VACATIONKEY,COLUMN_REQUESTTABLE_SELLERKEY,COLUMN_REQUESTTABLE_BUYERKEY};
         String[] foreignKeys = {FOREIGNKEY_VACATIONKEY,FOREIGNKEY_SELLERKEY,FOREIGNKEY_BUYERKEY};
-        String[] stringFields = {};
+        String[] stringFields = {COLUMN_REQUESTTABLE_VACATIONKEY,COLUMN_REQUESTTABLE_SELLERKEY,COLUMN_REQUESTTABLE_BUYERKEY};
         String[] intFields = {COLUMN_REQUESTTABLE_APPROVED,COLUMN_REQUESTTABLE_TIMESTAMP};
         String[] doubleFields = {};
         return super.createTable(primaryKeys, foreignKeys,stringFields,intFields,doubleFields);

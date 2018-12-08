@@ -17,20 +17,20 @@ public class PurchaseModel extends ACRUDModel<Purchase> {
         DBResult result = DBResult.NONE;
 
         String [] whereFields = { PurchaseTable.COLUMN_PURCHASETABLE_VACATIONKEY,
-                            PurchaseTable.COLUMN_PURCHASETABLE_SELLERKEY,
-                            PurchaseTable.COLUMN_PURCHASETABLE_BUYERKEY};
+                PurchaseTable.COLUMN_PURCHASETABLE_SELLERKEY,
+                PurchaseTable.COLUMN_PURCHASETABLE_BUYERKEY};
 
         String[] whereValues = {purchase.getVacationKey(),purchase.getSellerKey(),purchase.getBuyerKey()};
 
 
         String [] set = {PurchaseTable.COLUMN_PURCHASETABLE_VACATIONKEY,
-                         PurchaseTable.COLUMN_PURCHASETABLE_SELLERKEY,
-                         PurchaseTable.COLUMN_PURCHASETABLE_BUYERKEY,
-                        PurchaseTable.COLUMN_PURCHASETABLE_TIMESTAMP};
+                PurchaseTable.COLUMN_PURCHASETABLE_SELLERKEY,
+                PurchaseTable.COLUMN_PURCHASETABLE_BUYERKEY,
+                PurchaseTable.COLUMN_PURCHASETABLE_TIMESTAMP};
         String [] values = {purchase.getVacationKey(),
-                            purchase.getSellerKey(),
-                            purchase.getBuyerKey(),
-                            String.valueOf(purchase.getTimestamp())};
+                purchase.getSellerKey(),
+                purchase.getBuyerKey(),
+                String.valueOf(purchase.getTimestamp())};
 
 
         result = tableManager.updateData(set , values, whereFields,whereValues);

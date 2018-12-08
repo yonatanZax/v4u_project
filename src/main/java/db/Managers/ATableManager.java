@@ -156,8 +156,6 @@ public abstract class ATableManager<T> implements ITableManager<T> {
     protected String getCreateTableSQLString(String[] primaryKeys, String[] foreignKeys, String[] stringFields,String[] intFields, String[] doubleFields) {
         if(primaryKeys != null) {
             String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (\n";
-            for (String key: primaryKeys)
-                sql += key + " TEXT NOT NULL,\n";
             for (String str: stringFields)
                 sql += str + " TEXT NOT NULL,\n";
             for (String i: intFields)

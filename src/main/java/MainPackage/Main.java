@@ -1,18 +1,12 @@
 package MainPackage;
 
-import Controllers.ControllerHome;
-import Controllers.ControllerUserCRUD;
-
 import Model.Request.Request;
 import Model.Request.RequestModel;
 import Model.User.User;
 import Model.User.UserModel;
 import Model.Vacation.Vacation;
 import Model.Vacation.VacationModel;
-import db.Tables.PurchaseTable;
-import db.Tables.RequestTable;
-import db.Tables.UserTable;
-import db.Tables.VacationTable;
+import db.Tables.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -30,6 +24,7 @@ public class Main extends Application {
         VacationTable.getInstance().createTable();
         PurchaseTable.getInstance().createTable();
         RequestTable.getInstance().createTable();
+        PaymentTable.getInstance().createTable();
 
         UserTable userTable = UserTable.getInstance();
         VacationTable vacationTable = VacationTable.getInstance();
@@ -60,7 +55,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-
+        initProject();
     }
 
 

@@ -114,7 +114,7 @@ public class UserTable extends ATableManager<User> {
     public DBResult createTable() {
         String[] primaryKeys = {COLUMN_USERTABLE_KEY};
         String[] foreignKeys = {};
-        String[] stringFields = {COLUMN_USERTABLE_PASS,COLUMN_USERTABLE_FIRST_NAME,COLUMN_USERTABLE_LAST_NAME,COLUMN_USERTABLE_CITY};
+        String[] stringFields = {COLUMN_USERTABLE_KEY,COLUMN_USERTABLE_PASS,COLUMN_USERTABLE_FIRST_NAME,COLUMN_USERTABLE_LAST_NAME,COLUMN_USERTABLE_CITY};
         String[] intFields = {COLUMN_USERTABLE_BIRTHDAY};
         String[] doubleFields = {};
         return super.createTable(primaryKeys, foreignKeys,stringFields,intFields,doubleFields);
