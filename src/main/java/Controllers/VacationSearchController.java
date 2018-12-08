@@ -1,83 +1,76 @@
 package Controllers;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import Model.User.UserModel;
 import Model.Vacation.Vacation;
+import Model.Vacation.VacationModel;
 import View.VacationSearchView;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 /**
 
  */
-public class VacationSearchController extends Application implements Observer {
+public class VacationSearchController implements Observer {
 
+    private UserModel userModel;
     private VacationSearchView myView;
-
+    private VacationModel vacationModel = new VacationModel(userModel);
     private String status;
-    private Stage stage;
+    private Scene scene;
     private Parent root;
     private FXMLLoader fxmlLoader;
+
 
     private Vacation pickedVacation;
 
     public VacationSearchController() {
-        stage = new Stage();
         fxmlLoader = new FXMLLoader(getClass().getResource("/vacation_search_view.fxml"));
         try {
             root = fxmlLoader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
+//        scene = new Scene(root);
         myView = fxmlLoader.getController();
 
-        myView.setVacations_listview(startVacationList());
+        // TODO - PAY ATTENTION: added to vacationTable price (double) -> constructor changed!
+
+
+//        myView.setVacations_listview(startVacationList());
 
         myView.addObserver(this);
-        stage.show();
-    }
 
-    public void start(Stage primaryStage) {
-/*        primaryStage.setTitle("Sorting and Filtering");
 
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vacation_search_view.fxml"));
-            BorderPane page = (BorderPane) loader.load();
-            Scene scene = new Scene(page);
-            primaryStage.setScene(scene);
-            myView = loader.getController();
-            myView.addObserver(this);
-            myView.setVacations_listview(startVacationList());
-
-            primaryStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
+        updateSubScene();
 
     }
 
-    private Vacation[] startVacationList() {
-        Vacation[] vacations = new Vacation[6];
-        int i = 0;
-        for ( i = 0;i <5; i++){
-            vacations[i] = new Vacation(""+i,""+i,""+i,""+i,true,i);
+    public Parent getRoot(){
+        return root;
+    }
+
+    public void updateSubScene(){
+        List<Vacation> vacationList = vacationModel.getAllData();
+        myView.setVacations_listview(vacationList);
+    }
+
+
+    private void vacationPicked(){
+        if (UserModel.isLoggedIn()){
 
         }
-        vacations[5] =  new Vacation(""+i,""+i,""+i,""+i,false,i);
-        return vacations;
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 
     @Override

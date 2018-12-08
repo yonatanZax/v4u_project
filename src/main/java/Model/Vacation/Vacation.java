@@ -5,19 +5,21 @@ import javafx.beans.property.StringProperty;
 
 public class Vacation {
 
-    // Todo - add more fields ( also getters and setters )
+    // Todo - add more fields ( also getters and setters ) - DONE
     private StringProperty vacationKey;
     private StringProperty sellerKey;
     private StringProperty origin;
     private StringProperty destination;
     private boolean visible;
     private int timeStamp;
+    private double price;
 
     public Vacation() {}
 
-    public Vacation(String vacationKey, String sellerKey, String origin, String destination, boolean visible, int timeStamp) {
+    public Vacation(String vacationKey, String sellerKey, String origin, String destination, boolean visible, int timeStamp, double price) {
         this.vacationKey = new SimpleStringProperty(vacationKey);
         this.sellerKey = new SimpleStringProperty(sellerKey);
+        this.price = price;
         this.origin = new SimpleStringProperty(origin);
         this.destination = new SimpleStringProperty(destination);
         this.visible = visible;
@@ -29,7 +31,7 @@ public class Vacation {
     }
 
     public void setVacationKey(String vacationKey) {
-        this.vacationKey.setValue(vacationKey);
+        this.vacationKey = new SimpleStringProperty(vacationKey);
     }
 
     public String getSellerKey() {
@@ -37,7 +39,7 @@ public class Vacation {
     }
 
     public void setSellerKey(String sellerKey) {
-        this.sellerKey.setValue(sellerKey);
+        this.sellerKey = new SimpleStringProperty(sellerKey);
     }
 
     public String getOrigin() {
@@ -45,7 +47,7 @@ public class Vacation {
     }
 
     public void setOrigin(String origin) {
-        this.origin.setValue(origin);
+        this.origin = new SimpleStringProperty(origin);
     }
 
     public String getDestination() {
@@ -53,7 +55,7 @@ public class Vacation {
     }
 
     public void setDestination(String destination) {
-        this.destination.setValue(destination);
+        this.destination = new SimpleStringProperty(destination);
     }
 
     public StringProperty vacationKeyProperty() {
@@ -90,5 +92,13 @@ public class Vacation {
 
     public void setTimeStamp(int timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

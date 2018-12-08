@@ -59,6 +59,11 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </VBox.margin>
                   </Button>
+                  <Button fx:id="searchVacation_btn" mnemonicParsing="false" onAction="#search" prefWidth="73.0" text="Search">
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
+                  </Button>
                </children>
                <HBox.margin>
                   <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
