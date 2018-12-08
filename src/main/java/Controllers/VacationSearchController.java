@@ -9,17 +9,10 @@ import Model.User.UserModel;
 import Model.Vacation.Vacation;
 import Model.Vacation.VacationModel;
 import View.VacationSearchView;
-import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
 
-/**
 
- */
 public class VacationSearchController extends Observable implements Observer,SubScenable {
 
     private VacationSearchView myView;

@@ -16,18 +16,16 @@ public class UserModel extends ACRUDModel<User> {
     }
 
 
-    public void tryToLogin(String userName, String password){
+    public boolean tryToLogin(String userName, String password){
         String where = UserTable.COLUMN_USERTABLE_KEY + " = " + userName;
         where += " AND ";
         where += UserTable.COLUMN_USERTABLE_PASS + " = " + password;
         List<User> list = UserTable.getInstance().select(null,where,null);
         if (list.size() > 0) {
             loggedInUser = list.get(0);
-            setChanged();
-            notifyObservers(ControllerLogin.CONTROLLER_LOGIN_ARGS_LOGGEDIN);
+            return true;
         }
-        setChanged();
-        notifyObservers(ControllerLogin.CONTROLLER_LOGIN_ARGS_LOGGEDIN);
+        return false;
     }
 
     public static boolean isLoggedIn(){

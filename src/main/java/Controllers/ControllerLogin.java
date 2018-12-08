@@ -57,23 +57,24 @@ public class ControllerLogin extends Observable implements Observer {
         stage.show();
     }
 
+
     @Override
     public void update(Observable o, Object arg) {
         if (o.equals(loginView) && arg.equals(LoginView.LOGINVIEW_CHECKLOGIN)) {
             String userName = "\"" + loginView.getUserId() + "\"";
             String password = "\"" + loginView.getPassword() + "\"";
-            userModel.tryToLogin(userName, password);
+            if (userModel.tryToLogin(userName, password)){
+                loginView.closeWindow();
+                setChanged();
+                notifyObservers(CONTROLLER_LOGIN_ARGS_LOGGEDIN);
+            }
+
+            else
+                loginView.setErrorMessageVisble(true);
+
 
         } else if (o.equals(loginView) && arg.equals(LoginView.LOGINVIEW_SIGNIN)) {
             controllerUserCRUD.createUser();
-        }else if (o.equals(userModel)){
-            if (arg.equals(CONTROLLER_LOGIN_ARGS_LOGGEDIN)){
-                notifyObservers(CONTROLLER_LOGIN_ARGS_LOGGEDIN);
-                loginView.closeWindow();
-            }else{
-                loginView.setErrorMessageVisble(true);
-
-            }
         }
     }
 }

@@ -107,11 +107,6 @@ public class ControllerHomeNew extends Application implements Observer {
                 }
             }
 
-        }else if (o.equals(controllerLogin)){
-            if(arg.equals(ControllerLogin.CONTROLLER_LOGIN_ARGS_LOGGEDIN)){
-                // Logged in successfully
-
-            }
         }else if (o.equals(vacationSearchController)){
             if (arg.equals(VacationSearchController.BTN_ADD)) {
                 if (UserModel.isLoggedIn()) {
@@ -122,6 +117,10 @@ public class ControllerHomeNew extends Application implements Observer {
 
             }else if(arg.equals(VacationSearchController.VACATION_PICKED)){
 
+            }
+        }else if(o.equals(controllerLogin)){
+            if (arg.equals(ControllerLogin.CONTROLLER_LOGIN_ARGS_LOGGEDIN)){
+                homeNewView.setLoginStatusLabel(UserModel.getUserName());
             }
         }
 
