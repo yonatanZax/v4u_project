@@ -1,10 +1,12 @@
 package MainPackage;
 
+import Controllers.ControllerHome;
 import Controllers.ControllerUserCRUD;
 
 import Model.Request.Request;
 import Model.Request.RequestModel;
 import Model.User.User;
+import Model.User.UserModel;
 import Model.Vacation.Vacation;
 import Model.Vacation.VacationModel;
 import db.Tables.PurchaseTable;
@@ -21,6 +23,8 @@ public class Main extends Application {
 
 
 
+    public static String user = null;
+
 
     private void initProject(){
         File directory = new File("db");
@@ -36,16 +40,19 @@ public class Main extends Application {
         VacationTable vacationTable = VacationTable.getInstance();
         PurchaseTable purchaseTable = PurchaseTable.getInstance();
         RequestTable requestTable = RequestTable.getInstance();
+        UserModel userModel = new UserModel();
         RequestModel requestModel = new RequestModel();
-        VacationModel vacationModel = new VacationModel();
+        VacationModel vacationModel = new VacationModel(userModel);
         User user1 = new User("user1","p","p","p","p",19920101);
         User user2 = new User("user2","p","p","p","p",19920101);
         userTable.InsertToTable(user1);
         userTable.InsertToTable(user2);
-        Vacation vacation1 = new Vacation("TLV","user1","TLV", "LAS",true,1025);
+//        Vacation vacation1 = new Vacation(null,"user1","TLV", "NYC",true,20181025,200);
+//        Vacation vacation2 = new Vacation(null,"user1","TLV", "LAS",true,20181025,200);
         Request request1 = new Request("TLV","user1","user2",false,1025);
         requestModel.createNewData(request1);
-        vacationModel.createNewData(vacation1);
+//        vacationModel.createNewData(vacation1);
+//        vacationModel.createNewData(vacation2);
         request1.setTimestamp(2020);
         //requestModel.updateTable(request1);
         List<Request> list1 = requestModel.getAllData();
@@ -60,8 +67,11 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         initProject();
-        ControllerUserCRUD controllerUserCRUD = new ControllerUserCRUD();
-        controllerUserCRUD.showStage();
+        ControllerHome home = new ControllerHome();
+        home.showStage();
+
+        //ControllerUserCRUD controllerUserCRUD = new ControllerUserCRUD();
+        //controllerUserCRUD.showStage();
     }
 
 

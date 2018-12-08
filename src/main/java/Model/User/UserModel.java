@@ -8,9 +8,36 @@ import java.util.List;
 
 public class UserModel extends ACRUDModel<User> {
 
+    private String userName = null;
+    private static User loggedInUser = null;
 
     public UserModel() {
         super.setTableManager(UserTable.getInstance());
+    }
+
+    public void setUserName(String name){ userName = name;}
+
+    public String getUserName(){ return userName;}
+
+    public boolean tryToLogin(String userName, String password){
+        String where = UserTable.COLUMN_USERTABLE_KEY + " = " + userName;
+        where += " AND ";
+        where += UserTable.COLUMN_USERTABLE_PASS + " = " + password;
+        List<User> list = UserTable.getInstance().select(null,where,null);
+        if (list.size() > 0) {
+            loggedInUser = list.get(0);
+            return true;
+        }
+
+        return false;
+    }
+
+    public static boolean isLoggedIn(){
+        return loggedInUser != null;
+    }
+
+    public void logOff(){
+        loggedInUser = null;
     }
 
 
