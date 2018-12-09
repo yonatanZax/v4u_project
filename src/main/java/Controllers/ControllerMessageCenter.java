@@ -63,6 +63,7 @@ public class ControllerMessageCenter implements Observer {
     }
 
 
+
     public void informationDialog(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Under Construction");
