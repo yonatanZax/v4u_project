@@ -110,6 +110,7 @@ public class VacationSearchController extends Observable implements Observer,Sub
                     errorAlert.showAndWait();
                 }
             }
+            // todo - auto update list after vacation added to DB
             else if (arg.equals(BTN_ADD)){
                 setChanged();
                 notifyObservers(BTN_ADD);

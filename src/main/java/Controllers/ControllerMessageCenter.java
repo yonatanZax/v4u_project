@@ -35,7 +35,6 @@ public class ControllerMessageCenter extends Observable implements Observer,SubS
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         messageCenterView = fxmlLoader.getController();
         messageCenterView.addObserver(this);
     }
@@ -51,6 +50,16 @@ public class ControllerMessageCenter extends Observable implements Observer,SubS
 //        messageCenterView.messageCenter_tableList.setItems(null);
 //        fillTableList();
     }
+
+    // todo - check the other todo in other classes.. if not relevant -> continue as is..
+    // TODO - first thing to do --> see that the list is updated with all requests
+    // TODO - second thing to do --> add the RequestTable STATUS: APPROVED, PAID, PENDING
+    // TODO - third thing to do --> combine working with multiple requests for the SAME VACATION --> if APPROVED --> remove from list and all the same vacation requests
+    // NOT TODO NOT NOT NOT --> THERE WILL BE NO CANCELLATION FOR REQUESTS!
+    // TODO - IF THE PAYMENT DIDN'T HAPPEN IN 48 HOURS --> ALL THE SAME REQUESTS RETURN TO STATUS --> PENDING
+    // TODO - forth thing to do --> deal with refresh button
+    // todo - check that vacations that approved are removed from the search list (home page)
+    // todo - change table list colours to be different than the search list (home page)
 
     private void fillTableList() {
         messageModel.setMessagesForUser();
