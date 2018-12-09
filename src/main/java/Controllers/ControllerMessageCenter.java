@@ -81,7 +81,7 @@ public class ControllerMessageCenter extends Observable implements Observer,SubS
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
-            // ... user chose OK
+            System.out.println(messageModel.getUserName() + " Clicked OK");
         }
     }
 
