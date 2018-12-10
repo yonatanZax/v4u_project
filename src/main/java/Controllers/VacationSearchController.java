@@ -6,6 +6,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
 
+import Model.Request.RequestModel;
 import Model.User.UserModel;
 import Model.Vacation.Vacation;
 import Model.Vacation.VacationModel;
@@ -33,6 +34,7 @@ public class VacationSearchController extends Observable implements Observer,Sub
 
     private VacationSearchView myView;
     private VacationModel vacationModel = new VacationModel();
+    private RequestModel requestModel = new RequestModel();
     private Parent root;
     private FXMLLoader fxmlLoader;
 
@@ -66,9 +68,7 @@ public class VacationSearchController extends Observable implements Observer,Sub
         myView.setVacations_listview(vacationList);
     }
 
-
     private void vacationPicked(){
-
         Alert alert = new Alert(Alert.AlertType.NONE);
         alert.setTitle("Confirmation Dialog");
         alert.setHeaderText(null);
@@ -88,11 +88,22 @@ public class VacationSearchController extends Observable implements Observer,Sub
             // ... user chose OK
             // TODO - create a purchase request
             // TODO - show a message in the status bar
+
+            requestModel.insertRequestToTable(pickedVacation.getVacationKey(),pickedVacation.getSellerKey());
         } else {
             // ... user chose CANCEL or closed the dialog
             updateSubScene();
         }
 
+    }
+
+    private void informationDialog(String title, String header, String content){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+
+        alert.showAndWait();
     }
 
     @Override
@@ -101,7 +112,12 @@ public class VacationSearchController extends Observable implements Observer,Sub
             if (arg.equals(VACATION_PICKED)){
                 if (UserModel.isLoggedIn()) {
                     pickedVacation = myView.getPickedVacation();
-                    vacationPicked();
+                    // todo - SELLER CAN'T PURCHASE HIS OWN VACATION!!!! - DONE
+                    if (pickedVacation.getSellerKey().equals(UserModel.getUserName())){
+                        informationDialog("Not Relevant for You",null, "Why would you want to buy your own vacation?!");
+                    }else {
+                        vacationPicked();
+                    }
                 }
                 else {
                     Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -111,7 +127,6 @@ public class VacationSearchController extends Observable implements Observer,Sub
                 }
             }
             // todo - auto update list after vacation added to DB
-            // todo - SELLER CAN'T PURCHASE HIS OWN VACATION!!!!
             else if (arg.equals(BTN_ADD)){
                 setChanged();
                 notifyObservers(BTN_ADD);

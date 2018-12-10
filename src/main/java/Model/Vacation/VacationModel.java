@@ -62,11 +62,11 @@ public class VacationModel extends ACRUDModel<Vacation> {
     @Override
     public List<Vacation> readDataFromDB(String[][] parameters) {
         //TODO - implement --> BETTER!
-        String selection = parameters[0] + " IN (";
-        for (int i=0 ; i < parameters.length - 1; i++) {
-            selection += "\"" + parameters[i][1] + "\",";
+        String selection = parameters[0][0] + " IN (";
+        for (int i=0 ; i < parameters[1].length - 1; i++) {
+            selection += "\"" + parameters[1][i] + "\",";
         }
-        selection += "\"" + parameters[parameters.length-1][1] + "\")";
+        selection += "\"" + parameters[1][parameters[1].length-1] + "\")";
 
         // Get the list of users from the database
         return tableManager.select(null,selection,null);
