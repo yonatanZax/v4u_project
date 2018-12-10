@@ -4,17 +4,20 @@ public class Purchase {
 
     private String vacationKey;
     private String sellerKey;
+    private String sellerEmail;
     private String buyerKey;
+    private String buyerEmail;
     private int timestamp;
 
 
     public Purchase(){}
 
-
-    public Purchase(String vacationKey, String sellerKey, String buyerKey, int timestamp) {
+    public Purchase(String vacationKey, String sellerKey, String sellerEmail, String buyerKey, String buyerEmail, int timestamp) {
         this.vacationKey = vacationKey;
         this.sellerKey = sellerKey;
+        this.sellerEmail = sellerEmail;
         this.buyerKey = buyerKey;
+        this.buyerEmail = buyerEmail;
         this.timestamp = timestamp;
     }
 
@@ -34,12 +37,28 @@ public class Purchase {
         this.sellerKey = sellerKey;
     }
 
+    public String getSellerEmail() {
+        return sellerEmail;
+    }
+
+    public void setSellerEmail(String sellerEmail) {
+        this.sellerEmail = sellerEmail;
+    }
+
     public String getBuyerKey() {
         return buyerKey;
     }
 
     public void setBuyerKey(String buyerKey) {
         this.buyerKey = buyerKey;
+    }
+
+    public String getBuyerEmail() {
+        return buyerEmail;
+    }
+
+    public void setBuyerEmail(String buyerEmail) {
+        this.buyerEmail = buyerEmail;
     }
 
     public int getTimestamp() {

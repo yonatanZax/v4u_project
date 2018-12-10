@@ -1,8 +1,6 @@
 package Model.Request;
 
 import MainPackage.Enum_RequestState;
-import Model.Vacation.Vacation;
-import Model.Vacation.VacationModel;
 
 public class Request {
 
@@ -13,7 +11,7 @@ public class Request {
     private int timestamp;
     private String state;
 
-    public static String[] states = {"PENDING","HOLD","SOLD"};
+    public static String[] states = {"PENDING","HOLD","SOLD","DENIED"};
 
     public Request(){}
 

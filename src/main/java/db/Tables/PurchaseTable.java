@@ -21,8 +21,10 @@ public class PurchaseTable extends ATableManager<Purchase> {
     private final String FOREIGNKEY_VACATIONKEY = "(" + COLUMN_PURCHASETABLE_VACATIONKEY + ") references vacationInfo(key)";
     public static final String COLUMN_PURCHASETABLE_SELLERKEY = "sellerKey";
     private final String FOREIGNKEY_SELLERKEY = "(" + COLUMN_PURCHASETABLE_SELLERKEY + ") references userInfo(key)";
+    public static final String COLUMN_PURCHASETABLE_SELLEREMAIL = "sellerEmail";
     public static final String COLUMN_PURCHASETABLE_BUYERKEY = "buyerKey";
     private final String FOREIGNKEY_BUYERKEY = "(" + COLUMN_PURCHASETABLE_BUYERKEY + ") references userInfo(key)";
+    public static final String COLUMN_PURCHASETABLE_BUYEREMAIL = "buyerEmail";
     public static final String COLUMN_PURCHASETABLE_TIMESTAMP = "timestamp";
 
 
@@ -66,6 +68,14 @@ public class PurchaseTable extends ATableManager<Purchase> {
                         purchase.setBuyerKey( entry.getValue());
                         break;
 
+                    case COLUMN_PURCHASETABLE_SELLEREMAIL:
+                        purchase.getSellerEmail();
+                        break;
+
+                    case COLUMN_PURCHASETABLE_BUYEREMAIL:
+                        purchase.getBuyerEmail();
+                        break;
+
                 }
 
             }
@@ -80,7 +90,7 @@ public class PurchaseTable extends ATableManager<Purchase> {
     public DBResult createTable() {
         String[] primaryKeys = {COLUMN_PURCHASETABLE_VACATIONKEY,COLUMN_PURCHASETABLE_SELLERKEY,COLUMN_PURCHASETABLE_BUYERKEY};
         String[] foreignKeys = {FOREIGNKEY_VACATIONKEY,FOREIGNKEY_SELLERKEY,FOREIGNKEY_BUYERKEY};
-        String[] stringFields = {COLUMN_PURCHASETABLE_VACATIONKEY,COLUMN_PURCHASETABLE_SELLERKEY,COLUMN_PURCHASETABLE_BUYERKEY};
+        String[] stringFields = {COLUMN_PURCHASETABLE_VACATIONKEY,COLUMN_PURCHASETABLE_SELLERKEY,COLUMN_PURCHASETABLE_SELLEREMAIL,COLUMN_PURCHASETABLE_BUYERKEY,COLUMN_PURCHASETABLE_BUYEREMAIL};
         String[] intFields = {COLUMN_PURCHASETABLE_TIMESTAMP};
         String[] doubleFields = {};
         return super.createTable(primaryKeys, foreignKeys,stringFields,intFields,doubleFields);
@@ -90,16 +100,20 @@ public class PurchaseTable extends ATableManager<Purchase> {
     protected PreparedStatement getInsertPreparedStatement(Purchase object, Connection connection) {
         String sql = "INSERT INTO " + TABLE_NAME + "(" + COLUMN_PURCHASETABLE_VACATIONKEY + "," +
                 COLUMN_PURCHASETABLE_SELLERKEY+ "," +
+                COLUMN_PURCHASETABLE_SELLEREMAIL+ "," +
                 COLUMN_PURCHASETABLE_BUYERKEY+ "," +
-                COLUMN_PURCHASETABLE_TIMESTAMP + "," +") VALUES(?,?,?,?)";
+                COLUMN_PURCHASETABLE_BUYEREMAIL+ "," +
+                COLUMN_PURCHASETABLE_TIMESTAMP /*+ ","*/ +") VALUES(?,?,?,?,?,?)";
         PreparedStatement pstmt = null;
         if (connection != null) {
             try {
                 pstmt = connection.prepareStatement(sql);
                 pstmt.setString(1, object.getVacationKey());
                 pstmt.setString(2, object.getSellerKey());
-                pstmt.setString(3, object.getBuyerKey());
-                pstmt.setInt(4, object.getTimestamp());
+                pstmt.setString(3, object.getSellerEmail());
+                pstmt.setString(4, object.getBuyerKey());
+                pstmt.setString(5, object.getBuyerEmail());
+                pstmt.setInt(6 ,object.getTimestamp());
                 return pstmt;
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -109,6 +123,46 @@ public class PurchaseTable extends ATableManager<Purchase> {
                     System.out.println(ex.getMessage());
                 }
             }
+        }
+        return null;
+    }
+
+
+    @Override
+    protected String getCreateTableSQLString(String[] primaryKeys, String[] foreignKeys, String[] stringFields,String[] intFields, String[] doubleFields) {
+        if(primaryKeys != null) {
+            String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (\n";
+
+            for (int i=0; i < stringFields.length - 1; i++)
+                sql += stringFields[i] + " TEXT NOT NULL,\n";
+
+            sql += stringFields[stringFields.length - 1] + " TEXT,\n";
+
+            for (String i: intFields)
+                sql += i + " INTEGER NOT NULL,\n";
+            for (String d: doubleFields)
+                sql += d + " REAL NOT NULL,\n";
+
+            sql += "primary key (";
+            for (String primaryKey: primaryKeys)
+                sql += primaryKey + ",";
+
+            sql = sql.substring(0, sql.length() - 1);
+            sql += ')';
+            if (foreignKeys.length > 0)
+                sql += ',';
+
+            // foreign key (house_id) references houses(id),
+            for (int i = 0 ; i < foreignKeys.length ; i++){
+                if( i == foreignKeys.length - 1){
+                    sql += "foreign key " + foreignKeys[i] + "\n";
+                    break;
+                }
+                sql += "foreign key " + foreignKeys[i] + ",\n";
+            }
+
+            sql += "\n);";
+            return sql;
         }
         return null;
     }

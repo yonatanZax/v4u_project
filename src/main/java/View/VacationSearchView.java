@@ -34,6 +34,9 @@ public class VacationSearchView extends Observable{
     @FXML
     public TableColumn<Vacation,String> priceColumn;
 
+    @FXML
+    public TableColumn<Vacation,String> sellerColumn;
+
     private ObservableList<Vacation> masterData = FXCollections.observableArrayList();
 
     private Vacation pickedVacation;
@@ -60,6 +63,7 @@ public class VacationSearchView extends Observable{
         destinationColumn.setCellValueFactory(cellData -> cellData.getValue().destinationProperty());
         originColumn.setCellValueFactory(cellData -> cellData.getValue().originProperty());
         priceColumn.setCellValueFactory(cellData -> new SimpleStringProperty("" +cellData.getValue().getPrice()));
+        sellerColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSellerKey()));
 
 
         // 1. Wrap the ObservableList in a FilteredList (initially display all data).

@@ -126,9 +126,19 @@ public class ControllerHome extends Application implements Observer {
             }else if(arg.equals(VacationSearchController.VACATION_PICKED)){
 
             }
+            else if (arg.equals(VacationSearchController.SEND_VACATION_PURCHASE_REQUEST)){
+                homeView.setStatusBarString("Purchase request was sent to the seller");
+
+            }
         }else if(o.equals(controllerLogin)){
             if (arg.equals(ControllerLogin.CONTROLLER_LOGIN_ARGS_LOGGEDIN)){
                 changeLoginStatus(UserModel.getUserName());
+            }
+        }
+        else if (o.equals(controllerCreateVacation)){
+            if (arg.equals(ControllerCreateVacation.VACATION_ADDED)){
+                vacationSearchController.updateSubScene();
+                homeView.setStatusBarString("Vacation was added successfully");
             }
         }
 

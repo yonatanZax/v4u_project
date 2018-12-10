@@ -29,8 +29,6 @@ public class MessageCenterView extends Observable {
 
     private ObservableList<Request> masterData = FXCollections.observableArrayList();
 
-    // todo - add buttons to third row (APPROVE, NOT APPROVE, START CONVERSATION (OPTIONAL)
-
     @FXML
     public void initialize() {
         // set the table for double click
@@ -60,5 +58,9 @@ public class MessageCenterView extends Observable {
     public void refresh() {
         setChanged();
         notifyObservers("refresh");
+    }
+
+    public Request getPickedRequest() {
+        return pickedRequest;
     }
 }
