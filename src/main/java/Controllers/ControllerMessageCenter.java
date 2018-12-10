@@ -4,9 +4,11 @@ import Model.MessageCenter.ListMessageContent;
 import Model.MessageCenter.Message;
 import Model.MessageCenter.MessageModel;
 import Model.Request.Request;
+import Model.Vacation.Vacation;
 import View.MessageCenterView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -28,6 +30,8 @@ public class ControllerMessageCenter extends Observable implements Observer,SubS
     private Parent root;
     private FXMLLoader fxmlLoader;
 
+    public static final String REQUEST_PICKED = "request_picked";
+
     public ControllerMessageCenter() {
         fxmlLoader = new FXMLLoader(getClass().getResource("/messageCenter_view.fxml"));
         try {
@@ -35,6 +39,7 @@ public class ControllerMessageCenter extends Observable implements Observer,SubS
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         messageCenterView = fxmlLoader.getController();
         messageCenterView.addObserver(this);
     }
@@ -47,8 +52,8 @@ public class ControllerMessageCenter extends Observable implements Observer,SubS
 
     @Override
     public void updateSubScene() {
-//        messageCenterView.messageCenter_tableList.setItems(null);
-//        fillTableList();
+        messageCenterView.messageCenter_tableList.setItems(null);
+        fillTableList();
     }
 
     // todo - check the other todo in other classes.. if not relevant -> continue as is..
@@ -66,7 +71,7 @@ public class ControllerMessageCenter extends Observable implements Observer,SubS
         List<String[]> messagesParameters = messageModel.createMessageParametersForController();
         ObservableList<ListMessageContent> data = FXCollections.observableArrayList();
         for (String[] parameter : messagesParameters){
-            ListMessageContent messageContent = new ListMessageContent(parameter[0], parameter[1]);
+            ListMessageContent messageContent = new ListMessageContent(parameter[0], parameter[1], null);
             data.add(messageContent);
         }
         messageCenterView.messageCenter_tableList.setItems(data);
