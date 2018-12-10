@@ -111,6 +111,7 @@ public class VacationSearchController extends Observable implements Observer,Sub
                 }
             }
             // todo - auto update list after vacation added to DB
+            // todo - SELLER CAN'T PURCHASE HIS OWN VACATION!!!!
             else if (arg.equals(BTN_ADD)){
                 setChanged();
                 notifyObservers(BTN_ADD);
