@@ -1,6 +1,8 @@
 package View;
 
 import impl.org.controlsfx.skin.DecorationPane;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -11,6 +13,8 @@ import javafx.scene.layout.Pane;
 import org.controlsfx.control.StatusBar;
 
 import java.util.Observable;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class HomeView extends Observable {
 
@@ -22,9 +26,11 @@ public class HomeView extends Observable {
 
     private Parent defaultParent;
     private boolean firstScene = true;
+    Thread thread;
 
 
-    @FXML
+
+            @FXML
     Button login_btn;
 
     @FXML
@@ -43,6 +49,8 @@ public class HomeView extends Observable {
     @FXML
     public void initialize() {
         setLoginStatusLabel(null);
+        thread = new Thread();
+
     }
 
     public void setSub_scene(Parent sub_scene) {
@@ -67,13 +75,17 @@ public class HomeView extends Observable {
             login_btn.setText("Login");
             login_status_lbl.setText("Not Signed");
             message_iv.setDisable(true);
-            if(!firstScene)
+            if(!firstScene) {
                 setSub_scene(defaultParent);
+                setStatusBarString("Logged out");
+            }
+
         }
         else {
             login_btn.setText("Logout");
             login_status_lbl.setText("Signed As: " + newLabel);
             message_iv.setDisable(false);
+            setStatusBarString("Logged in successfully");
         }
     }
 
@@ -87,6 +99,27 @@ public class HomeView extends Observable {
     public void messageOnAction(){
         setChanged();
         notifyObservers(HOMEVIEW_AGRS_MESSAGECENER);
+    }
+
+
+    public void setStatusBarString(String newStatus){
+        if(thread.isAlive()){
+            thread.interrupt();
+        }
+        thread = new Thread(this::runStatusBarThread);
+        status_bar.setText(newStatus);
+        thread.start();
+    }
+
+    private void runStatusBarThread(){
+        try {
+            Thread.sleep(((long) (5 * 1000)));
+        } catch (InterruptedException e) {
+            return;
+        }
+        Platform.runLater(() -> {
+            status_bar.setText("");
+        });
     }
 
 }

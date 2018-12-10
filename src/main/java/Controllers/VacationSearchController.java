@@ -42,6 +42,7 @@ public class VacationSearchController extends Observable implements Observer,Sub
 
     public static final String BTN_ADD = "add_btn";
     public static final String VACATION_PICKED = "vacation_picked";
+    public static final String SEND_VACATION_PURCHASE_REQUEST = "send_vacation_purchase_request";
 
     public VacationSearchController() {
         fxmlLoader = new FXMLLoader(getClass().getResource("/vacation_search_view.fxml"));
@@ -88,10 +89,12 @@ public class VacationSearchController extends Observable implements Observer,Sub
         if (result.get() == buttonTypeOK) {
             updateSubScene();
             // ... user chose OK
-            // TODO - create a purchase request
             // TODO - show a message in the status bar
 
             requestModel.insertRequestToTable(pickedVacation.getVacationKey(),pickedVacation.getSellerKey());
+            setChanged();
+            notifyObservers(SEND_VACATION_PURCHASE_REQUEST);
+
         } else {
             // ... user chose CANCEL or closed the dialog
             updateSubScene();
@@ -118,7 +121,7 @@ public class VacationSearchController extends Observable implements Observer,Sub
                     if (pickedVacation.getSellerKey().equals(UserModel.getUserName())){
                         informationDialog("Not Relevant for You",null, "Why would you want to buy your own vacation?!");
                     }else {
-                    vacationPicked();
+                        vacationPicked();
                     }
                 }
                 else {
