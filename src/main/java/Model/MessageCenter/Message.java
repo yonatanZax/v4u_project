@@ -7,7 +7,7 @@ import javafx.beans.property.StringProperty;
 
 public class Message {
 
-    private StringProperty messageType = new SimpleStringProperty("Purchase Request");
+    private StringProperty messageType = new SimpleStringProperty("Purchase Message");
     private boolean isSeller;
     private StringProperty sellerName;
     private StringProperty buyerName;

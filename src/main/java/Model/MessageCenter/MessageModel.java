@@ -8,6 +8,9 @@ import Model.Vacation.VacationModel;
 import db.Tables.RequestTable;
 import db.Tables.VacationTable;
 import MainPackage.Enum_RequestState;
+import javafx.util.Pair;
+
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,7 +28,6 @@ public class MessageModel {
         messagesList = new MessagesBox();
     }
 
-
     public String getUserName(){ return userModel.getUserName(); }
 
     public List<Vacation> getVacationFromKey(String key){
@@ -36,22 +38,28 @@ public class MessageModel {
     /**
      * Message parameters: {messageType, info}
      */
-    public List<String[]> createMessageParametersForController(){
-        List<String[]> messageParameters = new LinkedList<>();
+    public List<Pair<Message,String[]>> createMessageParametersForController(){
+        List<Pair<Message,String[]>> messageParameters = new LinkedList<>();
         for (Message message : messagesList.getMessagesList()){
-            if (message.isSeller()) {
-                String[] s = {message.getMessageType(), message.getBuyerName() + " wish to buy from you the vacation to: " + message.getVacation().getDestination() + ", at the price " + message.getVacation().getPrice()+ "$"};
-                messageParameters.add(s);
-            } else {
-                String[] s = {message.getMessageType(), message.getSellerName() + " approved your request to buy the vacation to: " + message.getVacation().getDestination() + ", at the price " + message.getVacation().getPrice()+ "$"};
-                messageParameters.add(s);
+                if (message.isSeller()) {
+                    if (message.getRequest().getState().equals(Request.states[0])) {
+                        String[] s = {message.getMessageType(), message.getBuyerName() + " wish to buy from you the vacation to: " + message.getVacation().getDestination() + ", at the price " + message.getVacation().getPrice() + "$"};
+                        Pair<Message, String[]> pair = new Pair<>(message, s);
+                        messageParameters.add(pair);
+                    }
+                } else {
+                    if (message.getRequest().getState().equals(Request.states[1])) {
+                    String[] s = {message.getMessageType(), message.getSellerName() + " approved your request to buy the vacation to: " + message.getVacation().getDestination() + ", at the price " + message.getVacation().getPrice() + "$"};
+                    Pair<Message, String[]> pair = new Pair<>(message, s);
+                    messageParameters.add(pair);
+                }
             }
         }
         return messageParameters;
     }
 
     public void setMessagesForUser(){
-        messagesList.resetMessegeBox();
+        resetMessagesBox();
         List<Request> requestsAsBuyer = getRequests(0);
         List<Request> requestsAsSeller = getRequests(1);
 
@@ -79,14 +87,14 @@ public class MessageModel {
         }
     }
 
-    // TODO - when logout will be created - use this function!
+
     public void resetMessagesBox(){
         messagesList.resetMessegeBox();
     }
 
 
     /**
-     * @param role : 0 -> Seller, else is Buyer
+     * @param role : 0 -> Buyer, else is Seller
      */
     public List<Request> getRequests(int role){
         List<Request> requestsList = new LinkedList<>();

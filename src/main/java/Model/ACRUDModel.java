@@ -1,5 +1,6 @@
 package Model;
 
+import Model.Request.Request;
 import db.DBResult;
 import db.Managers.ATableManager;
 
@@ -45,6 +46,7 @@ public abstract class ACRUDModel<T> extends Observable{
 
     abstract public void updateTable(T t);
     abstract public List<T> readDataFromDB(String[][] listOfKeys);
+
     //abstract public void deleteDataFromDB(String keys[][]);
 
 
