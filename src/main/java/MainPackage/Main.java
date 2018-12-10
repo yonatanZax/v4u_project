@@ -52,6 +52,9 @@ public class Main extends Application {
 //        Vacation vacation2 = new Vacation(null,"user1","TLV", "LAS",true,20181025,200);
         Request request1 = new Request("TLV","user1","user2",false,1025);
         requestModel.createNewData(request1);
+
+        Request request2 = new Request("BGU","user1","user2",false,3000);
+        requestModel.updateTable(request2);
 //        vacationModel.createNewData(vacation1);
 //        vacationModel.createNewData(vacation2);
         request1.setTimestamp(2020);
