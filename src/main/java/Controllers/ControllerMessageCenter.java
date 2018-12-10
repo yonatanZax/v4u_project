@@ -48,8 +48,8 @@ public class ControllerMessageCenter extends Observable implements Observer,SubS
 
     @Override
     public void updateSubScene() {
-        messageCenterView.messageCenter_tableList.setItems(null);
-        fillTableList();
+//        messageCenterView.messageCenter_tableList.setItems(null);
+//        fillTableList();
     }
 
     private void fillTableList() {

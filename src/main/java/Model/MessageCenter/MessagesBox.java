@@ -3,10 +3,10 @@ package Model.MessageCenter;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MessegesBox {
+public class MessagesBox {
     private List<Message> messagesList;
 
-    MessegesBox(){
+    MessagesBox(){
         messagesList = new LinkedList<>();
     }
 

@@ -1,6 +1,6 @@
 package Model.User;
 
-import Controllers.ControllerLogin;
+
 import Model.ACRUDModel;
 import db.DBResult;
 import db.Tables.UserTable;
@@ -25,6 +25,7 @@ public class UserModel extends ACRUDModel<User> {
             loggedInUser = list.get(0);
             return true;
         }
+
         return false;
     }
 

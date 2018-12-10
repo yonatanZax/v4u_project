@@ -16,7 +16,7 @@ public class MessageModel {
     private RequestModel requestModel;
     private UserModel userModel;
     private VacationModel vacationModel;
-    private MessegesBox messagesList;
+    private MessagesBox messagesList;
 
     public MessageModel(){}
 
@@ -24,7 +24,7 @@ public class MessageModel {
         this.requestModel = requestModel;
         this.userModel = userModel;
         this.vacationModel = vacationModel;
-        messagesList = new MessegesBox();
+        messagesList = new MessagesBox();
     }
 
 
@@ -81,7 +81,7 @@ public class MessageModel {
     }
 
     // TODO - when logout will be created - use this function!
-    public void resetMessegesBox(){
+    public void resetMessagesBox(){
         messagesList.resetMessegeBox();
     }
 

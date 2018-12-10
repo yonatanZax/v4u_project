@@ -40,6 +40,7 @@ public class RequestTable extends ATableManager<Request> {
 
     protected RequestTable() {
         super(DBManager.getInstance(), "requestInfo");
+        createTable();
     }
 
     @Override

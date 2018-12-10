@@ -57,7 +57,7 @@ public class VacationTable extends ATableManager<Vacation> {
         if(primaryKeys != null) {
             String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (\n";
             for (String key: primaryKeys)
-                sql += key + " ,\n";
+                    sql += key + " ,\n";
 
             for (String str: stringFields)
                 sql += str + " TEXT NOT NULL,\n";

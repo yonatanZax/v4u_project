@@ -45,18 +45,17 @@ public class ControllerLogin extends Observable implements Observer {
     }
 
 
-    public void errorMessageNotLoggedIn(){
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setHeaderText("You are NOT Logged in!");
-            errorAlert.setContentText("Only Registered User can publish new vacation for sale.");
-            errorAlert.showAndWait();
+    public void errorMessageNotLoggedIn(String contentText){
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setHeaderText("You are NOT Logged in!");
+        errorAlert.setContentText(contentText);
+        errorAlert.showAndWait();
     }
 
 
     public void showStage() {
         stage.show();
     }
-
 
     @Override
     public void update(Observable o, Object arg) {

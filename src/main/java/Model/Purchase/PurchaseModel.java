@@ -16,21 +16,32 @@ public class PurchaseModel extends ACRUDModel<Purchase> {
     public void updateTable(Purchase purchase) {
         DBResult result = DBResult.NONE;
 
-        String [] whereFields = { PurchaseTable.COLUMN_PURCHASETABLE_VACATIONKEY,
-                PurchaseTable.COLUMN_PURCHASETABLE_SELLERKEY,
-                PurchaseTable.COLUMN_PURCHASETABLE_BUYERKEY};
+        String [] whereFields = {   PurchaseTable.COLUMN_PURCHASETABLE_VACATIONKEY,
+                                    PurchaseTable.COLUMN_PURCHASETABLE_SELLERKEY,
+                                    PurchaseTable.COLUMN_PURCHASETABLE_SELLEREMAIL,
+                                    PurchaseTable.COLUMN_PURCHASETABLE_BUYERKEY,
+                                    PurchaseTable.COLUMN_PURCHASETABLE_BUYEREMAIL};
 
-        String[] whereValues = {purchase.getVacationKey(),purchase.getSellerKey(),purchase.getBuyerKey()};
+        String[] whereValues = {purchase.getVacationKey(),
+                                purchase.getSellerKey(),
+                                purchase.getSellerEmail(),
+                                purchase.getBuyerKey(),
+                                purchase.getBuyerEmail()};
 
 
-        String [] set = {PurchaseTable.COLUMN_PURCHASETABLE_VACATIONKEY,
-                PurchaseTable.COLUMN_PURCHASETABLE_SELLERKEY,
-                PurchaseTable.COLUMN_PURCHASETABLE_BUYERKEY,
-                PurchaseTable.COLUMN_PURCHASETABLE_TIMESTAMP};
+        String [] set = {   PurchaseTable.COLUMN_PURCHASETABLE_VACATIONKEY,
+                            PurchaseTable.COLUMN_PURCHASETABLE_SELLERKEY,
+                            PurchaseTable.COLUMN_PURCHASETABLE_SELLEREMAIL,
+                            PurchaseTable.COLUMN_PURCHASETABLE_BUYERKEY,
+                            PurchaseTable.COLUMN_PURCHASETABLE_BUYEREMAIL,
+                            PurchaseTable.COLUMN_PURCHASETABLE_TIMESTAMP};
+
         String [] values = {purchase.getVacationKey(),
-                purchase.getSellerKey(),
-                purchase.getBuyerKey(),
-                String.valueOf(purchase.getTimestamp())};
+                            purchase.getSellerKey(),
+                            purchase.getSellerEmail(),
+                            purchase.getBuyerKey(),
+                            purchase.getBuyerEmail(),
+                            String.valueOf(purchase.getTimestamp())};
 
 
         result = tableManager.updateData(set , values, whereFields,whereValues);

@@ -53,26 +53,35 @@
       <RefTableName>userInfo</RefTableName>
       <RefColNames>key</RefColNames>
     </foreign-key>
-    <column id="20" parent="7" name="vacationKey">
+    <column id="20" parent="7" name="buyerEmail">
       <DataType>TEXT|0</DataType>
-      <NotNull>1</NotNull>
     </column>
-    <column id="21" parent="7" name="sellerKey">
+    <column id="21" parent="7" name="vacationKey">
       <Position>1</Position>
       <DataType>TEXT|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="22" parent="7" name="buyerKey">
+    <column id="22" parent="7" name="sellerKey">
       <Position>2</Position>
       <DataType>TEXT|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="23" parent="7" name="timestamp">
+    <column id="23" parent="7" name="sellerEmail">
       <Position>3</Position>
+      <DataType>TEXT|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="24" parent="7" name="buyerKey">
+      <Position>4</Position>
+      <DataType>TEXT|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="25" parent="7" name="timestamp">
+      <Position>5</Position>
       <DataType>INTEGER|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="24" parent="7" name="sqlite_autoindex_purchaseInfo_1">
+    <index id="26" parent="7" name="sqlite_autoindex_purchaseInfo_1">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>vacationKey
 sellerKey
@@ -82,53 +91,53 @@ buyerKey</ColNames>
 </ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <key id="25" parent="7">
+    <key id="27" parent="7">
       <ColNames>vacationKey
 sellerKey
 buyerKey</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_purchaseInfo_1</UnderlyingIndexName>
     </key>
-    <foreign-key id="26" parent="7">
+    <foreign-key id="28" parent="7">
       <ColNames>vacationKey</ColNames>
       <RefTableName>vacationInfo</RefTableName>
       <RefColNames>key</RefColNames>
     </foreign-key>
-    <foreign-key id="27" parent="7">
+    <foreign-key id="29" parent="7">
       <ColNames>sellerKey</ColNames>
       <RefTableName>userInfo</RefTableName>
       <RefColNames>key</RefColNames>
     </foreign-key>
-    <foreign-key id="28" parent="7">
+    <foreign-key id="30" parent="7">
       <ColNames>buyerKey</ColNames>
       <RefTableName>userInfo</RefTableName>
       <RefColNames>key</RefColNames>
     </foreign-key>
-    <column id="29" parent="8" name="vacationKey">
+    <column id="31" parent="8" name="vacationKey">
       <DataType>TEXT|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="30" parent="8" name="sellerKey">
+    <column id="32" parent="8" name="sellerKey">
       <Position>1</Position>
       <DataType>TEXT|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="31" parent="8" name="buyerKey">
+    <column id="33" parent="8" name="buyerKey">
       <Position>2</Position>
       <DataType>TEXT|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="32" parent="8" name="approved">
+    <column id="34" parent="8" name="approved">
       <Position>3</Position>
       <DataType>INTEGER|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="33" parent="8" name="timestamp">
+    <column id="35" parent="8" name="timestamp">
       <Position>4</Position>
       <DataType>INTEGER|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="34" parent="8" name="sqlite_autoindex_requestInfo_1">
+    <index id="36" parent="8" name="sqlite_autoindex_requestInfo_1">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>vacationKey
 sellerKey
@@ -138,130 +147,130 @@ buyerKey</ColNames>
 </ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <key id="35" parent="8">
+    <key id="37" parent="8">
       <ColNames>vacationKey
 sellerKey
 buyerKey</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_requestInfo_1</UnderlyingIndexName>
     </key>
-    <foreign-key id="36" parent="8">
+    <foreign-key id="38" parent="8">
       <ColNames>vacationKey</ColNames>
       <RefTableName>vacationInfo</RefTableName>
       <RefColNames>key</RefColNames>
     </foreign-key>
-    <foreign-key id="37" parent="8">
+    <foreign-key id="39" parent="8">
       <ColNames>sellerKey</ColNames>
       <RefTableName>userInfo</RefTableName>
       <RefColNames>key</RefColNames>
     </foreign-key>
-    <foreign-key id="38" parent="8">
+    <foreign-key id="40" parent="8">
       <ColNames>buyerKey</ColNames>
       <RefTableName>userInfo</RefTableName>
       <RefColNames>key</RefColNames>
     </foreign-key>
-    <column id="39" parent="9" name="type">
+    <column id="41" parent="9" name="type">
       <DataType>text|0</DataType>
     </column>
-    <column id="40" parent="9" name="name">
+    <column id="42" parent="9" name="name">
       <Position>1</Position>
       <DataType>text|0</DataType>
     </column>
-    <column id="41" parent="9" name="tbl_name">
+    <column id="43" parent="9" name="tbl_name">
       <Position>2</Position>
       <DataType>text|0</DataType>
     </column>
-    <column id="42" parent="9" name="rootpage">
+    <column id="44" parent="9" name="rootpage">
       <Position>3</Position>
       <DataType>integer|0</DataType>
     </column>
-    <column id="43" parent="9" name="sql">
+    <column id="45" parent="9" name="sql">
       <Position>4</Position>
       <DataType>text|0</DataType>
     </column>
-    <column id="44" parent="10" name="name"/>
-    <column id="45" parent="10" name="seq">
+    <column id="46" parent="10" name="name"/>
+    <column id="47" parent="10" name="seq">
       <Position>1</Position>
     </column>
-    <column id="46" parent="11" name="key">
+    <column id="48" parent="11" name="key">
       <DataType>TEXT|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="47" parent="11" name="password">
+    <column id="49" parent="11" name="password">
       <Position>1</Position>
       <DataType>TEXT|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="48" parent="11" name="firstName">
+    <column id="50" parent="11" name="firstName">
       <Position>2</Position>
       <DataType>TEXT|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="49" parent="11" name="lastName">
+    <column id="51" parent="11" name="lastName">
       <Position>3</Position>
       <DataType>TEXT|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="50" parent="11" name="city">
+    <column id="52" parent="11" name="city">
       <Position>4</Position>
       <DataType>TEXT|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="51" parent="11" name="birthday">
+    <column id="53" parent="11" name="birthday">
       <Position>5</Position>
       <DataType>INTEGER|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="52" parent="11" name="sqlite_autoindex_userInfo_1">
+    <index id="54" parent="11" name="sqlite_autoindex_userInfo_1">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>key</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <key id="53" parent="11">
+    <key id="55" parent="11">
       <ColNames>key</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_userInfo_1</UnderlyingIndexName>
     </key>
-    <column id="54" parent="12" name="key">
+    <column id="56" parent="12" name="key">
       <DataType>INTEGER|0</DataType>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="55" parent="12" name="sellerKey">
+    <column id="57" parent="12" name="sellerKey">
       <Position>1</Position>
       <DataType>TEXT|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="56" parent="12" name="origin">
+    <column id="58" parent="12" name="origin">
       <Position>2</Position>
       <DataType>TEXT|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="57" parent="12" name="destination">
+    <column id="59" parent="12" name="destination">
       <Position>3</Position>
       <DataType>TEXT|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="58" parent="12" name="visible">
+    <column id="60" parent="12" name="visible">
       <Position>4</Position>
       <DataType>TEXT|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="59" parent="12" name="timestamp">
+    <column id="61" parent="12" name="timestamp">
       <Position>5</Position>
       <DataType>INTEGER|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="60" parent="12" name="price">
+    <column id="62" parent="12" name="price">
       <Position>6</Position>
       <DataType>REAL|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="61" parent="12">
+    <key id="63" parent="12">
       <ColNames>key</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="62" parent="12">
+    <foreign-key id="64" parent="12">
       <ColNames>sellerKey</ColNames>
       <RefTableName>userInfo</RefTableName>
       <RefColNames>key</RefColNames>

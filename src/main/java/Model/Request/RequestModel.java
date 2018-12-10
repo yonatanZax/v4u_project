@@ -23,15 +23,15 @@ public class RequestModel extends ACRUDModel<Request> {
         String[] whereValues = {request.getVacationKey(),request.getSellerKey(),request.getBuyerKey()};
 
         String [] set = {RequestTable.COLUMN_REQUESTTABLE_VACATIONKEY,
-                         RequestTable.COLUMN_REQUESTTABLE_SELLERKEY,
-                         RequestTable.COLUMN_REQUESTTABLE_BUYERKEY,
-                         RequestTable.COLUMN_REQUESTTABLE_APPROVED,
-                         RequestTable.COLUMN_REQUESTTABLE_TIMESTAMP};
+                RequestTable.COLUMN_REQUESTTABLE_SELLERKEY,
+                RequestTable.COLUMN_REQUESTTABLE_BUYERKEY,
+                RequestTable.COLUMN_REQUESTTABLE_APPROVED,
+                RequestTable.COLUMN_REQUESTTABLE_TIMESTAMP};
         String [] values = {request.getVacationKey(),
-                            request.getSellerKey(),
-                            request.getBuyerKey(),
-                            String.valueOf(request.getApproved()),
-                            String.valueOf(request.getTimestamp())};
+                request.getSellerKey(),
+                request.getBuyerKey(),
+                String.valueOf(request.getApproved()),
+                String.valueOf(request.getTimestamp())};
 
 
         result = tableManager.updateData(set , values, whereFields, whereValues);
@@ -45,7 +45,7 @@ public class RequestModel extends ACRUDModel<Request> {
         String selection = parameters[0] + " IN (";
         for (int i=0 ; i < parameters.length - 1; i++) {
             selection += "\"" + parameters[i][1] + "\",";
-        }
+    }
         selection += "\"" + parameters[parameters.length-1][1] + "\")";
 
         // Get the list of users from the database

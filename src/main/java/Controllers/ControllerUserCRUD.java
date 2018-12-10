@@ -38,7 +38,7 @@ public class ControllerUserCRUD implements Observer {
             root = fxmlLoader.load();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+    }
         Scene scene = new Scene(root,400,400);
         stage.setScene(scene);
 
@@ -113,22 +113,23 @@ public class ControllerUserCRUD implements Observer {
     public void update(Observable o, Object arg){
         System.out.println("ControllerUserCRUD: update by UserCRUDView");
 
-        if (o.equals(myView)){
-            if(arg.equals(Enum_CRUD.READ)) {
+        if (o.equals(myView)) {
+
+            if (arg.equals(Enum_CRUD.READ)) {
                 readUser();
-            } else if(arg.equals(Enum_CRUD.CREATE)) {
+            } else if (arg.equals(Enum_CRUD.CREATE)) {
                 try {
                     createUser();
-                } catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else if(arg.equals(Enum_CRUD.UPDATE)) {
+            } else if (arg.equals(Enum_CRUD.UPDATE)) {
                 try {
                     updateUser();
-                } catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else if(arg.equals(Enum_CRUD.DELETE)) {
+            } else if (arg.equals(Enum_CRUD.DELETE)) {
                 deleteUser();
             }
         }

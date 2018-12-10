@@ -20,7 +20,8 @@ public class UserCRUDView extends ACRUDView {
     public Label status_lbl;
     public Label info_lbl;
 
-    public static final String info_lblTitle = "Info from DB:\n";
+        public static final String info_lblTitle = "Info from DB:\n";
+
 
 
     @Override

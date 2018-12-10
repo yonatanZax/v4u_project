@@ -30,8 +30,8 @@ public class VacationModel extends ACRUDModel<Vacation> {
     @Override
     public void updateTable(Vacation vacation) {
         DBResult result = DBResult.NONE;
-        String[] whereFields = {VacationTable.COLUMN_VACATIONTABLE_KEY};
-        String[] whereValues = {vacation.getVacationKey()};
+        String [] whereFields = {VacationTable.COLUMN_VACATIONTABLE_KEY};
+        String [] whereValues = {vacation.getVacationKey()};
 
         // Todo - implement set and values -> DONE
         String[] set = {VacationTable.COLUMN_VACATIONTABLE_KEY,
@@ -51,7 +51,7 @@ public class VacationModel extends ACRUDModel<Vacation> {
                             String.valueOf(vacation.isVisible())};
 
 
-        result = tableManager.updateData(set, values, whereFields, whereValues);
+        result = tableManager.updateData(set , values, whereFields,whereValues);
         setChanged();
         notifyObservers(result);
     }
