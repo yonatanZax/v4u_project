@@ -131,6 +131,11 @@ public class ControllerHome extends Application implements Observer {
                 changeLoginStatus(UserModel.getUserName());
             }
         }
+        else if (o.equals(controllerCreateVacation)){
+            if (arg.equals(ControllerCreateVacation.VACATION_ADDED)){
+                vacationSearchController.updateSubScene();
+            }
+        }
 
 
     }

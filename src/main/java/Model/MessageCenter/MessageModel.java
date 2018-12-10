@@ -18,12 +18,10 @@ public class MessageModel {
     private VacationModel vacationModel;
     private MessagesBox messagesList;
 
-    public MessageModel(){}
-
-    public MessageModel(UserModel userModel, RequestModel requestModel, VacationModel vacationModel) {
-        this.requestModel = requestModel;
-        this.userModel = userModel;
-        this.vacationModel = vacationModel;
+    public MessageModel() {
+        this.requestModel = new RequestModel();
+        this.userModel = new UserModel();
+        this.vacationModel = new VacationModel();
         messagesList = new MessagesBox();
     }
 
@@ -31,7 +29,7 @@ public class MessageModel {
     public String getUserName(){ return userModel.getUserName(); }
 
     public List<Vacation> getVacationFromKey(String key){
-        String[][] parameters = {{VacationTable.COLUMN_VACATIONTABLE_KEY,key}};
+        String[][] parameters = {{VacationTable.COLUMN_VACATIONTABLE_KEY},{key}};
         return vacationModel.readDataFromDB(parameters);
     }
 
@@ -53,8 +51,9 @@ public class MessageModel {
     }
 
     public void setMessagesForUser(){
-        List<Request> requestsAsBuyer = getRequests(getUserName(), 0);
-        List<Request> requestsAsSeller = getRequests(getUserName(), 1);
+        messagesList.resetMessegeBox();
+        List<Request> requestsAsBuyer = getRequests(0);
+        List<Request> requestsAsSeller = getRequests(1);
 
         for (Request request : requestsAsBuyer){
             if (request.getApproved() && request.getBuyerKey().equals(userModel.getUserName())) {
@@ -62,18 +61,18 @@ public class MessageModel {
                 List<Vacation> vacationsList = getVacationFromKey(key);
                 if (!vacationsList.isEmpty()) {
                     Vacation vacation = vacationsList.get(0);
-                    Message message = new Message(request.getSellerKey(), getUserName(), vacation, false);
+                    Message message = new Message(request.getSellerKey(), getUserName(), vacation, false, request);
                     messagesList.getMessagesList().add(message);
                 }
             }
         }
         for (Request request : requestsAsSeller){
-            if (request.getState().equals(Enum_RequestState.PENDING)) {
+            if (request.getState().equals(Request.states[0])) {
                 String key = request.getVacationKey();
                 List<Vacation> vacationsList = getVacationFromKey(key);
                 if (!vacationsList.isEmpty()) {
                     Vacation vacation = vacationsList.get(0);
-                    Message message = new Message(getUserName(), request.getBuyerKey(), vacation, true);
+                    Message message = new Message(getUserName(), request.getBuyerKey(), vacation, true, request);
                     messagesList.getMessagesList().add(message);
                 }
             }
@@ -89,13 +88,13 @@ public class MessageModel {
     /**
      * @param role : 0 -> Seller, else is Buyer
      */
-    public List<Request> getRequests(String UserName, int role){
+    public List<Request> getRequests(int role){
         List<Request> requestsList = new LinkedList<>();
         if(role == 0){
-            String[][] parameters = {{RequestTable.COLUMN_REQUESTTABLE_BUYERKEY,userModel.getUserName()}};
+            String[][] parameters = {{RequestTable.COLUMN_REQUESTTABLE_BUYERKEY},{userModel.getUserName()}};
             requestsList = requestModel.readDataFromDB(parameters);
         } else {
-            String[][] parameters = {{RequestTable.COLUMN_REQUESTTABLE_SELLERKEY,userModel.getUserName()}};
+            String[][] parameters = {{RequestTable.COLUMN_REQUESTTABLE_SELLERKEY},{userModel.getUserName()}};
             requestsList = requestModel.readDataFromDB(parameters);
         }
         return requestsList;

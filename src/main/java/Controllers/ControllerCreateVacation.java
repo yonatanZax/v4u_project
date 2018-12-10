@@ -2,9 +2,7 @@ package Controllers;
 
 import MainPackage.Enum_CRUD;
 import Model.Vacation.VacationModel;
-import View.CRUDViews.ACRUDView;
 import View.CRUDViews.VacationCRUDView;
-import db.DBResult;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -22,6 +20,8 @@ public class ControllerCreateVacation extends Observable implements Observer {
     private FXMLLoader fxmlLoader;
     public VacationCRUDView vacationView;
     public VacationModel vacationModel = new VacationModel();
+
+    public static final String VACATION_ADDED = "vacation_added";
 
     // Todo - implement here -> DONE
 
@@ -77,6 +77,8 @@ public class ControllerCreateVacation extends Observable implements Observer {
                     System.out.println("ControllerCreateVacation: update by vacationModel");
                     System.out.println("ControllerCreateVacation: " + vacationModel.getUserName() + " registered vacation to " + vacationView.destination.getText());
                     vacationView.closeWindow();
+                    setChanged();
+                    notifyObservers(VACATION_ADDED);
                 }
             } else {
                 String title = "houston we have a problem";
