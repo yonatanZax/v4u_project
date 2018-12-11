@@ -98,6 +98,20 @@ public class VacationSearchController extends Observable implements Observer,Sub
         alert.showAndWait();
     }
 
+    public String getVacationPickedKey(){
+        if (pickedVacation != null){
+            return pickedVacation.getVacationKey();
+        }
+        return null;
+    }
+
+    public String getVacationPickedSeller(){
+        if (pickedVacation != null){
+            return pickedVacation.getSellerKey();
+        }
+        return null;
+    }
+
     @Override
     public void update(Observable o, Object arg) {
         if (o == myView){

@@ -106,8 +106,6 @@ public class Vacation {
 
     public int getDepartureDate() {
         return departureDate;
-//        TODO - return the departure not the bot number
-//        return 20181230;
     }
 
     public void setDepartureDate(int departureDate) {
@@ -119,8 +117,8 @@ public class Vacation {
 //        TODO - add all the information to the string. what returns here is what we will show the user in the information before confirmation on purchase
         String ans = "VacationDetails:\n";
         ans += "\tDestination: " + this.getDestination() + '\n';
-        ans += "\tPrice: " + price;
-        ans += "\tDeparture Date: " + departureDate;
+        ans += "\tPrice: " + price + "\n";
+        ans += "\tDeparture Date: " + departureDate + "\n";
         return ans;
     }
 

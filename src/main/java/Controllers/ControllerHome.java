@@ -1,6 +1,8 @@
 package Controllers;
 
+import Model.Request.RequestModel;
 import Model.User.UserModel;
+import Model.Vacation.Vacation;
 import View.HomeView;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -25,6 +27,7 @@ public class ControllerHome extends Application implements Observer {
     private ControllerMessageCenter controllerMessageCenter = new ControllerMessageCenter();
     private ControllerLogin controllerLogin = new ControllerLogin();
     private ControllerCreateVacation controllerCreateVacation = new ControllerCreateVacation();
+    private RequestModel requestModel = new RequestModel();
 
     public ControllerHome() {
         stage = new Stage();
@@ -129,6 +132,11 @@ public class ControllerHome extends Application implements Observer {
             }
             else if (arg.equals(VacationSearchController.SEND_VACATION_PURCHASE_REQUEST)){
                 homeView.setStatusBarString("Purchase request was sent to the seller");
+                String vacationKey = vacationSearchController.getVacationPickedKey();
+                String vacationSellerKey = vacationSearchController.getVacationPickedSeller();
+                if (vacationKey != null && vacationSellerKey != null){
+                    requestModel.insertRequestToTable(vacationKey, vacationSellerKey);
+                }
 
             }
         }else if(o.equals(controllerLogin)){
