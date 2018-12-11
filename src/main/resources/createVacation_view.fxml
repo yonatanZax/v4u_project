@@ -115,8 +115,8 @@
     <Label fx:id="errorMessage_r_time" text="Check Field" textFill="RED" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="8" />
     <Label fx:id="errorMessage_r_date" text="Check Field" textFill="RED" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="7" />
     <Label fx:id="errorMessage_d_time" text="Check Field" textFill="RED" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="6" />
-    <ChoiceBox fx:id="vacation_type_choice" prefHeight="25.0" prefWidth="208.0" GridPane.columnIndex="2" GridPane.rowIndex="12" />
-    <ChoiceBox fx:id="accommodation_type_choice" prefHeight="25.0" prefWidth="208.0" GridPane.columnIndex="2" GridPane.rowIndex="13" />
+    <ChoiceBox fx:id="vacation_type_choice" visible="false" prefHeight="25.0" prefWidth="208.0" GridPane.columnIndex="2" GridPane.rowIndex="12" />
+    <ChoiceBox fx:id="accommodation_type_choice" visible="false" prefHeight="25.0" prefWidth="208.0" GridPane.columnIndex="2" GridPane.rowIndex="13" />
     <TextField fx:id="depart_time" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
     <TextField fx:id="return_time" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="8" />
     <TextArea fx:id="freeText" prefHeight="77.0" prefWidth="319.0" promptText="Add here more info" GridPane.columnIndex="2" GridPane.rowIndex="14" />
