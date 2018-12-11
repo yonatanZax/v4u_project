@@ -107,7 +107,7 @@ public class VacationSearchView extends Observable{
         int todayDateInt = convertDateStringToInt(LocalDate.now().toString());
         boolean booleanVal =  departureDateInt > todayDateInt;
 //        System.out.println("departureDateInt: " + departureDateInt + " , todayDateInt: " + todayDateInt + " , booleanVal: " + booleanVal);
-        return booleanVal;
+        return vacation.isVisible() && booleanVal;
     }
 
     public Vacation getPickedVacation() {

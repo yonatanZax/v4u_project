@@ -1,18 +1,26 @@
 package Controllers;
 
+import Model.Request.RequestModel;
 import Model.User.UserModel;
+import Model.Vacation.Vacation;
 import View.HomeView;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
 import java.util.Observable;
 import java.util.Observer;
 
-public class ControllerHome extends Application implements Observer {
+//public class ControllerHome extends Application implements Observer {
+public class ControllerHome implements Observer {
 
 
     private Stage stage;
@@ -25,6 +33,7 @@ public class ControllerHome extends Application implements Observer {
     private ControllerMessageCenter controllerMessageCenter = new ControllerMessageCenter();
     private ControllerLogin controllerLogin = new ControllerLogin();
     private ControllerCreateVacation controllerCreateVacation = new ControllerCreateVacation();
+    private RequestModel requestModel = new RequestModel();
 
     public ControllerHome() {
         stage = new Stage();
@@ -35,6 +44,8 @@ public class ControllerHome extends Application implements Observer {
             e.printStackTrace();
         }
         Scene scene = new Scene(root);
+        stage.getIcons().add(new Image("/images/vacation.png"));
+        stage.setTitle("Vacation 4 U");
         stage.setScene(scene);
 
         homeView = fxmlLoader.getController();
@@ -46,8 +57,6 @@ public class ControllerHome extends Application implements Observer {
         controllerCreateVacation.addObserver(this);
         vacationSearchController.addObserver(this);
 
-
-
         // Stack holds the last subSceneName
 //        subSceneStack.push(vacationSearchController);
         // Set the subSceneName to be vacationSearchController
@@ -58,10 +67,10 @@ public class ControllerHome extends Application implements Observer {
         stage.show();
     }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-
-    }
+//    @Override
+//    public void start(Stage primaryStage) throws Exception {
+//
+//    }
 
     /**
      * changes the login status in the home view
@@ -87,6 +96,7 @@ public class ControllerHome extends Application implements Observer {
                     UserModel.logOff();
                     changeLoginStatus(null);
                 }
+
                 else
                     controllerLogin.showStage();
 
@@ -94,15 +104,20 @@ public class ControllerHome extends Application implements Observer {
 
                 //Updates the MessageCenter and sets it as subSceneName
                 Parent newRoot;
+//                TODO - here we need to get the path to the imageView and send it through setSubsceneIcon
+                String imagePath = "";
                 if(!subSceneName.equals(controllerMessageCenter.getClass().getSimpleName())) {
                     subSceneName = controllerMessageCenter.getClass().getSimpleName();
                     controllerMessageCenter.updateSubScene();
                     newRoot = controllerMessageCenter.getRoot();
+                    imagePath = "/images/search.png";
                 }else{
                     subSceneName = vacationSearchController.getClass().getSimpleName();
                     vacationSearchController.updateSubScene();
                     newRoot = vacationSearchController.getRoot();
+                    imagePath = "/images/mail.png";
                 }
+                homeView.setSubsceneIcon(imagePath);
                 homeView.setSub_scene(newRoot);
 
             }else if (arg.equals(HomeView.HOMEVIEW_AGRS_GOBACK)){
@@ -128,11 +143,17 @@ public class ControllerHome extends Application implements Observer {
             }
             else if (arg.equals(VacationSearchController.SEND_VACATION_PURCHASE_REQUEST)){
                 homeView.setStatusBarString("Purchase request was sent to the seller");
+                String vacationKey = vacationSearchController.getVacationPickedKey();
+                String vacationSellerKey = vacationSearchController.getVacationPickedSeller();
+                if (vacationKey != null && vacationSellerKey != null){
+                    requestModel.insertRequestToTable(vacationKey, vacationSellerKey);
+                }
 
             }
         }else if(o.equals(controllerLogin)){
             if (arg.equals(ControllerLogin.CONTROLLER_LOGIN_ARGS_LOGGEDIN)){
                 changeLoginStatus(UserModel.getUserName());
+                homeView.setSubsceneIcon("/images/mail.png");
             }
         }
         else if (o.equals(controllerCreateVacation)){
@@ -145,7 +166,7 @@ public class ControllerHome extends Application implements Observer {
 
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+//    public static void main(String[] args) {
+//        launch(args);
+//    }
 }

@@ -7,11 +7,14 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import javafx.scene.layout.Pane;
 import org.controlsfx.control.StatusBar;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Observable;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -63,6 +66,10 @@ public class HomeView extends Observable {
 
     }
 
+    public void setSubsceneIcon(String path) {
+            message_iv.setImage(new Image(path));
+    }
+
     /**
      * changes the login status in the home view
      * if userName is null: it means we are doing logout
@@ -75,7 +82,7 @@ public class HomeView extends Observable {
             login_btn.setText("Login");
             login_status_lbl.setText("Not Signed");
             message_iv.setVisible(false);
-            if(!firstScene) {
+            if (!firstScene) {
                 setSub_scene(defaultParent);
                 setStatusBarString("Logged out");
             }

@@ -41,11 +41,7 @@ public class VacationSearchController extends Observable implements Observer,Sub
             e.printStackTrace();
         }
         myView = fxmlLoader.getController();
-
-
         myView.addObserver(this);
-
-        updateSubScene();
 
     }
 
@@ -94,6 +90,20 @@ public class VacationSearchController extends Observable implements Observer,Sub
         alert.setContentText(content);
 
         alert.showAndWait();
+    }
+
+    public String getVacationPickedKey(){
+        if (pickedVacation != null){
+            return pickedVacation.getVacationKey();
+        }
+        return null;
+    }
+
+    public String getVacationPickedSeller(){
+        if (pickedVacation != null){
+            return pickedVacation.getSellerKey();
+        }
+        return null;
     }
 
     @Override

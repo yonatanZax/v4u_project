@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -41,6 +42,7 @@ public class ControllerCreateVacation extends Observable implements Observer {
             e.printStackTrace();
         }
         Scene scene = new Scene(root);
+        stage.getIcons().add(new Image("/images/create.png"));
         stage.setScene(scene);
         vacationView = fxmlLoader.getController();
         vacationView.addObserver(this);
