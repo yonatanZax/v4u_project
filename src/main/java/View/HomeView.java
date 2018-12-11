@@ -60,8 +60,11 @@ public class HomeView extends Observable {
         }
         this.decorationPane.getChildren().clear();
         this.decorationPane.getChildren().add(sub_scene);
-        this.decorationPane.setPrefSize(decorationPane.getMaxWidth(), decorationPane.getMaxHeight());
 
+    }
+
+    public void setSubsceneIcon(String path){
+//        TODO - change the image view picture here
     }
 
     /**
@@ -79,7 +82,6 @@ public class HomeView extends Observable {
                 setSub_scene(defaultParent);
                 setStatusBarString("Logged out");
             }
-
         }
         else {
             login_btn.setText("Logout");

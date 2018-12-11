@@ -98,16 +98,21 @@ public class ControllerHome extends Application implements Observer {
 
                 //Updates the MessageCenter and sets it as subSceneName
                 Parent newRoot;
+//                TODO - here we need to get the path to the imageView and send it through setSubsceneIcon
+                String imagePath = "";
                 if(!subSceneName.equals(controllerMessageCenter.getClass().getSimpleName())) {
                     subSceneName = controllerMessageCenter.getClass().getSimpleName();
                     controllerMessageCenter.updateSubScene();
                     newRoot = controllerMessageCenter.getRoot();
+//                    imagePath = ??
                 }else{
                     subSceneName = vacationSearchController.getClass().getSimpleName();
                     vacationSearchController.updateSubScene();
                     newRoot = vacationSearchController.getRoot();
+//                    imagePath = ??
                 }
                 homeView.setSub_scene(newRoot);
+//                homeView.setSubsceneIcon(imagePath);
 
             }else if (arg.equals(HomeView.HOMEVIEW_AGRS_GOBACK)){
 //                if(!subSceneStack.empty()){
