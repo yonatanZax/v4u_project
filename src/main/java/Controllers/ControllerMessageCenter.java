@@ -37,7 +37,6 @@ import java.util.Optional;
 
 public class ControllerMessageCenter extends Observable implements Observer,SubScenable {
 
-
     MessageCenterView messageCenterView;
 
     private PaypalTable paypalAPI;
@@ -160,9 +159,10 @@ public class ControllerMessageCenter extends Observable implements Observer,SubS
         alert.setTitle("Confirmation Dialog");
         alert.setHeaderText(null);
         alert.setContentText(message);
+
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
-            System.out.println(messageModel.getUserName() + " Clicked OK");
+            // ... user chose OK
         }
     }
 

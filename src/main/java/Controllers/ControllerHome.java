@@ -85,7 +85,6 @@ public class ControllerHome extends Application implements Observer {
                 // Show login stage in another window
                 if(UserModel.isLoggedIn()){
                     UserModel.logOff();
-                    homeView.message_iv.setVisible(false);
                     changeLoginStatus(null);
                 }
                 else
@@ -133,7 +132,6 @@ public class ControllerHome extends Application implements Observer {
             }
         }else if(o.equals(controllerLogin)){
             if (arg.equals(ControllerLogin.CONTROLLER_LOGIN_ARGS_LOGGEDIN)){
-                homeView.message_iv.setVisible(true);
                 changeLoginStatus(UserModel.getUserName());
             }
         }
