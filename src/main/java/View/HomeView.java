@@ -74,7 +74,7 @@ public class HomeView extends Observable {
         if (newLabel == null){
             login_btn.setText("Login");
             login_status_lbl.setText("Not Signed");
-            message_iv.setDisable(true);
+            message_iv.setVisible(false);
             if(!firstScene) {
                 setSub_scene(defaultParent);
                 setStatusBarString("Logged out");
@@ -84,7 +84,7 @@ public class HomeView extends Observable {
         else {
             login_btn.setText("Logout");
             login_status_lbl.setText("Signed As: " + newLabel);
-            message_iv.setDisable(false);
+            message_iv.setVisible(true);
             setStatusBarString("Logged in successfully");
         }
     }

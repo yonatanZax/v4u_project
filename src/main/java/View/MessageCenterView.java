@@ -5,8 +5,12 @@ import Controllers.VacationSearchController;
 import Model.MessageCenter.ListMessageContent;
 import Model.MessageCenter.Message;
 import Model.Request.Request;
+import Model.Vacation.Vacation;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -24,8 +28,6 @@ public class MessageCenterView extends Observable {
     private Request pickedRequest;
 
     private ObservableList<Request> masterData = FXCollections.observableArrayList();
-
-    // todo - add buttons to third row (APPROVE, NOT APPROVE, START CONVERSATION (OPTIONAL)
 
     @FXML
     public void initialize() {
@@ -58,5 +60,9 @@ public class MessageCenterView extends Observable {
     public void refresh() {
         setChanged();
         notifyObservers("refresh");
+    }
+
+    public Request getPickedRequest() {
+        return pickedRequest;
     }
 }

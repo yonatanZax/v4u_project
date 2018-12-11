@@ -7,7 +7,9 @@ import Model.Vacation.Vacation;
 import Model.Vacation.VacationModel;
 import db.Tables.RequestTable;
 import db.Tables.VacationTable;
-import MainPackage.Enum_RequestState;
+import javafx.util.Pair;
+
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,22 +38,28 @@ public class MessageModel {
     /**
      * Message parameters: {messageType, info}
      */
-    public List<String[]> createMessageParametersForController(){
-        List<String[]> messageParameters = new LinkedList<>();
+    public List<Pair<Message, String[]>> createMessageParametersForController() {
+        List<Pair<Message, String[]>> messageParameters = new LinkedList<>();
         for (Message message : messagesList.getMessagesList()){
             if (message.isSeller()) {
+                if (message.getRequest().getState().equals(Request.states[0])) {
                 String[] s = {message.getMessageType(), message.getBuyerName() + " wish to buy from you the vacation to: " + message.getVacation().getDestination() + ", at the price " + message.getVacation().getPrice()+ "$"};
-                messageParameters.add(s);
+                    Pair<Message, String[]> pair = new Pair<>(message, s);
+                    messageParameters.add(pair);
+                }
             } else {
+                if (message.getRequest().getState().equals(Request.states[1])) {
                 String[] s = {message.getMessageType(), message.getSellerName() + " approved your request to buy the vacation to: " + message.getVacation().getDestination() + ", at the price " + message.getVacation().getPrice()+ "$"};
-                messageParameters.add(s);
+                    Pair<Message, String[]> pair = new Pair<>(message, s);
+                    messageParameters.add(pair);
+                }
             }
         }
         return messageParameters;
     }
 
     public void setMessagesForUser(){
-        messagesList.resetMessegeBox();
+        resetMessagesBox();
         List<Request> requestsAsBuyer = getRequests(0);
         List<Request> requestsAsSeller = getRequests(1);
 
@@ -79,14 +87,14 @@ public class MessageModel {
         }
     }
 
-    // TODO - when logout will be created - use this function!
+
     public void resetMessagesBox(){
         messagesList.resetMessegeBox();
     }
 
 
     /**
-     * @param role : 0 -> Seller, else is Buyer
+     * @param role : 0 -> Buyer, else is Seller
      */
     public List<Request> getRequests(int role){
         List<Request> requestsList = new LinkedList<>();
@@ -103,4 +111,35 @@ public class MessageModel {
     public List<Message> getMessagesList() {
         return messagesList.getMessagesList();
     }
+
+    public int getCurrentTimeStamp() {
+        String date = LocalDateTime.now().getYear() + "" + LocalDateTime.now().getMonthValue() + "" + LocalDateTime.now().getDayOfMonth();
+        return Integer.parseInt(date);
+    }
+
+    private void checkListForDueDateApproval(List<Request> list) {
+        String day;
+        String todayDate;
+        for (Request requestBuyer : list) {
+            if (requestBuyer.getState().equals(Request.states[1])) {
+                day = String.valueOf(requestBuyer.getTimestamp());
+                day = day.substring(6);
+                todayDate = String.valueOf(getCurrentTimeStamp());
+                todayDate = todayDate.substring(6);
+                if (Integer.parseInt(day) + 2 == Integer.parseInt(todayDate)) {
+                    requestBuyer.setState(Request.states[0]);
+                    requestBuyer.setApproved(false);
+                    requestModel.updateTable(requestBuyer);
+                }
+            }
+        }
+    }
+
+    public void checkIfApprovalDue() {
+        List<Request> requestsAsBuyer = getRequests(0);
+        List<Request> requestsAsSeller = getRequests(1);
+        checkListForDueDateApproval(requestsAsBuyer);
+        checkListForDueDateApproval(requestsAsSeller);
+    }
+
 }

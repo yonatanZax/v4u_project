@@ -5,7 +5,7 @@ import javafx.beans.property.StringProperty;
 
 public class Vacation {
 
-    // Todo - add more fields ( also getters and setters ) - DONE
+
     private StringProperty vacationKey;
     private StringProperty sellerKey;
     private StringProperty origin;
@@ -13,6 +13,7 @@ public class Vacation {
     private boolean visible;
     private int timeStamp;
     private double price;
+    private int departureDate;
 
     public Vacation() {}
 
@@ -102,11 +103,24 @@ public class Vacation {
         this.price = price;
     }
 
+    public int getDepartureDate() {
+//        return departureDate;
+//        TODO - return the departure not the bot number
+        return 20181230;
+    }
+
+    public void setDepartureDate(int departureDate) {
+        this.departureDate = departureDate;
+    }
+
     @Override
     public String toString(){
+//        TODO - add all the information to the string. what returns here is what we will show the user in the information before confirmation on purchase
         String ans = "VacationDetails:\n";
         ans += "\tDestination: " + this.getDestination() + '\n';
         ans += "\tPrice: " + price;
         return ans;
     }
+
+
 }

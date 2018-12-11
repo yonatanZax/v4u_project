@@ -33,7 +33,6 @@ public class VacationModel extends ACRUDModel<Vacation> {
         String [] whereFields = {VacationTable.COLUMN_VACATIONTABLE_KEY};
         String [] whereValues = {vacation.getVacationKey()};
 
-        // Todo - implement set and values -> DONE
         String [] set = {VacationTable.COLUMN_VACATIONTABLE_KEY,
                 VacationTable.COLUMN_VACATIONTABLE_SELLERKEY,
                 VacationTable.COLUMN_VACATIONTABLE_PRICE,

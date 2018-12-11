@@ -40,7 +40,46 @@ public class RequestTable extends ATableManager<Request> {
 
     protected RequestTable() {
         super(DBManager.getInstance(), "requestInfo");
+        createTable();
     }
+
+//    @Override
+//    public PreparedStatement getUpdatePreparedStatement(String[] set, String[] values, String[] whereFields, String[] whereValues, Connection connection) {
+//        String sql = "UPDATE " + TABLE_NAME + " SET ";
+//        sql += appendSql(set);
+//        sql += " WHERE " + appendWhereSQL(whereFields);
+//        PreparedStatement pstmt = null;
+//        if (connection != null) {
+//            try {
+//                pstmt = connection.prepareStatement(sql);
+////                for (int i = 0; i < values.length; i++) {
+////                    if (i < values.length - 1)
+////                        pstmt.setString(i + 1, values[i]);
+////                    else
+////                        pstmt.setInt(i + 1, Integer.valueOf(values[i]));
+////                }
+//                pstmt.setString(1, values[0]);
+//                pstmt.setString(2, values[1]);
+//                pstmt.setString(3, values[2]);
+//                pstmt.setString(4, values[3]);
+//                pstmt.setString(5, values[4]);
+//                pstmt.setInt(6, Integer.valueOf(values[5]));
+//                int j = 7;
+//                for (int i = 0; i < whereValues.length; i++) {
+//                    pstmt.setObject(j++, whereValues[i]);
+//                }
+//                return pstmt;
+//            } catch (SQLException e) {
+//                System.out.println(e.getMessage());
+//                try {
+//                    connection.rollback();
+//                } catch (SQLException ex) {
+//                    System.out.println(ex.getMessage());
+//                }
+//            }
+//        }
+//        return null;
+//    }
 
     @Override
     protected List<Request> transformListMapToList(List<Map<String, String>> listMap) {
@@ -67,7 +106,12 @@ public class RequestTable extends ATableManager<Request> {
                         break;
 
                     case COLUMN_REQUESTTABLE_APPROVED:
-                        request.setApproved(entry.getValue());
+//                        request.setApproved(entry.getValue());
+                        if (entry.getValue().equals("false")) {
+                            request.setApproved(false);
+                        } else {
+                            request.setApproved(true);
+                        }
                         break;
                     case COLUMN_REQUESTTABLE_STATUS:
                         request.setState(entry.getValue());
@@ -110,8 +154,8 @@ public class RequestTable extends ATableManager<Request> {
     public DBResult createTable() {
         String[] primaryKeys = {COLUMN_REQUESTTABLE_VACATIONKEY,COLUMN_REQUESTTABLE_SELLERKEY,COLUMN_REQUESTTABLE_BUYERKEY};
         String[] foreignKeys = {FOREIGNKEY_VACATIONKEY,FOREIGNKEY_SELLERKEY,FOREIGNKEY_BUYERKEY};
-        String[] stringFields = {COLUMN_REQUESTTABLE_VACATIONKEY, COLUMN_REQUESTTABLE_SELLERKEY, COLUMN_REQUESTTABLE_BUYERKEY, COLUMN_REQUESTTABLE_STATUS};
-        String[] intFields = {COLUMN_REQUESTTABLE_APPROVED,COLUMN_REQUESTTABLE_TIMESTAMP};
+        String[] stringFields = {COLUMN_REQUESTTABLE_VACATIONKEY, COLUMN_REQUESTTABLE_SELLERKEY, COLUMN_REQUESTTABLE_BUYERKEY, COLUMN_REQUESTTABLE_STATUS,COLUMN_REQUESTTABLE_APPROVED};
+        String[] intFields = {COLUMN_REQUESTTABLE_TIMESTAMP};
         String[] doubleFields = {};
         return super.createTable(primaryKeys, foreignKeys,stringFields,intFields,doubleFields);
     }

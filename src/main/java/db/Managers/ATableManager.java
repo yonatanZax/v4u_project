@@ -43,18 +43,18 @@ public abstract class ATableManager<T> implements ITableManager<T> {
 
     protected PreparedStatement getUpdatePreparedStatement(String[] set, String[] values, String[] whereFields, String[] whereValues, Connection connection){
         String sql = "UPDATE " + TABLE_NAME + " SET ";
-        sql += appendSql(set);
-        sql += " WHERE " + appendWhereSQL(whereFields);
+        sql += appendSql(set,values);
+        sql += " WHERE " + appendWhereSQL(whereFields,whereValues);
         PreparedStatement pstmt = null;
         if (connection != null) {
             try {
                 pstmt = connection.prepareStatement(sql);
-                for (int i = 0; i < values.length; i++) {
-                    pstmt.setObject(i+1,values[i]);
-                }
-                for (int i = 0; i < whereValues.length; i++) {
-                    pstmt.setObject(i+1,whereValues[i]);
-                }
+//                for (int i = 0; i < values.length; i++) {
+//                    pstmt.setObject(i+1,values[i]);
+//                }
+//                for (int j = 0; j < whereValues.length; J++ i++) {
+//                    pstmt.setObject(i+1,whereValues[j]);
+//                }
                 return pstmt;
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -68,23 +68,33 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return null;
     }
 
-    private String appendSql(String[] strings) {
+    private String appendSql(String[] strings,String[] values) {
         String s = "";
         for (int i = 0; i < strings.length; i++) {
-            s+= strings[i] + " = ?";
+            s+= strings[i] + " = " + "\"" +values[i] + "\"";
             if (i<strings.length-1)
                 s+=", ";
         }
+//        for (int i = 0; i < strings.length; i++) {
+//            s+= strings[i] + " = ?";
+//            if (i<strings.length-1)
+//                s+=", ";
+//        }
         return s;
     }
 
-    private String appendWhereSQL(String[] whereFields){
+    private String appendWhereSQL(String[] whereFields, String[] whereValues){
         String s = "";
         for (int i = 0; i < whereFields.length; i++) {
-            s+= whereFields[i] + " = ?";
+            s+= whereFields[i] + " = " + "\"" + whereValues[i] + "\"";
             if (i<whereFields.length-1)
                 s+=" AND ";
         }
+//        for (int i = 0; i < whereFields.length; i++) {
+//            s+= whereFields[i] + " = ?";
+//            if (i<whereFields.length-1)
+//                s+=" AND ";
+//        }
         return s;
     }
 

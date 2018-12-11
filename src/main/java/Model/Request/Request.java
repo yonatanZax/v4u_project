@@ -11,7 +11,7 @@ public class Request {
     private int timestamp;
     private String state;
 
-    public static String[] states = {"PENDING","HOLD","SOLD"};
+    public static String[] states = {"PENDING","HOLD","SOLD","DENIED"};
 
     public Request(){}
 

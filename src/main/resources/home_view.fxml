@@ -17,7 +17,7 @@
       <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="45.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
           <Button fx:id="login_btn" alignment="CENTER" mnemonicParsing="false" onAction="#logInOnAction" prefWidth="70.0" text="Log In" />
-            <ImageView fx:id="message_iv" blendMode="SRC_ATOP" fitHeight="37.0" fitWidth="39.0" onMouseClicked="#messageOnAction" pickOnBounds="true" preserveRatio="true">
+                <ImageView fx:id="message_iv" blendMode="SRC_ATOP" fitHeight="37.0" fitWidth="39.0" onMouseClicked="#messageOnAction" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@images/90448526-mail-icon-with-long-shadow-flat-design-style-round-icon-mail-silhouette-simple-circle-icon-modern-fl.jpg" />
                </image>

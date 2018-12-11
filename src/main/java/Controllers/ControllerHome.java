@@ -70,8 +70,9 @@ public class ControllerHome extends Application implements Observer {
      * @param userName the name of the new user or null it it's logout
      */
     public void changeLoginStatus(String userName){
-        if (userName == null)
+        if (userName == null) {
             vacationSearchController.updateSubScene();
+        }
         homeView.setLoginStatusLabel(userName);
     }
 
