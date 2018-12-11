@@ -8,8 +8,13 @@ import Model.Purchase.PurchaseModel;
 import Model.Request.Request;
 import Model.Request.RequestModel;
 import Model.Vacation.Vacation;
+import Model.Vacation.VacationModel;
+import PaypalPackage.PayPalDBManager;
+import PaypalPackage.PaypalPayment;
+import PaypalPackage.PaypalTable;
 import View.MessageCenterView;
 import db.Tables.PurchaseTable;
+import db.Tables.VacationTable;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,9 +39,12 @@ public class ControllerMessageCenter extends Observable implements Observer,SubS
 
 
     MessageCenterView messageCenterView;
-    RequestModel requestModel = new RequestModel();
-    PurchaseModel purchaseModel = new PurchaseModel();
-    MessageModel messageModel = new MessageModel();
+
+    private PaypalTable paypalAPI;
+    private VacationModel vacationModel = new VacationModel();
+    private RequestModel requestModel = new RequestModel();
+    private PurchaseModel purchaseModel = new PurchaseModel();
+    private MessageModel messageModel = new MessageModel();
     private Parent root;
     private FXMLLoader fxmlLoader;
 
@@ -187,6 +195,17 @@ public class ControllerMessageCenter extends Observable implements Observer,SubS
         purchase.setBuyerEmail(buyerPaymentAccount);
         purchaseModel.updateTable(purchase);
         requestModel.finishPurchase(pickedRequest);
+
+        // DEMO FOR PAYPAL API USAGE
+
+        paypalAPI = PaypalTable.getInstance();
+        String transactionId = String.valueOf((int)(Math.random() * 10000000 + 1));
+        String sellerAccount = purchase.getSellerEmail();
+        String[][] vacationParameters = {{VacationTable.COLUMN_VACATIONTABLE_KEY},{purchase.getVacationKey()}};
+        List<Vacation> vacationList = vacationModel.readDataFromDB(vacationParameters);
+        Double amount = vacationList.get(0).getPrice();
+        PaypalPayment payment = new PaypalPayment(transactionId,buyerPaymentAccount,sellerAccount,amount);
+        // todo - insert payment to PAYPAL TABLE
     }
 
     private void initPurchase(String paymentAccount) {
