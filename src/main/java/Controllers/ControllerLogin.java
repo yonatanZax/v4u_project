@@ -56,6 +56,7 @@ public class ControllerLogin extends Observable implements Observer {
 
 
     public void showStage() {
+        loginView.resetLoginCredentials();
         stage.show();
     }
 
