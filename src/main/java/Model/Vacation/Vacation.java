@@ -15,7 +15,8 @@ public class Vacation {
     private double price;
     private int departureDate;
 
-    public Vacation() {}
+    public Vacation() {
+    }
 
     public Vacation(String vacationKey, String sellerKey, String origin, String destination, boolean visible, int timeStamp, double price, int departureDate) {
         this.vacationKey = new SimpleStringProperty(vacationKey);
@@ -106,8 +107,6 @@ public class Vacation {
 
     public int getDepartureDate() {
         return departureDate;
-//        TODO - return the departure not the bot number
-//        return 20181230;
     }
 
     public void setDepartureDate(int departureDate) {
@@ -115,7 +114,7 @@ public class Vacation {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         String ans = "VacationDetails:\n";
         ans += "\tDestination: " + this.getDestination() + '\n';
         ans += "\tPrice: " + price + "\n";

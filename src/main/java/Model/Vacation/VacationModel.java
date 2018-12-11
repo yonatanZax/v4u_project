@@ -31,10 +31,10 @@ public class VacationModel extends ACRUDModel<Vacation> {
     @Override
     public void updateTable(Vacation vacation) {
         DBResult result = DBResult.NONE;
-        String [] whereFields = {VacationTable.COLUMN_VACATIONTABLE_KEY};
-        String [] whereValues = {vacation.getVacationKey()};
+        String[] whereFields = {VacationTable.COLUMN_VACATIONTABLE_KEY};
+        String[] whereValues = {vacation.getVacationKey()};
 
-        String [] set = {VacationTable.COLUMN_VACATIONTABLE_KEY,
+        String[] set = {VacationTable.COLUMN_VACATIONTABLE_KEY,
                 VacationTable.COLUMN_VACATIONTABLE_SELLERKEY,
                 VacationTable.COLUMN_VACATIONTABLE_PRICE,
                 VacationTable.COLUMN_VACATIONTABLE_ORIGIN,
@@ -42,7 +42,7 @@ public class VacationModel extends ACRUDModel<Vacation> {
                 VacationTable.COLUMN_VACATIONTABLE_TIMESTAMP,
                 VacationTable.COLUMN_VACATIONTABLE_VISIBLE,
                 VacationTable.COLUMN_VACATIONTABLE_DEPARTUREDATE};
-        String [] values = {vacation.getVacationKey(),
+        String[] values = {vacation.getVacationKey(),
                 vacation.getSellerKey(),
                 String.valueOf(vacation.getPrice()),
                 vacation.getOrigin(),
@@ -52,7 +52,7 @@ public class VacationModel extends ACRUDModel<Vacation> {
                 String.valueOf(vacation.getDepartureDate())};
 
 
-        result = tableManager.updateData(set , values, whereFields,whereValues);
+        result = tableManager.updateData(set, values, whereFields, whereValues);
         setChanged();
         notifyObservers(result);
     }
@@ -65,25 +65,12 @@ public class VacationModel extends ACRUDModel<Vacation> {
     public List<Vacation> readDataFromDB(String[][] parameters) {
         //TODO - implement --> BETTER!
         String selection = parameters[0][0] + " IN (";
-        for (int i=0 ; i < parameters[1].length - 1; i++) {
+        for (int i = 0; i < parameters[1].length - 1; i++) {
             selection += "\"" + parameters[1][i] + "\",";
         }
-        selection += "\"" + parameters[1][parameters[1].length-1] + "\")";
+        selection += "\"" + parameters[1][parameters[1].length - 1] + "\")";
 
         // Get the list of users from the database
-        return tableManager.select(null,selection,null);
+        return tableManager.select(null, selection, null);
     }
-
-    /*@Override
-    public void deleteDataFromDB(String[][] keys) {
-        String where = keys[keys.length - 1][0] + " = " + "\"" + keys[keys.length - 1][1] + "\"";
-        DBResult result = vacationTable.deleteFromTable(where);
-        setChanged();
-        notifyObservers(result);
-    }
-
-    public void deleteVacation(String key){
-        String[][] keys = {{vacationTable.COLUMN_VACATIONTABLE_KEY,key}};
-        deleteDataFromDB(keys);
-    }*/
 }

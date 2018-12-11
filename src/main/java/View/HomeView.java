@@ -67,7 +67,7 @@ public class HomeView extends Observable {
     }
 
     public void setSubsceneIcon(String path) {
-            message_iv.setImage(new Image(path));
+        message_iv.setImage(new Image(path));
     }
 
     /**

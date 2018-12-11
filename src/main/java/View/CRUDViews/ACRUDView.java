@@ -5,7 +5,7 @@ import javafx.fxml.Initializable;
 
 import java.util.Observable;
 
-public abstract class ACRUDView extends Observable implements Initializable{
+public abstract class ACRUDView extends Observable implements Initializable {
 
 
     abstract public void notifyController(Enum_CRUD arg);

@@ -6,7 +6,7 @@ import java.util.List;
 public class MessagesBox {
     private List<Message> messagesList;
 
-    MessagesBox(){
+    MessagesBox() {
         messagesList = new LinkedList<>();
     }
 
@@ -14,7 +14,7 @@ public class MessagesBox {
         return messagesList;
     }
 
-    public void resetMessegeBox(){
+    public void resetMessegeBox() {
         messagesList.clear();
     }
 }

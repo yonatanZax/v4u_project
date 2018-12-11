@@ -13,12 +13,12 @@ public class VacationView {
 
     @FXML
     public void initialize() {
-        buy_btn.setOnAction(event ->  {
+        buy_btn.setOnAction(event -> {
             System.out.println("Buy was clicked");
         });
     }
 
-    public void setVacation(Vacation vacation){
+    public void setVacation(Vacation vacation) {
 
     }
 }

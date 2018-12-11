@@ -10,7 +10,8 @@ public class Purchase {
     private int timestamp;
 
 
-    public Purchase(){}
+    public Purchase() {
+    }
 
     public Purchase(String vacationKey, String sellerKey, String sellerEmail, String buyerKey, String buyerEmail, int timestamp) {
         this.vacationKey = vacationKey;

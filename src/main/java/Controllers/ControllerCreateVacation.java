@@ -25,8 +25,6 @@ public class ControllerCreateVacation extends Observable implements Observer {
 
     public static final String VACATION_ADDED = "vacation_added";
 
-    // Todo - implement here -> DONE
-
     public void showStage() {
         vacationView.price.setText("500");
         vacationView.destination.setText("Spain");
@@ -74,7 +72,7 @@ public class ControllerCreateVacation extends Observable implements Observer {
             if (arg.equals(Enum_CRUD.CREATE)) {
                 if (!checkNumber(vacationView.price.getText())) {
                     vacationView.createVacationSetPriceError(true);
-                } else { // TODO - how do we check the destination (OR NOT)
+                } else {
                     double price = Double.parseDouble(vacationView.price.getText());
 
                     String date = vacationView.departureDate.getValue().getYear() + "" + vacationView.departureDate.getValue().getMonthValue() + "" + vacationView.departureDate.getValue().getDayOfMonth();

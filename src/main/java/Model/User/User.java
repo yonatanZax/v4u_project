@@ -19,7 +19,7 @@ public class User {
         this.birthDate = 2018;
     }
 
-    public User(String userName, String password, String firstName, String lastName, String city, int date){
+    public User(String userName, String password, String firstName, String lastName, String city, int date) {
         this.userName = userName;
         this.password = password;
         this.firstName = firstName;

@@ -17,6 +17,7 @@ public class RequestModel extends ACRUDModel<Request> {
     public RequestModel() {
         super.setTableManager(RequestTable.getInstance());
     }
+
     private VacationModel vacationModel = new VacationModel();
 
     @Override
@@ -34,7 +35,7 @@ public class RequestModel extends ACRUDModel<Request> {
                 RequestTable.COLUMN_REQUESTTABLE_STATUS,
                 RequestTable.COLUMN_REQUESTTABLE_APPROVED,
                 RequestTable.COLUMN_REQUESTTABLE_TIMESTAMP
-                };
+        };
         String[] values = {request.getVacationKey(),
                 request.getSellerKey(),
                 request.getBuyerKey(),
@@ -55,27 +56,27 @@ public class RequestModel extends ACRUDModel<Request> {
     @Override
     public List<Request> readDataFromDB(String[][] parameters) {
         // Todo - implement --> BETTER!!
-            String selection = parameters[0][0] + " IN (";
-            for (int i = 0; i < parameters[1].length - 1; i++) {
-                selection += "\"" + parameters[1][i] + "\",";
-            }
-            selection += "\"" + parameters[1][parameters[1].length - 1] + "\")";
+        String selection = parameters[0][0] + " IN (";
+        for (int i = 0; i < parameters[1].length - 1; i++) {
+            selection += "\"" + parameters[1][i] + "\",";
+        }
+        selection += "\"" + parameters[1][parameters[1].length - 1] + "\")";
 
-            // Get the list of users from the database
-            List<Request> dataList = tableManager.select(null, selection, null);
+        // Get the list of users from the database
+        List<Request> dataList = tableManager.select(null, selection, null);
         return dataList;
     }
 
     public void insertRequestToTable(String vacationKey, String seller) {
         String userName = UserModel.getUserName();
-        Request request = new Request(vacationKey, seller, userName, false, getCurrentTimeStamp(),Request.states[0]);
+        Request request = new Request(vacationKey, seller, userName, false, getCurrentTimeStamp(), Request.states[0]);
         createNewData(request);
     }
 
-    public void finishPurchase(Request request){
-        String[][] requestParameters = {{RequestTable.COLUMN_REQUESTTABLE_VACATIONKEY},{request.getVacationKey()}};
+    public void finishPurchase(Request request) {
+        String[][] requestParameters = {{RequestTable.COLUMN_REQUESTTABLE_VACATIONKEY}, {request.getVacationKey()}};
         List<Request> list = readDataFromDB(requestParameters);
-        for (Request req : list){
+        for (Request req : list) {
             req.setState(Request.states[3]);
             updateTable(req);
         }
@@ -83,18 +84,18 @@ public class RequestModel extends ACRUDModel<Request> {
         updateTable(request);
     }
 
-    public void updateApprovedRequest(Request request){
+    public void updateApprovedRequest(Request request) {
         request.setState(Request.states[1]);
         request.setApproved(true);
         updateTable(request);
-        String[][] vacationParameters = {{VacationTable.COLUMN_VACATIONTABLE_KEY},{request.getVacationKey()}};
+        String[][] vacationParameters = {{VacationTable.COLUMN_VACATIONTABLE_KEY}, {request.getVacationKey()}};
         List<Vacation> vacationList = vacationModel.readDataFromDB(vacationParameters);
         Vacation vacation = vacationList.get(0);
         vacation.setVisible(false);
         vacationModel.updateTable(vacation);
-        String[][] requestParameters = {{RequestTable.COLUMN_REQUESTTABLE_VACATIONKEY},{request.getVacationKey()}};
+        String[][] requestParameters = {{RequestTable.COLUMN_REQUESTTABLE_VACATIONKEY}, {request.getVacationKey()}};
         List<Request> list = readDataFromDB(requestParameters);
-        for (Request req : list){
+        for (Request req : list) {
             req.setState(Request.states[1]);
             updateTable(req);
         }

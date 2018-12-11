@@ -11,9 +11,10 @@ public class Request {
     private int timestamp;
     private String state;
 
-    public static String[] states = {"PENDING","HOLD","SOLD","DENIED"};
+    public static String[] states = {"PENDING", "HOLD", "SOLD", "DENIED"};
 
-    public Request(){}
+    public Request() {
+    }
 
     public Request(String vacationKey, String sellerKey, String buyerKey, boolean approved, int timestamp, String status) {
         this.vacationKey = vacationKey;
@@ -68,7 +69,7 @@ public class Request {
         this.timestamp = timestamp;
     }
 
-    public void setTimestamp(String timestamp){
+    public void setTimestamp(String timestamp) {
         this.timestamp = Integer.valueOf(timestamp);
     }
 

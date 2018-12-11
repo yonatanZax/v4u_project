@@ -9,19 +9,18 @@ import java.util.List;
 import java.util.Map;
 
 
-
 public abstract class ATableManager<T> implements ITableManager<T> {
 
     protected IDBManager db;
     public final String TABLE_NAME;
 
-    protected abstract List<T> transformListMapToList(List<Map<String,String>> listMap);
+    protected abstract List<T> transformListMapToList(List<Map<String, String>> listMap);
+
     protected abstract PreparedStatement getInsertPreparedStatement(T object, Connection connection);
 
 
-
-    protected PreparedStatement getDeletePreparedStatement(String where, Connection connection){
-        String sql = "DELETE FROM "+ TABLE_NAME + " WHERE " +  where ;
+    protected PreparedStatement getDeletePreparedStatement(String where, Connection connection) {
+        String sql = "DELETE FROM " + TABLE_NAME + " WHERE " + where;
         PreparedStatement pstmt;
         if (connection != null) {
             try {
@@ -40,21 +39,14 @@ public abstract class ATableManager<T> implements ITableManager<T> {
     }
 
 
-
-    protected PreparedStatement getUpdatePreparedStatement(String[] set, String[] values, String[] whereFields, String[] whereValues, Connection connection){
+    protected PreparedStatement getUpdatePreparedStatement(String[] set, String[] values, String[] whereFields, String[] whereValues, Connection connection) {
         String sql = "UPDATE " + TABLE_NAME + " SET ";
-        sql += appendSql(set,values);
-        sql += " WHERE " + appendWhereSQL(whereFields,whereValues);
+        sql += appendSql(set, values);
+        sql += " WHERE " + appendWhereSQL(whereFields, whereValues);
         PreparedStatement pstmt = null;
         if (connection != null) {
             try {
                 pstmt = connection.prepareStatement(sql);
-//                for (int i = 0; i < values.length; i++) {
-//                    pstmt.setObject(i+1,values[i]);
-//                }
-//                for (int j = 0; j < whereValues.length; J++ i++) {
-//                    pstmt.setObject(i+1,whereValues[j]);
-//                }
                 return pstmt;
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -68,37 +60,25 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return null;
     }
 
-    private String appendSql(String[] strings,String[] values) {
+    private String appendSql(String[] strings, String[] values) {
         String s = "";
         for (int i = 0; i < strings.length; i++) {
-            s+= strings[i] + " = " + "\"" +values[i] + "\"";
-            if (i<strings.length-1)
-                s+=", ";
+            s += strings[i] + " = " + "\"" + values[i] + "\"";
+            if (i < strings.length - 1)
+                s += ", ";
         }
-//        for (int i = 0; i < strings.length; i++) {
-//            s+= strings[i] + " = ?";
-//            if (i<strings.length-1)
-//                s+=", ";
-//        }
         return s;
     }
 
-    private String appendWhereSQL(String[] whereFields, String[] whereValues){
+    private String appendWhereSQL(String[] whereFields, String[] whereValues) {
         String s = "";
         for (int i = 0; i < whereFields.length; i++) {
-            s+= whereFields[i] + " = " + "\"" + whereValues[i] + "\"";
-            if (i<whereFields.length-1)
-                s+=" AND ";
+            s += whereFields[i] + " = " + "\"" + whereValues[i] + "\"";
+            if (i < whereFields.length - 1)
+                s += " AND ";
         }
-//        for (int i = 0; i < whereFields.length; i++) {
-//            s+= whereFields[i] + " = ?";
-//            if (i<whereFields.length-1)
-//                s+=" AND ";
-//        }
         return s;
     }
-
-
 
 
     protected ATableManager(IDBManager db, String table_name) {
@@ -107,12 +87,6 @@ public abstract class ATableManager<T> implements ITableManager<T> {
 
     }
 
-    /**
-     * @param projection
-     * @param selection
-     * @param orderBy
-     * @return
-     */
     @Override
     public List<T> select(String projection, String selection, String orderBy) {
         String sqlQuery = createSQLSelect(projection, selection, orderBy);
@@ -138,7 +112,7 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         DBResult result = DBResult.NONE;
         Connection connection = db.connect();
         if (connection != null) {
-            PreparedStatement preparedStatement = getUpdatePreparedStatement(set, values, whereFields,whereValues, connection);
+            PreparedStatement preparedStatement = getUpdatePreparedStatement(set, values, whereFields, whereValues, connection);
             if (preparedStatement != null) {
                 try {
                     if (1 == preparedStatement.executeUpdate())
@@ -163,18 +137,18 @@ public abstract class ATableManager<T> implements ITableManager<T> {
     }
 
 
-    protected String getCreateTableSQLString(String[] primaryKeys, String[] foreignKeys, String[] stringFields,String[] intFields, String[] doubleFields) {
-        if(primaryKeys != null) {
+    protected String getCreateTableSQLString(String[] primaryKeys, String[] foreignKeys, String[] stringFields, String[] intFields, String[] doubleFields) {
+        if (primaryKeys != null) {
             String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (\n";
-            for (String str: stringFields)
+            for (String str : stringFields)
                 sql += str + " TEXT NOT NULL,\n";
-            for (String i: intFields)
+            for (String i : intFields)
                 sql += i + " INTEGER NOT NULL,\n";
-            for (String d: doubleFields)
+            for (String d : doubleFields)
                 sql += d + " REAL NOT NULL,\n";
 
             sql += "primary key (";
-            for (String primaryKey: primaryKeys)
+            for (String primaryKey : primaryKeys)
                 sql += primaryKey + ",";
 
             sql = sql.substring(0, sql.length() - 1);
@@ -183,7 +157,7 @@ public abstract class ATableManager<T> implements ITableManager<T> {
                 sql += ',';
 
             // foreign key (house_id) references houses(id),
-            for (String foreignKey: foreignKeys)
+            for (String foreignKey : foreignKeys)
                 sql += "foreign key " + foreignKey + "\n";
 
             sql += "\n);";
@@ -193,9 +167,8 @@ public abstract class ATableManager<T> implements ITableManager<T> {
     }
 
 
-
-    protected DBResult createTable(String[] primaryKeys, String[] foreignKeys, String[] stringFields,String[] intFields, String[] doubleFields){
-        String sql = getCreateTableSQLString(primaryKeys,foreignKeys,stringFields,intFields,doubleFields);
+    protected DBResult createTable(String[] primaryKeys, String[] foreignKeys, String[] stringFields, String[] intFields, String[] doubleFields) {
+        String sql = getCreateTableSQLString(primaryKeys, foreignKeys, stringFields, intFields, doubleFields);
         return db.createTable(sql);
     }
 
@@ -203,24 +176,21 @@ public abstract class ATableManager<T> implements ITableManager<T> {
     public DBResult InsertToTable(T object) {
         DBResult result = DBResult.NONE;
         Connection connection = db.connect();
-        if(connection != null) {
+        if (connection != null) {
             PreparedStatement preparedStatement = getInsertPreparedStatement(object, connection);
-            if(preparedStatement != null){
-                try{
-                    if(1 == preparedStatement.executeUpdate())
+            if (preparedStatement != null) {
+                try {
+                    if (1 == preparedStatement.executeUpdate())
                         result = DBResult.ADDED;
-                }catch (SQLException e){
-                    /*
-                    errorCode(vendorCode) 19 is: name = SQLITE_CONSTRAINT_PRIMARYKEY, messeage =  A PRIMARY KEY constraint failed.
-                     */
+                } catch (SQLException e) {
                     int errorCode = e.getErrorCode();
                     if (errorCode == 19)
                         result = DBResult.ALREADY_EXIST;
                     else {
-                    e.printStackTrace();
+                        e.printStackTrace();
                         result = DBResult.ERROR;
                     }
-                }finally {
+                } finally {
                     closeStatement(preparedStatement);
                     if (db.closeConnection(connection) != DBResult.CONNECTION_CLOSED)
                         result = DBResult.ERROR;
@@ -256,8 +226,8 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         return result;
     }
 
-    private void closeStatement(Statement statement){
-        if(statement != null) {
+    private void closeStatement(Statement statement) {
+        if (statement != null) {
             try {
                 statement.closeOnCompletion();
             } catch (SQLException e) {
@@ -266,8 +236,8 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         }
     }
 
-    private void closeResultSet(ResultSet rs){
-        if(rs != null ){
+    private void closeResultSet(ResultSet rs) {
+        if (rs != null) {
             try {
                 rs.close();
             } catch (SQLException e) {
@@ -277,17 +247,16 @@ public abstract class ATableManager<T> implements ITableManager<T> {
     }
 
 
-
-    private List<T> getDataList(ResultSet rs){
+    private List<T> getDataList(ResultSet rs) {
         List<T> list = null;
         try {
-            List<Map<String,String>>  mapList = map(rs);
+            List<Map<String, String>> mapList = map(rs);
             closeResultSet(rs);
             rs = null;
             list = transformListMapToList(mapList);
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             closeResultSet(rs);
         }
         return list;
@@ -296,7 +265,7 @@ public abstract class ATableManager<T> implements ITableManager<T> {
 
     private static List<Map<String, String>> map(ResultSet rs) throws SQLException {
         List<Map<String, String>> results = new ArrayList<Map<String, String>>();
-        if(rs != null) {
+        if (rs != null) {
             try {
                 if (rs != null) {
                     ResultSetMetaData meta = rs.getMetaData();
@@ -322,22 +291,21 @@ public abstract class ATableManager<T> implements ITableManager<T> {
     private String createSQLSelect(String projection, String selection, String orderBy) {
         String sqlQuery = "SELECT ";
         // set the projection, if null or empty will auto assign '*'
-        if (projection != null && !projection.equals("")){
+        if (projection != null && !projection.equals("")) {
             sqlQuery += projection + " ";
-        }
-        else{
+        } else {
             sqlQuery += "* ";
         }
 
         sqlQuery += "FROM " + TABLE_NAME + " ";
 
         // set the selection. where selection[i] suppose to refer selectionArgs[i]
-        if(selection != null && selection.length() > 0 ){
+        if (selection != null && selection.length() > 0) {
             sqlQuery += "WHERE " + selection;
         }
 
         //set the Order By
-        if(orderBy != null && orderBy != ""){
+        if (orderBy != null && orderBy != "") {
             sqlQuery += " ORDER BY " + orderBy;
         }
         return sqlQuery;

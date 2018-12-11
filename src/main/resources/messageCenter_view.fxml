@@ -9,41 +9,48 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<?import java.net.URL?>
-<BorderPane xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.MessageCenterView">
-   <center>
-      <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-          <children>
-                <Label prefHeight="40.0" prefWidth="250.0" text="Message Center" underline="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="185.0" AnchorPane.topAnchor="0.0">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="View.MessageCenterView">
+    <center>
+        <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+            <children>
+                <Label prefHeight="40.0" prefWidth="250.0" text="Message Center" underline="true"
+                       AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="185.0" AnchorPane.topAnchor="0.0">
                     <font>
-                        <Font size="29.0" />
+                        <Font size="29.0"/>
                     </font>
                     <padding>
-                        <Insets left="20.0" />
+                        <Insets left="20.0"/>
                     </padding>
                 </Label>
-                <TableView fx:id="messageCenter_tableList" layoutY="43.0" prefHeight="320.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="43.0">
+                <TableView fx:id="messageCenter_tableList" layoutY="43.0" prefHeight="320.0" prefWidth="200.0"
+                           AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                           AnchorPane.topAnchor="43.0">
                     <columns>
-                        <TableColumn fx:id="messageType_col" maxWidth="115.0" minWidth="115.0" prefWidth="115.0" text="Message type" />
-                        <TableColumn fx:id="info_col" minWidth="-1.0" prefWidth="329.0" text="Info" />
+                        <TableColumn fx:id="messageType_col" maxWidth="115.0" minWidth="115.0" prefWidth="115.0"
+                                     text="Message type"/>
+                        <TableColumn fx:id="info_col" minWidth="-1.0" prefWidth="329.0" text="Info"/>
                     </columns>
-               <columnResizePolicy>
-                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
                 </TableView>
-          </children>
-      </AnchorPane>
-   </center>
-   <bottom>
-      <AnchorPane prefHeight="26.0" prefWidth="435.0" BorderPane.alignment="CENTER">
-         <children>
-                  <Button mnemonicParsing="false" visible="false" onAction="#refresh" text="Refresh" wrapText="true" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="8.0" />
-                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#viewConversations" text="View Conversations History" wrapText="true" AnchorPane.bottomAnchor="6.0" AnchorPane.rightAnchor="8.0">
-                      <opaqueInsets>
-                          <Insets />
-                      </opaqueInsets>
-                  </Button>
-         </children>
-      </AnchorPane>
-   </bottom>
+            </children>
+        </AnchorPane>
+    </center>
+    <bottom>
+        <AnchorPane prefHeight="26.0" prefWidth="435.0" BorderPane.alignment="CENTER">
+            <children>
+                <Button mnemonicParsing="false" visible="false" onAction="#refresh" text="Refresh" wrapText="true"
+                        AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="8.0"/>
+                <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#viewConversations"
+                        text="View Conversations History" wrapText="true" AnchorPane.bottomAnchor="6.0"
+                        AnchorPane.rightAnchor="8.0">
+                    <opaqueInsets>
+                        <Insets/>
+                    </opaqueInsets>
+                </Button>
+            </children>
+        </AnchorPane>
+    </bottom>
 </BorderPane>

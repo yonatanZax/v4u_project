@@ -35,7 +35,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
 
-public class ControllerMessageCenter extends Observable implements Observer,SubScenable {
+public class ControllerMessageCenter extends Observable implements Observer, SubScenable {
 
     MessageCenterView messageCenterView;
 
@@ -75,15 +75,12 @@ public class ControllerMessageCenter extends Observable implements Observer,SubS
         fillTableList();
     }
 
-    // todo - cant send PURCHASE REQUEST TWICE.. need to be checked!!!!!
-    // todo - change table list colours to be different than the search list (home page)
-
     private void fillTableList() {
         messageModel.checkIfApprovalDue();
         messageModel.setMessagesForUser();
-        List<Pair<Message,String[]>> messagesParameters = messageModel.createMessageParametersForController();
+        List<Pair<Message, String[]>> messagesParameters = messageModel.createMessageParametersForController();
         ObservableList<ListMessageContent> data = FXCollections.observableArrayList();
-        for (Pair<Message,String[]> parameter : messagesParameters){
+        for (Pair<Message, String[]> parameter : messagesParameters) {
             ListMessageContent messageContent = new ListMessageContent(parameter.getValue()[0], parameter.getValue()[1], parameter.getKey());
             data.add(messageContent);
         }
@@ -99,7 +96,7 @@ public class ControllerMessageCenter extends Observable implements Observer,SubS
         alert.showAndWait();
     }
 
-    private String confirmPaymentPurchase(){
+    private String confirmPaymentPurchase() {
         Dialog<Pair<String, String>> dialog = new Dialog<>();
         dialog.setTitle("Real PayPal Login");
 
@@ -112,8 +109,8 @@ public class ControllerMessageCenter extends Observable implements Observer,SubS
         gridPane.setPadding(new Insets(20, 150, 10, 10));
 
         TextField account = new TextField();
-        account.setText(messageModel.getUserName()+ "@RealPayPalAccount.com");
-        PasswordField password= new PasswordField();
+        account.setText(messageModel.getUserName() + "@RealPayPalAccount.com");
+        PasswordField password = new PasswordField();
         password.setText("Password");
 
         gridPane.add(new Label("PayPal account:"), 0, 0);
@@ -140,42 +137,31 @@ public class ControllerMessageCenter extends Observable implements Observer,SubS
 
     }
 
-    private String confirmPurchase(){
-        TextInputDialog dialog = new TextInputDialog(messageModel.getUserName()+ "@RealPayPalAccount.com");
+    private String confirmPurchase() {
+        TextInputDialog dialog = new TextInputDialog(messageModel.getUserName() + "@RealPayPalAccount.com");
         dialog.setResizable(true);
         dialog.setTitle("Confirm Purchase");
         dialog.setHeaderText("Do you wish to confirm purchase for this seller?");
         dialog.setContentText("Please enter your payPal account to receive payment:");
 // Traditional way to get the response value.
         Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()){
+        if (result.isPresent()) {
             return result.get();
         }
         return "";
     }
 
-    public void confirmDialog(String message) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation Dialog");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK) {
-            // ... user chose OK
-        }
-    }
 
     @Override
     public void update(Observable o, Object arg) {
         if (o.equals(messageCenterView)) {
             if (arg.equals("history")) {
                 informationDialog("This process is still under construction...");
-            } else if (arg.equals(REQUEST_PICKED)){
+            } else if (arg.equals(REQUEST_PICKED)) {
                 pickedRequest = messageCenterView.getPickedRequest();
-                if (pickedRequest.getSellerKey().equals(messageModel.getUserName())){
+                if (pickedRequest.getSellerKey().equals(messageModel.getUserName())) {
                     String paymentAccount = confirmPurchase();
-                    if (!paymentAccount.equals("")){
+                    if (!paymentAccount.equals("")) {
                         initPurchase(paymentAccount);
                         fillTableList();
                     }
@@ -190,8 +176,8 @@ public class ControllerMessageCenter extends Observable implements Observer,SubS
         }
     }
 
-    private void updatePurchase(String buyerPaymentAccount){
-        String[][] parameters = {{PurchaseTable.COLUMN_PURCHASETABLE_VACATIONKEY},{pickedRequest.getVacationKey()}};
+    private void updatePurchase(String buyerPaymentAccount) {
+        String[][] parameters = {{PurchaseTable.COLUMN_PURCHASETABLE_VACATIONKEY}, {pickedRequest.getVacationKey()}};
         List<Purchase> purchaseList = purchaseModel.readDataFromDB(parameters); // todo - read worng data (in table data is different) - need fix
         Purchase purchase = purchaseList.get(0);
         purchase.setBuyerEmail(buyerPaymentAccount);
@@ -201,17 +187,16 @@ public class ControllerMessageCenter extends Observable implements Observer,SubS
         // DEMO FOR PAYPAL API USAGE
 
         paypalAPI = PaypalTable.getInstance();
-//        String transactionId = String.valueOf((int)(Math.random() * 10000000 + 1));
         String sellerAccount = purchase.getSellerEmail();
-        String[][] vacationParameters = {{VacationTable.COLUMN_VACATIONTABLE_KEY},{purchase.getVacationKey()}};
+        String[][] vacationParameters = {{VacationTable.COLUMN_VACATIONTABLE_KEY}, {purchase.getVacationKey()}};
         List<Vacation> vacationList = vacationModel.readDataFromDB(vacationParameters);
         Double amount = vacationList.get(0).getPrice();
-        PaypalPayment payment = new PaypalPayment(null,buyerPaymentAccount,sellerAccount,amount);
+        PaypalPayment payment = new PaypalPayment(null, buyerPaymentAccount, sellerAccount, amount);
         paypalAPI.InsertToTable(payment); // todo - not inserting
     }
 
     private void initPurchase(String paymentAccount) {
-        purchaseModel.insertPurchaseToTable(pickedRequest.getVacationKey(),pickedRequest.getSellerKey(),paymentAccount,pickedRequest.getBuyerKey());
+        purchaseModel.insertPurchaseToTable(pickedRequest.getVacationKey(), pickedRequest.getSellerKey(), paymentAccount, pickedRequest.getBuyerKey());
         requestModel.updateApprovedRequest(pickedRequest);
     }
 

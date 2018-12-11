@@ -1,6 +1,6 @@
 package db;
 
-public enum DBResult{
+public enum DBResult {
     // General:
     NONE,
     ERROR,

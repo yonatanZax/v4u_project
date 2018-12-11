@@ -5,12 +5,13 @@ import db.Managers.IDBManager;
 
 import java.sql.*;
 
-public class PayPalDBManager implements IDBManager{
+public class PayPalDBManager implements IDBManager {
 
     protected static final String DATABASE = "paypal.db";
     protected static final String PATH_DB = "jdbc:sqlite:" + System.getProperty("user.dir") + "/db/" + DATABASE;
 
-    public PayPalDBManager(){}
+    public PayPalDBManager() {
+    }
 
     private DBResult createDatabase() {
         DBResult result = DBResult.NONE;
@@ -36,7 +37,7 @@ public class PayPalDBManager implements IDBManager{
     public DBResult createTable(String sql) {
         DBResult result = DBResult.NONE;
         Connection conn = connect();
-        if(conn != null && sql != null) {
+        if (conn != null && sql != null) {
             try {
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 // createUser a new table
@@ -53,7 +54,6 @@ public class PayPalDBManager implements IDBManager{
         }
         return result;
     }
-
 
 
     public Connection connect() {

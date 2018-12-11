@@ -31,74 +31,74 @@ public class UserDetailsView extends Observable implements Initializable {
 
     private static final String result_lblTitle = "Info from DB:\t";
 
-    public void setUserName(String userName){
+    public void setUserName(String userName) {
         userName_textInput.setText(userName);
     }
 
-    public String getUserName(){
+    public String getUserName() {
         return userName_textInput.getText().trim();
     }
 
-    public void setPassword(String password){
+    public void setPassword(String password) {
         password_textInput.setText(password);
     }
 
-    public String getPassword(){
+    public String getPassword() {
         return password_textInput.getText().trim();
     }
 
-    public void setFirstName(String firstName){
+    public void setFirstName(String firstName) {
         firstName_textInput.setText(firstName);
     }
 
-    public String getFirstName(){
+    public String getFirstName() {
         return firstName_textInput.getText().trim();
     }
 
-    public void setLastName(String lastNameName){
+    public void setLastName(String lastNameName) {
         lastName_textInput.setText(lastNameName);
     }
 
-    public String getLastName(){
+    public String getLastName() {
         return lastName_textInput.getText().trim();
     }
 
-    public void setCityName(String cityName){
+    public void setCityName(String cityName) {
         city_textInput.setText(cityName);
     }
 
-    public String getCityName(){
+    public String getCityName() {
         return city_textInput.getText().trim();
     }
 
 
-    private int convertDateFromStringToInt(String dateAsString){
+    private int convertDateFromStringToInt(String dateAsString) {
         int day = Integer.valueOf(dateAsString.substring(dateAsString.length() - 2, dateAsString.length()));
         int month = Integer.valueOf(dateAsString.substring(dateAsString.length() - 4, dateAsString.length() - 2));
-        int year =  Integer.valueOf(dateAsString.substring(0, dateAsString.length() - 4));
+        int year = Integer.valueOf(dateAsString.substring(0, dateAsString.length() - 4));
 
-        return year*10000 + month*100 + day;
+        return year * 10000 + month * 100 + day;
     }
 
-    public void setBirthdate(String birthdate){
+    public void setBirthdate(String birthdate) {
         int day = Integer.valueOf(birthdate.substring(birthdate.length() - 2, birthdate.length()));
         int month = Integer.valueOf(birthdate.substring(birthdate.length() - 4, birthdate.length() - 2));
-        int year =  Integer.valueOf(birthdate.substring(0, birthdate.length() - 4));
+        int year = Integer.valueOf(birthdate.substring(0, birthdate.length() - 4));
         LocalDate localDate = LocalDate.of(year, month, day);
         create_datePicker.setValue(localDate);
     }
 
-    public LocalDate getBirthday(){
+    public LocalDate getBirthday() {
         return create_datePicker.getValue();
     }
 
-    public void setResult_lbl(String message){
-        if(message != null)
+    public void setResult_lbl(String message) {
+        if (message != null)
             result_lbl.setText(result_lblTitle + message);
     }
 
 
-    public void saveInfo(){
+    public void saveInfo() {
         System.out.println("UserDetailsView: saveInfo");
         setChanged();
         notifyObservers("saveInfo");
@@ -107,13 +107,13 @@ public class UserDetailsView extends Observable implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        create_datePicker.setDayCellFactory(create_datePicker-> new DateCell(){
+        create_datePicker.setDayCellFactory(create_datePicker -> new DateCell() {
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
                 LocalDate today = LocalDate.now();
                 LocalDate today18 = today.minusYears(18);
 
-                setDisable(empty || date.compareTo(today18) > 0 );
+                setDisable(empty || date.compareTo(today18) > 0);
             }
         });
 
@@ -125,7 +125,7 @@ public class UserDetailsView extends Observable implements Initializable {
         });
     }
 
-    public void resetAll(){
+    public void resetAll() {
         userName_textInput.setText("");
         password_textInput.setText("");
         firstName_textInput.setText("");

@@ -25,13 +25,12 @@ public class VacationCRUDView extends ACRUDView {
         price.setText("500");
         destination.setText("Spain");
         departureDate.setValue(LocalDate.now().plusDays(1));
-        departureDate.setDayCellFactory(create_datePicker-> new DateCell(){
+        departureDate.setDayCellFactory(create_datePicker -> new DateCell() {
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
                 LocalDate today = LocalDate.now();
-//                LocalDate today18 = today.minusYears(18);
 
-                setDisable(empty || date.compareTo(today) < 0 );
+                setDisable(empty || date.compareTo(today) < 0);
             }
         });
     }

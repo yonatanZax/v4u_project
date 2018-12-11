@@ -17,10 +17,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 
-/**
-
- */
-public class VacationSearchController extends Observable implements Observer,SubScenable {
+public class VacationSearchController extends Observable implements Observer, SubScenable {
 
     private VacationSearchView myView;
     private VacationModel vacationModel = new VacationModel();
@@ -45,16 +42,16 @@ public class VacationSearchController extends Observable implements Observer,Sub
 
     }
 
-    public Parent getRoot(){
+    public Parent getRoot() {
         return root;
     }
 
-    public void updateSubScene(){
+    public void updateSubScene() {
         List<Vacation> vacationList = vacationModel.getAllData();
         myView.setVacations_listview(vacationList);
     }
 
-    private void vacationPicked(){
+    private void vacationPicked() {
         Alert alert = new Alert(Alert.AlertType.NONE);
         alert.setTitle("Confirmation Dialog");
         alert.setHeaderText(null);
@@ -70,8 +67,8 @@ public class VacationSearchController extends Observable implements Observer,Sub
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == buttonTypeOK) {
-            updateSubScene();
             // ... user chose OK
+            updateSubScene();
 
             setChanged();
             notifyObservers(SEND_VACATION_PURCHASE_REQUEST);
@@ -83,7 +80,7 @@ public class VacationSearchController extends Observable implements Observer,Sub
 
     }
 
-    private void informationDialog(String title, String header, String content){
+    private void informationDialog(String title, String header, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(header);
@@ -92,15 +89,15 @@ public class VacationSearchController extends Observable implements Observer,Sub
         alert.showAndWait();
     }
 
-    public String getVacationPickedKey(){
-        if (pickedVacation != null){
+    public String getVacationPickedKey() {
+        if (pickedVacation != null) {
             return pickedVacation.getVacationKey();
         }
         return null;
     }
 
-    public String getVacationPickedSeller(){
-        if (pickedVacation != null){
+    public String getVacationPickedSeller() {
+        if (pickedVacation != null) {
             return pickedVacation.getSellerKey();
         }
         return null;
@@ -108,35 +105,32 @@ public class VacationSearchController extends Observable implements Observer,Sub
 
     @Override
     public void update(Observable o, Object arg) {
-        if (o == myView){
-            if (arg.equals(VACATION_PICKED)){
+        if (o == myView) {
+            if (arg.equals(VACATION_PICKED)) {
                 if (UserModel.isLoggedIn()) {
                     pickedVacation = myView.getPickedVacation();
-                    if (pickedVacation.getSellerKey().equals(UserModel.getUserName())){
-                        informationDialog("Not Relevant for You",null, "Why would you want to buy your own vacation?!");
-                    }else {
-                        if (checkIfAlreadyRequested()){
-                            informationDialog("Request Already Made",null, "You already sent a request for this vacation");
+                    if (pickedVacation.getSellerKey().equals(UserModel.getUserName())) {
+                        informationDialog("Not Relevant for You", null, "Why would you want to buy your own vacation?!");
+                    } else {
+                        if (checkIfAlreadyRequested()) {
+                            informationDialog("Request Already Made", null, "You already sent a request for this vacation");
                         } else {
                             vacationPicked();
                         }
                     }
-                }
-                else {
+                } else {
                     Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                     errorAlert.setHeaderText("You are NOT Logged in!");
                     errorAlert.setContentText("Only Registered User can file a request to buy a vacation.");
                     errorAlert.showAndWait();
                 }
-            }
-            else if (arg.equals(BTN_ADD)){
+            } else if (arg.equals(BTN_ADD)) {
                 setChanged();
                 notifyObservers(BTN_ADD);
             }
         }
     }
 
-    // todo - read from requestTable with multiple arguments
     private boolean checkIfAlreadyRequested() {
         return false;
     }

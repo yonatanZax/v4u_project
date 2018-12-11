@@ -27,14 +27,14 @@ public class UserTable extends ATableManager<User> {
 
     // Singleton
     public static UserTable getInstance() {
-        if(ourInstance == null) {
+        if (ourInstance == null) {
             ourInstance = new UserTable();
         }
         return ourInstance;
     }
 
     private UserTable() {
-        super(DBManager.getInstance(),"userInfo");
+        super(DBManager.getInstance(), "userInfo");
         createTable();
     }
 
@@ -42,32 +42,32 @@ public class UserTable extends ATableManager<User> {
     protected List<User> transformListMapToList(List<Map<String, String>> listMap) {
 
         List<User> list = new ArrayList<>(listMap.size());
-        for(Map<String,String> map : listMap){
+        for (Map<String, String> map : listMap) {
             User user = new User();
-            for(Map.Entry<String,String> entry : map.entrySet()){
+            for (Map.Entry<String, String> entry : map.entrySet()) {
                 String key = entry.getKey();
-                switch (key){
+                switch (key) {
                     case COLUMN_USERTABLE_BIRTHDAY:
                         String dateString = entry.getValue();
                         int dateAsInt = Integer.parseInt(dateString);
                         user.setBirthDate(dateAsInt);
                         break;
                     case COLUMN_USERTABLE_CITY:
-                        user.setCity( entry.getValue());
+                        user.setCity(entry.getValue());
                         break;
 
                     case COLUMN_USERTABLE_FIRST_NAME:
-                        user.setFirstName( entry.getValue());
+                        user.setFirstName(entry.getValue());
                         break;
                     case COLUMN_USERTABLE_LAST_NAME:
-                        user.setLastName( entry.getValue());
+                        user.setLastName(entry.getValue());
 
                         break;
                     case COLUMN_USERTABLE_KEY:
-                        user.setUserName( entry.getValue());
+                        user.setUserName(entry.getValue());
                         break;
                     case COLUMN_USERTABLE_PASS:
-                        user.setPassword( entry.getValue());
+                        user.setPassword(entry.getValue());
                         //TODO (Keep for Part1) - delete this, we don't want to return password never
 
                         break;
@@ -78,7 +78,6 @@ public class UserTable extends ATableManager<User> {
         }
         return list;
     }
-
 
 
     @Override
@@ -108,18 +107,15 @@ public class UserTable extends ATableManager<User> {
     }
 
 
-
-
     @Override
     public DBResult createTable() {
         String[] primaryKeys = {COLUMN_USERTABLE_KEY};
         String[] foreignKeys = {};
-        String[] stringFields = {COLUMN_USERTABLE_KEY,COLUMN_USERTABLE_PASS,COLUMN_USERTABLE_FIRST_NAME,COLUMN_USERTABLE_LAST_NAME,COLUMN_USERTABLE_CITY};
+        String[] stringFields = {COLUMN_USERTABLE_KEY, COLUMN_USERTABLE_PASS, COLUMN_USERTABLE_FIRST_NAME, COLUMN_USERTABLE_LAST_NAME, COLUMN_USERTABLE_CITY};
         String[] intFields = {COLUMN_USERTABLE_BIRTHDAY};
         String[] doubleFields = {};
-        return super.createTable(primaryKeys, foreignKeys,stringFields,intFields,doubleFields);
+        return super.createTable(primaryKeys, foreignKeys, stringFields, intFields, doubleFields);
     }
-
 
 
 }

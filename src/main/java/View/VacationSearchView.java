@@ -17,7 +17,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Observable;
 
-public class VacationSearchView extends Observable{
+public class VacationSearchView extends Observable {
 
     @FXML
     private TextField destinationField;
@@ -26,19 +26,19 @@ public class VacationSearchView extends Observable{
     public TableView<Vacation> vacations_tableview;
 
     @FXML
-    public TableColumn<Vacation,String> destinationColumn;
+    public TableColumn<Vacation, String> destinationColumn;
 
     @FXML
-    public TableColumn<Vacation,String> originColumn;
+    public TableColumn<Vacation, String> originColumn;
 
     @FXML
-    public TableColumn<Vacation,String> priceColumn;
+    public TableColumn<Vacation, String> priceColumn;
 
     @FXML
-    public TableColumn<Vacation,String> sellerColumn;
+    public TableColumn<Vacation, String> sellerColumn;
 
     @FXML
-    public TableColumn<Vacation,String> departureDateColumn;
+    public TableColumn<Vacation, String> departureDateColumn;
 
     private ObservableList<Vacation> masterData = FXCollections.observableArrayList();
 
@@ -52,7 +52,7 @@ public class VacationSearchView extends Observable{
         vacations_tableview.setRowFactory(tv -> {
             TableRow<Vacation> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
                     Vacation rowData = row.getItem();
                     System.out.println("Vacation picked: " + rowData.getVacationKey());
                     pickedVacation = rowData;
@@ -60,12 +60,12 @@ public class VacationSearchView extends Observable{
                     this.notifyObservers(VacationSearchController.VACATION_PICKED);
                 }
             });
-            return row ;
+            return row;
         });
 
         destinationColumn.setCellValueFactory(cellData -> cellData.getValue().destinationProperty());
         originColumn.setCellValueFactory(cellData -> cellData.getValue().originProperty());
-        priceColumn.setCellValueFactory(cellData -> new SimpleStringProperty("" +cellData.getValue().getPrice()));
+        priceColumn.setCellValueFactory(cellData -> new SimpleStringProperty("" + cellData.getValue().getPrice()));
         sellerColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSellerKey()));
         departureDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty("" + cellData.getValue().getDepartureDate()));
 
@@ -90,7 +90,6 @@ public class VacationSearchView extends Observable{
         });
 
 
-
         // 3. Wrap the FilteredList in a SortedList.
         SortedList<Vacation> sortedData = new SortedList<>(filteredData);
 
@@ -102,10 +101,10 @@ public class VacationSearchView extends Observable{
 
     }
 
-    private boolean predicateForTable(Vacation vacation){
+    private boolean predicateForTable(Vacation vacation) {
         int departureDateInt = vacation.getDepartureDate();
         int todayDateInt = convertDateStringToInt(LocalDate.now().toString());
-        boolean booleanVal =  departureDateInt > todayDateInt;
+        boolean booleanVal = departureDateInt > todayDateInt;
 //        System.out.println("departureDateInt: " + departureDateInt + " , todayDateInt: " + todayDateInt + " , booleanVal: " + booleanVal);
         return vacation.isVisible() && booleanVal;
     }
@@ -115,7 +114,7 @@ public class VacationSearchView extends Observable{
     }
 
 
-    public void addVacationOnAction(){
+    public void addVacationOnAction() {
         setChanged();
         notifyObservers(VacationSearchController.BTN_ADD);
     }
@@ -123,7 +122,7 @@ public class VacationSearchView extends Observable{
 
     public void setVacations_listview(List<Vacation> vacationList) {
         Vacation[] vacations = new Vacation[vacationList.size()];
-        for (int i = 0 ; i < vacations.length ; i++){
+        for (int i = 0; i < vacations.length; i++) {
             vacations[i] = vacationList.get(i);
         }
         masterData.clear();
@@ -131,7 +130,7 @@ public class VacationSearchView extends Observable{
     }
 
     private int convertDateStringToInt(String str) {
-        if(str != null && !str.equals("")){
+        if (str != null && !str.equals("")) {
             String[] tempArr = str.split("-");
             String temp = tempArr[0] + tempArr[1] + tempArr[2];
             return Integer.valueOf(temp);

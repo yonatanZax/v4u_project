@@ -16,16 +16,12 @@ import java.util.Observer;
 public class ControllerLogin extends Observable implements Observer {
 
 
-    // Static Args
     public static final String CONTROLLER_LOGIN_ARGS_LOGGEDIN = "LoggedIn";
 
-
-    // Class variables
     private LoginView loginView;
     private UserModel userModel = new UserModel();
     private ControllerUserCRUD controllerUserCRUD = new ControllerUserCRUD();
 
-    // GUI
     private Stage stage;
     private Parent root;
     private FXMLLoader fxmlLoader;
@@ -47,7 +43,7 @@ public class ControllerLogin extends Observable implements Observer {
     }
 
 
-    public void errorMessageNotLoggedIn(String contentText){
+    public void errorMessageNotLoggedIn(String contentText) {
         Alert errorAlert = new Alert(Alert.AlertType.ERROR);
         errorAlert.setHeaderText("You are NOT Logged in!");
         errorAlert.setContentText(contentText);
@@ -65,13 +61,11 @@ public class ControllerLogin extends Observable implements Observer {
         if (o.equals(loginView) && arg.equals(LoginView.LOGINVIEW_CHECKLOGIN)) {
             String userName = "\"" + loginView.getUserId() + "\"";
             String password = "\"" + loginView.getPassword() + "\"";
-            if (userModel.tryToLogin(userName, password)){
+            if (userModel.tryToLogin(userName, password)) {
                 loginView.closeWindow();
                 setChanged();
                 notifyObservers(CONTROLLER_LOGIN_ARGS_LOGGEDIN);
-            }
-
-            else
+            } else
                 loginView.setErrorMessageVisble(true);
 
 
