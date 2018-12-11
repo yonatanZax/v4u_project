@@ -55,14 +55,14 @@ public class RequestModel extends ACRUDModel<Request> {
     @Override
     public List<Request> readDataFromDB(String[][] parameters) {
         // Todo - implement --> BETTER!!
-        String selection = parameters[0][0] + " IN (";
-        for (int i = 0; i < parameters[1].length - 1; i++) {
-            selection += "\"" + parameters[1][i] + "\",";
-        }
-        selection += "\"" + parameters[1][parameters[1].length - 1] + "\")";
+            String selection = parameters[0][0] + " IN (";
+            for (int i = 0; i < parameters[1].length - 1; i++) {
+                selection += "\"" + parameters[1][i] + "\",";
+            }
+            selection += "\"" + parameters[1][parameters[1].length - 1] + "\")";
 
-        // Get the list of users from the database
-        List<Request> dataList = tableManager.select(null, selection, null);
+            // Get the list of users from the database
+            List<Request> dataList = tableManager.select(null, selection, null);
         return dataList;
     }
 
