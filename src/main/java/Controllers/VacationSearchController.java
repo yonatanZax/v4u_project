@@ -6,27 +6,16 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
 
-import Model.Request.Request;
-import Model.Request.RequestModel;
+
 import Model.User.UserModel;
 import Model.Vacation.Vacation;
 import Model.Vacation.VacationModel;
 import View.VacationSearchView;
-import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.stage.Window;
 
 /**
 
@@ -35,7 +24,6 @@ public class VacationSearchController extends Observable implements Observer,Sub
 
     private VacationSearchView myView;
     private VacationModel vacationModel = new VacationModel();
-    private RequestModel requestModel = new RequestModel();
     private Parent root;
     private FXMLLoader fxmlLoader;
 
@@ -89,7 +77,6 @@ public class VacationSearchController extends Observable implements Observer,Sub
             updateSubScene();
             // ... user chose OK
 
-            requestModel.insertRequestToTable(pickedVacation.getVacationKey(),pickedVacation.getSellerKey());
             setChanged();
             notifyObservers(SEND_VACATION_PURCHASE_REQUEST);
 
@@ -118,7 +105,7 @@ public class VacationSearchController extends Observable implements Observer,Sub
                     if (pickedVacation.getSellerKey().equals(UserModel.getUserName())){
                         informationDialog("Not Relevant for You",null, "Why would you want to buy your own vacation?!");
                     }else {
-                        if (checkIfAlreadyResquested()){
+                        if (checkIfAlreadyRequested()){
                             informationDialog("Request Already Made",null, "You already sent a request for this vacation");
                         } else {
                             vacationPicked();
@@ -140,7 +127,7 @@ public class VacationSearchController extends Observable implements Observer,Sub
     }
 
     // todo - read from requestTable with multiple arguments
-    private boolean checkIfAlreadyResquested() {
+    private boolean checkIfAlreadyRequested() {
         return false;
     }
 }
