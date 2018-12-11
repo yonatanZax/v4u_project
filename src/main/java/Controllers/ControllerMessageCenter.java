@@ -190,22 +190,22 @@ public class ControllerMessageCenter extends Observable implements Observer,SubS
 
     private void updatePurchase(String buyerPaymentAccount){
         String[][] parameters = {{PurchaseTable.COLUMN_PURCHASETABLE_VACATIONKEY},{pickedRequest.getVacationKey()}};
-        List<Purchase> purchaseList = purchaseModel.readDataFromDB(parameters);
+        List<Purchase> purchaseList = purchaseModel.readDataFromDB(parameters); // todo - read worng data (in table data is different) - need fix
         Purchase purchase = purchaseList.get(0);
         purchase.setBuyerEmail(buyerPaymentAccount);
-        purchaseModel.updateTable(purchase);
+        purchaseModel.updateTable(purchase); // // todo - not updating data (in table data is different) - need fix
         requestModel.finishPurchase(pickedRequest);
 
         // DEMO FOR PAYPAL API USAGE
 
         paypalAPI = PaypalTable.getInstance();
-        String transactionId = String.valueOf((int)(Math.random() * 10000000 + 1));
+//        String transactionId = String.valueOf((int)(Math.random() * 10000000 + 1));
         String sellerAccount = purchase.getSellerEmail();
         String[][] vacationParameters = {{VacationTable.COLUMN_VACATIONTABLE_KEY},{purchase.getVacationKey()}};
         List<Vacation> vacationList = vacationModel.readDataFromDB(vacationParameters);
         Double amount = vacationList.get(0).getPrice();
-        PaypalPayment payment = new PaypalPayment(transactionId,buyerPaymentAccount,sellerAccount,amount);
-        // todo - insert payment to PAYPAL TABLE
+        PaypalPayment payment = new PaypalPayment(null,buyerPaymentAccount,sellerAccount,amount);
+        paypalAPI.InsertToTable(payment); // todo - not inserting
     }
 
     private void initPurchase(String paymentAccount) {
