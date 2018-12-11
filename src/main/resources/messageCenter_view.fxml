@@ -47,6 +47,6 @@
       </AnchorPane>
    </bottom>
     <stylesheets>
-        <URL value="@mainStyle.css" />
+        <URL value="@messageCenter.css" />
     </stylesheets>
 </BorderPane>
