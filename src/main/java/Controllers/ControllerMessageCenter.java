@@ -69,10 +69,10 @@ public class ControllerMessageCenter extends Observable implements Observer,SubS
     }
 
     // todo - cant send PURCHASE REQUEST TWICE.. need to be checked!!!!!
-    // TODO - IF THE PAYMENT DIDN'T HAPPEN IN 48 HOURS --> ALL THE SAME REQUESTS RETURN TO STATUS --> PENDING
     // todo - change table list colours to be different than the search list (home page)
 
     private void fillTableList() {
+        messageModel.checkIfApprovalDue();
         messageModel.setMessagesForUser();
         List<Pair<Message,String[]>> messagesParameters = messageModel.createMessageParametersForController();
         ObservableList<ListMessageContent> data = FXCollections.observableArrayList();
@@ -134,7 +134,7 @@ public class ControllerMessageCenter extends Observable implements Observer,SubS
     }
 
     private String confirmPurchase(){
-        TextInputDialog dialog = new TextInputDialog(messageModel.getUserName()+ "@RealPaypalAccount.com");
+        TextInputDialog dialog = new TextInputDialog(messageModel.getUserName()+ "@RealPayPalAccount.com");
         dialog.setResizable(true);
         dialog.setTitle("Confirm Purchase");
         dialog.setHeaderText("Do you wish to confirm purchase for this seller?");

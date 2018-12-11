@@ -6,6 +6,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
 
+import Model.Request.Request;
 import Model.Request.RequestModel;
 import Model.User.UserModel;
 import Model.Vacation.Vacation;
@@ -87,8 +88,6 @@ public class VacationSearchController extends Observable implements Observer,Sub
         if (result.get() == buttonTypeOK) {
             updateSubScene();
             // ... user chose OK
-            // TODO - create a purchase request
-            // TODO - show a message in the status bar
 
             requestModel.insertRequestToTable(pickedVacation.getVacationKey(),pickedVacation.getSellerKey());
             setChanged();
@@ -116,11 +115,14 @@ public class VacationSearchController extends Observable implements Observer,Sub
             if (arg.equals(VACATION_PICKED)){
                 if (UserModel.isLoggedIn()) {
                     pickedVacation = myView.getPickedVacation();
-                    // todo - SELLER CAN'T PURCHASE HIS OWN VACATION!!!! - DONE
                     if (pickedVacation.getSellerKey().equals(UserModel.getUserName())){
                         informationDialog("Not Relevant for You",null, "Why would you want to buy your own vacation?!");
                     }else {
-                        vacationPicked();
+                        if (checkIfAlreadyResquested()){
+                            informationDialog("Request Already Made",null, "You already sent a request for this vacation");
+                        } else {
+                            vacationPicked();
+                        }
                     }
                 }
                 else {
@@ -130,11 +132,15 @@ public class VacationSearchController extends Observable implements Observer,Sub
                     errorAlert.showAndWait();
                 }
             }
-            // todo Done - auto update list after vacation added to DB
             else if (arg.equals(BTN_ADD)){
                 setChanged();
                 notifyObservers(BTN_ADD);
             }
         }
+    }
+
+    // todo - read from requestTable with multiple arguments
+    private boolean checkIfAlreadyResquested() {
+        return false;
     }
 }
