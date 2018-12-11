@@ -1,0 +1,48 @@
+.root {
+    display: block;
+    -fx-background-color: lightsteelblue;
+}
+.fontStyle{
+    -fx-font-size: 25;
+    -fx-font-family: "Times New Roman";
+}
+
+.label{
+    -fx-text-fill: Black;
+}
+
+
+
+.tool-bar{
+    -fx-background-color: rgba(43, 71, 103, 0.51);
+}
+
+
+.borders{
+    -fx-border-color: rgba(64, 111, 162, 0.51);
+    -fx-border-style: solid;
+    -fx-border-width: 4;
+    -fx-border-insets: -5;
+}
+
+.button {
+    -fx-background-color: #090a0c,
+            linear-gradient(#546370 0%, #424d58 20%, #313842 100%),
+            linear-gradient(#505f6c, #3d4653),
+            radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-background-radius: 5,4,3,5;
+    -fx-background-insets: 0,1,2,0;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+
+.button:pressed {
+    -fx-background-color: #090a0c,
+    linear-gradient(#3a454e 0%, #2c343b 20%, #16191e 100%),
+    linear-gradient(#353e47, #2b313a),
+    radial-gradient(center 50% 0%, radius 100%, rgba(94, 108, 122, 0.9), rgba(137, 137, 137, 0));
+    -fx-background-radius: 5,4,3,5;
+    -fx-background-insets: 0,1,2,0;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}

@@ -13,7 +13,6 @@ import java.util.ResourceBundle;
 
 public class VacationCRUDView extends ACRUDView {
 
-
     public TextField price;
     public TextField destination;
     public Button cancel_btn;
