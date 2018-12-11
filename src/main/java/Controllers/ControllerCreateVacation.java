@@ -10,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -73,7 +74,11 @@ public class ControllerCreateVacation extends Observable implements Observer {
                     vacationView.createVacationSetPriceError(true);
                 } else { // TODO - how do we check the destination (OR NOT)
                     double price = Double.parseDouble(vacationView.price.getText());
-                    vacationModel.insertVacationToTable(vacationView.destination.getText(), price);
+
+                    String date = vacationView.departureDate.getValue().getYear() + "" + vacationView.departureDate.getValue().getMonthValue() + "" + vacationView.departureDate.getValue().getDayOfMonth();
+
+                    int departureDate = Integer.parseInt(date);
+                    vacationModel.insertVacationToTable(vacationView.destination.getText(), price, departureDate);
                     System.out.println("ControllerCreateVacation: update by vacationModel");
                     System.out.println("ControllerCreateVacation: " + vacationModel.getUserName() + " registered vacation to " + vacationView.destination.getText());
                     vacationView.closeWindow();
@@ -86,6 +91,8 @@ public class ControllerCreateVacation extends Observable implements Observer {
                 showAlertWithoutHeaderText(title, content);
             }
         }
+
     }
+
 }
 

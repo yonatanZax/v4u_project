@@ -23,6 +23,7 @@ public class VacationTable extends ATableManager<Vacation> {
     public static final String COLUMN_VACATIONTABLE_VISIBLE = "visible";
     public static final String COLUMN_VACATIONTABLE_DESTINATION = "destination";
     public static final String COLUMN_VACATIONTABLE_ORIGIN = "origin";
+    public static final String COLUMN_VACATIONTABLE_DEPARTUREDATE = "departure_date";
     public static final String COLUMN_VACATIONTABLE_TIMESTAMP = "timestamp";
 
     // Todo - add more columns
@@ -46,7 +47,7 @@ public class VacationTable extends ATableManager<Vacation> {
         String[] primaryKeys = {COLUMN_VACATIONTABLE_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT"};
         String[] foreignKeys = {FOREIGNKEY_SELLERKEY};
         String[] stringFields = {COLUMN_VACATIONTABLE_SELLERKEY, COLUMN_VACATIONTABLE_ORIGIN, COLUMN_VACATIONTABLE_DESTINATION, COLUMN_VACATIONTABLE_VISIBLE};
-        String[] intFields = {COLUMN_VACATIONTABLE_TIMESTAMP};
+        String[] intFields = {COLUMN_VACATIONTABLE_TIMESTAMP,COLUMN_VACATIONTABLE_DEPARTUREDATE};
         String[] doubleFields = {COLUMN_VACATIONTABLE_PRICE};
         return super.createTable(primaryKeys, foreignKeys, stringFields, intFields, doubleFields);
     }
@@ -116,6 +117,11 @@ public class VacationTable extends ATableManager<Vacation> {
                     case COLUMN_VACATIONTABLE_PRICE:
                         vacation.setPrice(Double.parseDouble(entry.getValue()));
                         break;
+                    case COLUMN_VACATIONTABLE_DEPARTUREDATE:
+                        String departureDateAsString = entry.getValue();
+                        int departureDateAsInt = Integer.parseInt(departureDateAsString);
+                        vacation.setDepartureDate(departureDateAsInt);
+                        break;
                 }
 
             }
@@ -151,8 +157,9 @@ public class VacationTable extends ATableManager<Vacation> {
                 + "," + COLUMN_VACATIONTABLE_DESTINATION
                 + "," + COLUMN_VACATIONTABLE_VISIBLE
                 + "," + COLUMN_VACATIONTABLE_TIMESTAMP
+                + "," + COLUMN_VACATIONTABLE_DEPARTUREDATE
                 + "," + COLUMN_VACATIONTABLE_PRICE
-                + ") VALUES(?,?,?,?,?,?,?)";
+                + ") VALUES(?,?,?,?,?,?,?,?)";
         PreparedStatement pstmt = null;
         if (connection != null) {
             try {
@@ -163,7 +170,8 @@ public class VacationTable extends ATableManager<Vacation> {
                 pstmt.setString(4, object.getDestination());
                 pstmt.setString(5, object.isVisible()+"");
                 pstmt.setInt(6, object.getTimeStamp());
-                pstmt.setDouble(7,object.getPrice());
+                pstmt.setInt(7,object.getDepartureDate());
+                pstmt.setDouble(8,object.getPrice());
                 return pstmt;
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
