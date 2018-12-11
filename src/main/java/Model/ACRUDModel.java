@@ -33,7 +33,6 @@ public abstract class ACRUDModel<T> extends Observable{
 
 
     public void deleteDataFromDB(String[][] keys) {
-        // Todo - implement
         String where = "";
         for (int i = 0; keys.length > 1 && i < keys.length - 1 ; i++)
             where += keys[i][0] + " = " + "\"" + keys[i][1] + "\"" + " AND \n";

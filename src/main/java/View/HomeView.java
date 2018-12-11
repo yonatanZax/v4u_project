@@ -33,7 +33,7 @@ public class HomeView extends Observable {
     Button login_btn;
 
     @FXML
-    ImageView message_iv;
+    public ImageView message_iv;
 
     @FXML
     Label login_status_lbl;

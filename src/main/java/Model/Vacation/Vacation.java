@@ -5,7 +5,7 @@ import javafx.beans.property.StringProperty;
 
 public class Vacation {
 
-    // Todo - add more fields ( also getters and setters ) - DONE
+
     private StringProperty vacationKey;
     private StringProperty sellerKey;
     private StringProperty origin;

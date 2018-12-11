@@ -52,7 +52,6 @@ public class PurchaseModel extends ACRUDModel<Purchase> {
 
     @Override
     public List<Purchase> readDataFromDB(String[][] parameters) {
-        // Todo - implement
         String selection = parameters[0][0] + " IN (";
         for (int i = 0; i < parameters[1].length - 1; i++) {
             selection += "\"" + parameters[1][i] + "\",";
@@ -66,7 +65,6 @@ public class PurchaseModel extends ACRUDModel<Purchase> {
 
     @Override
     public void deleteDataFromDB(String[][] keys) {
-        // Todo - implement
         String where = "";
         for (int i = 0; i < keys.length - 1 ; i++)
             where += keys[i][0] + " = " + keys[i][1] + "AND \n";

@@ -35,7 +35,7 @@ public class VacationCRUDView extends ACRUDView {
 
     }
 
-    // Todo - implementation in the controller -> DONE
+
     public void handleSubmitButtonAction(ActionEvent event) {
         notifyController(Enum_CRUD.CREATE);
     }
