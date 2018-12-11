@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import org.controlsfx.control.StatusBar?>
 
+<?import java.net.URL?>
 <AnchorPane prefHeight="581.0" prefWidth="758.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.HomeView">
    <children>
       <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="45.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -19,7 +20,7 @@
           <Button fx:id="login_btn" alignment="CENTER" mnemonicParsing="false" onAction="#logInOnAction" prefWidth="70.0" text="Log In" />
                 <ImageView fx:id="message_iv" blendMode="SRC_ATOP" fitHeight="37.0" fitWidth="39.0" onMouseClicked="#messageOnAction" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
-                  <Image url="@images/msg_icon.png" />
+                  <Image url="@images/mailBox.png" />
                </image>
                <viewport>
                   <Rectangle2D />
@@ -37,4 +38,7 @@
       <DecorationPane fx:id="decorationPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="29.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />
       <StatusBar fx:id="status_bar" layoutX="80.0" layoutY="544.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
    </children>
+    <stylesheets>
+        <URL value="@mainStyle.css" />
+    </stylesheets>
 </AnchorPane>

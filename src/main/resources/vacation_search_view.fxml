@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
+<?import java.net.URL?>
 <BorderPane xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.VacationSearchView">
    <center>
       <TableView fx:id="vacations_tableview" prefHeight="334.0" prefWidth="564.0" BorderPane.alignment="CENTER">
@@ -48,4 +49,7 @@
          </padding>
       </AnchorPane>
    </top>
+   <stylesheets>
+      <URL value="@mainStyle.css" />
+   </stylesheets>
 </BorderPane>

@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
+<?import java.net.URL?>
 <BorderPane xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.MessageCenterView">
    <center>
       <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
@@ -36,7 +37,7 @@
    <bottom>
       <AnchorPane prefHeight="26.0" prefWidth="435.0" BorderPane.alignment="CENTER">
          <children>
-                  <Button mnemonicParsing="false" onAction="#refresh" text="Refresh" wrapText="true" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="8.0" />
+                  <Button mnemonicParsing="false" visible="false" onAction="#refresh" text="Refresh" wrapText="true" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="8.0" />
                   <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#viewConversations" text="View Conversations History" wrapText="true" AnchorPane.bottomAnchor="6.0" AnchorPane.rightAnchor="8.0">
                       <opaqueInsets>
                           <Insets />
@@ -45,4 +46,7 @@
          </children>
       </AnchorPane>
    </bottom>
+    <stylesheets>
+        <URL value="@mainStyle.css" />
+    </stylesheets>
 </BorderPane>

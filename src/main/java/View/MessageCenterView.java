@@ -47,7 +47,9 @@ public class MessageCenterView extends Observable {
         });
 
         messageType_col.setCellValueFactory(cellData -> cellData.getValue().messageTypeProperty());
+
         info_col.setCellValueFactory(cellData -> cellData.getValue().infoProperty());
+
     }
 
     public void viewConversations() {

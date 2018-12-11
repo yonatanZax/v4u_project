@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
+<?import java.net.URL?>
 <StackPane id="Login" styleClass="login" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.LoginView">
     <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="270.0" prefWidth="234.0">
         <!-- Prevent AnchorPane so that it's max = pref. This causes it to center in StackPane -->
@@ -25,4 +26,7 @@
         <Button fx:id="cancel" defaultButton="true" layoutX="150.0" layoutY="210.0" onAction="#CancelLogIn" prefHeight="31.0" prefWidth="62.0" text="cancel" />
         <Label fx:id="errorMessage" layoutX="34.0" layoutY="243.0" prefHeight="17.0" prefWidth="172.0" text="Invalid user name or password" textFill="RED" visible="false" />
     </AnchorPane>
+    <stylesheets>
+        <URL value="@mainStyle.css" />
+    </stylesheets>
 </StackPane>

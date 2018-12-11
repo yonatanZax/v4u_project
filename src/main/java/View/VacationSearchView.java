@@ -89,6 +89,8 @@ public class VacationSearchView extends Observable{
             });
         });
 
+
+
         // 3. Wrap the FilteredList in a SortedList.
         SortedList<Vacation> sortedData = new SortedList<>(filteredData);
 

@@ -21,10 +21,11 @@ public class VacationModel extends ACRUDModel<Vacation> {
     }
 
 
-    public void insertVacationToTable(String destination, double price) {
+    public void insertVacationToTable(String destination, double price, int departure) {
         String userName = UserModel.getUserName();
-        Vacation vacation = new Vacation(null, userName, "TLV", destination, true, getCurrentTimeStamp(), price);
+        Vacation vacation = new Vacation(null, userName, "TLV", destination, true, getCurrentTimeStamp(), price, departure);
         createNewData(vacation);
+
     }
 
     @Override
@@ -39,14 +40,16 @@ public class VacationModel extends ACRUDModel<Vacation> {
                 VacationTable.COLUMN_VACATIONTABLE_ORIGIN,
                 VacationTable.COLUMN_VACATIONTABLE_DESTINATION,
                 VacationTable.COLUMN_VACATIONTABLE_TIMESTAMP,
-                VacationTable.COLUMN_VACATIONTABLE_VISIBLE};
+                VacationTable.COLUMN_VACATIONTABLE_VISIBLE,
+                VacationTable.COLUMN_VACATIONTABLE_DEPARTUREDATE};
         String [] values = {vacation.getVacationKey(),
                 vacation.getSellerKey(),
                 String.valueOf(vacation.getPrice()),
                 vacation.getOrigin(),
                 vacation.getDestination(),
                 String.valueOf(vacation.getTimeStamp()),
-                String.valueOf(vacation.isVisible())};
+                String.valueOf(vacation.isVisible()),
+                String.valueOf(vacation.getDepartureDate())};
 
 
         result = tableManager.updateData(set , values, whereFields,whereValues);
