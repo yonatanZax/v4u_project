@@ -8,6 +8,7 @@ import Model.User.User;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -35,6 +36,7 @@ public class ControllerCreateUser implements Observer{
             e.printStackTrace();
         }
         Scene scene = new Scene(root,400,400);
+        stage.getIcons().add(new Image("/images/create.png"));
         stage.setScene(scene);
         myView = fxmlLoader.getController();
 

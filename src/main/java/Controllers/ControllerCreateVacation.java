@@ -2,16 +2,16 @@ package Controllers;
 
 import MainPackage.Enum_CRUD;
 import Model.Vacation.VacationModel;
-import View.CRUDViews.ACRUDView;
 import View.CRUDViews.VacationCRUDView;
-import db.DBResult;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -22,6 +22,8 @@ public class ControllerCreateVacation extends Observable implements Observer {
     private FXMLLoader fxmlLoader;
     public VacationCRUDView vacationView;
     public VacationModel vacationModel = new VacationModel();
+
+    public static final String VACATION_ADDED = "vacation_added";
 
     // Todo - implement here -> DONE
 
@@ -40,6 +42,7 @@ public class ControllerCreateVacation extends Observable implements Observer {
             e.printStackTrace();
         }
         Scene scene = new Scene(root);
+        stage.getIcons().add(new Image("/images/create.png"));
         stage.setScene(scene);
         vacationView = fxmlLoader.getController();
         vacationView.addObserver(this);
@@ -73,10 +76,16 @@ public class ControllerCreateVacation extends Observable implements Observer {
                     vacationView.createVacationSetPriceError(true);
                 } else { // TODO - how do we check the destination (OR NOT)
                     double price = Double.parseDouble(vacationView.price.getText());
-                    vacationModel.insertVacationToTable(vacationView.destination.getText(), price);
+
+                    String date = vacationView.departureDate.getValue().getYear() + "" + vacationView.departureDate.getValue().getMonthValue() + "" + vacationView.departureDate.getValue().getDayOfMonth();
+
+                    int departureDate = Integer.parseInt(date);
+                    vacationModel.insertVacationToTable(vacationView.destination.getText(), price, departureDate);
                     System.out.println("ControllerCreateVacation: update by vacationModel");
                     System.out.println("ControllerCreateVacation: " + vacationModel.getUserName() + " registered vacation to " + vacationView.destination.getText());
                     vacationView.closeWindow();
+                    setChanged();
+                    notifyObservers(VACATION_ADDED);
                 }
             } else {
                 String title = "houston we have a problem";

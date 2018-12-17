@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import java.net.URL?>
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.CRUDViews.UserCRUDView">
    <children>
       <Label text="Welcome">
@@ -82,4 +83,7 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </VBox.margin></Label>
    </children>
+   <stylesheets>
+      <URL value="@mainStyle.css" />
+   </stylesheets>
 </VBox>

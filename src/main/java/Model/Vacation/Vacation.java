@@ -5,7 +5,7 @@ import javafx.beans.property.StringProperty;
 
 public class Vacation {
 
-    // Todo - add more fields ( also getters and setters ) - DONE
+
     private StringProperty vacationKey;
     private StringProperty sellerKey;
     private StringProperty origin;
@@ -13,10 +13,11 @@ public class Vacation {
     private boolean visible;
     private int timeStamp;
     private double price;
+    private int departureDate;
 
     public Vacation() {}
 
-    public Vacation(String vacationKey, String sellerKey, String origin, String destination, boolean visible, int timeStamp, double price) {
+    public Vacation(String vacationKey, String sellerKey, String origin, String destination, boolean visible, int timeStamp, double price, int departureDate) {
         this.vacationKey = new SimpleStringProperty(vacationKey);
         this.sellerKey = new SimpleStringProperty(sellerKey);
         this.price = price;
@@ -24,6 +25,7 @@ public class Vacation {
         this.destination = new SimpleStringProperty(destination);
         this.visible = visible;
         this.timeStamp = timeStamp;
+        this.departureDate = departureDate;
     }
 
     public String getVacationKey() {
@@ -102,11 +104,24 @@ public class Vacation {
         this.price = price;
     }
 
+    public int getDepartureDate() {
+        return departureDate;
+//        TODO - return the departure not the bot number
+//        return 20181230;
+    }
+
+    public void setDepartureDate(int departureDate) {
+        this.departureDate = departureDate;
+    }
+
     @Override
     public String toString(){
         String ans = "VacationDetails:\n";
         ans += "\tDestination: " + this.getDestination() + '\n';
-        ans += "\tPrice: " + price;
+        ans += "\tPrice: " + price + "\n";
+        ans += "\tDeparture Date: " + departureDate + "\n";
         return ans;
     }
+
+
 }

@@ -28,14 +28,19 @@ public class LoginView extends Observable implements Initializable {
     @FXML
     private Label errorMessage;
 
-    // Todo - implement in ControllerLogin - DONE
+    public void resetLoginCredentials(){
+        userId.setText("");
+        password.setText("");
+    }
+
+
     @FXML
     protected void processLogin() {
         setChanged();
         notifyObservers(LOGINVIEW_CHECKLOGIN);
     }
 
-    // Todo - add Create user to "Login" scene - DONE
+
     public void CreateAccount() {
         setChanged();
         notifyObservers(LOGINVIEW_SIGNIN);
@@ -43,8 +48,6 @@ public class LoginView extends Observable implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        userId.setText("user1");
-        password.setText("p");
     }
 
     public void closeWindow(){

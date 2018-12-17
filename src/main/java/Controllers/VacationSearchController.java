@@ -6,25 +6,16 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
 
+
 import Model.User.UserModel;
 import Model.Vacation.Vacation;
 import Model.Vacation.VacationModel;
 import View.VacationSearchView;
-import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.stage.Window;
 
 /**
 
@@ -40,6 +31,7 @@ public class VacationSearchController extends Observable implements Observer,Sub
 
     public static final String BTN_ADD = "add_btn";
     public static final String VACATION_PICKED = "vacation_picked";
+    public static final String SEND_VACATION_PURCHASE_REQUEST = "send_vacation_purchase_request";
 
     public VacationSearchController() {
         fxmlLoader = new FXMLLoader(getClass().getResource("/vacation_search_view.fxml"));
@@ -49,11 +41,7 @@ public class VacationSearchController extends Observable implements Observer,Sub
             e.printStackTrace();
         }
         myView = fxmlLoader.getController();
-
-
         myView.addObserver(this);
-
-        updateSubScene();
 
     }
 
@@ -66,9 +54,7 @@ public class VacationSearchController extends Observable implements Observer,Sub
         myView.setVacations_listview(vacationList);
     }
 
-
     private void vacationPicked(){
-
         Alert alert = new Alert(Alert.AlertType.NONE);
         alert.setTitle("Confirmation Dialog");
         alert.setHeaderText(null);
@@ -86,13 +72,38 @@ public class VacationSearchController extends Observable implements Observer,Sub
         if (result.get() == buttonTypeOK) {
             updateSubScene();
             // ... user chose OK
-            // TODO - create a purchase request
-            // TODO - show a message in the status bar
+
+            setChanged();
+            notifyObservers(SEND_VACATION_PURCHASE_REQUEST);
+
         } else {
             // ... user chose CANCEL or closed the dialog
             updateSubScene();
         }
 
+    }
+
+    private void informationDialog(String title, String header, String content){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+
+        alert.showAndWait();
+    }
+
+    public String getVacationPickedKey(){
+        if (pickedVacation != null){
+            return pickedVacation.getVacationKey();
+        }
+        return null;
+    }
+
+    public String getVacationPickedSeller(){
+        if (pickedVacation != null){
+            return pickedVacation.getSellerKey();
+        }
+        return null;
     }
 
     @Override
@@ -101,7 +112,15 @@ public class VacationSearchController extends Observable implements Observer,Sub
             if (arg.equals(VACATION_PICKED)){
                 if (UserModel.isLoggedIn()) {
                     pickedVacation = myView.getPickedVacation();
-                    vacationPicked();
+                    if (pickedVacation.getSellerKey().equals(UserModel.getUserName())){
+                        informationDialog("Not Relevant for You",null, "Why would you want to buy your own vacation?!");
+                    }else {
+                        if (checkIfAlreadyRequested()){
+                            informationDialog("Request Already Made",null, "You already sent a request for this vacation");
+                        } else {
+                            vacationPicked();
+                        }
+                    }
                 }
                 else {
                     Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -115,5 +134,10 @@ public class VacationSearchController extends Observable implements Observer,Sub
                 notifyObservers(BTN_ADD);
             }
         }
+    }
+
+    // todo - read from requestTable with multiple arguments
+    private boolean checkIfAlreadyRequested() {
+        return false;
     }
 }

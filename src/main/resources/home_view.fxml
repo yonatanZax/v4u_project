@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import impl.org.controlsfx.skin.DecorationPane?>
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
@@ -13,28 +14,31 @@
 <?import org.controlsfx.control.StatusBar?>
 
 <AnchorPane prefHeight="581.0" prefWidth="758.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.HomeView">
-    <children>
-        <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="45.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <items>
-                <Button fx:id="login_btn" alignment="CENTER" mnemonicParsing="false" onAction="#logInOnAction" prefWidth="70.0" text="Log In" />
-                <ImageView fx:id="message_iv" blendMode="SRC_ATOP" fitHeight="37.0" fitWidth="39.0" onMouseClicked="#messageOnAction" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@images/msg_icon.png" />
-                    </image>
-                    <viewport>
-                        <Rectangle2D />
-                    </viewport></ImageView>
-                <Label fx:id="login_status_lbl" prefHeight="21.0" text="Not Signed">
-                    <padding>
-                        <Insets left="20.0" />
-                    </padding></Label>
-            </items>
-            <opaqueInsets>
-                <Insets />
-            </opaqueInsets>
-        </ToolBar>
-        <Pane fx:id="pane" layoutX="179.0" layoutY="351.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="29.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />
-        <DecorationPane fx:id="decorationPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="29.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />
-        <StatusBar fx:id="status_bar" layoutX="80.0" layoutY="544.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-    </children>
+   <children>
+      <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="45.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+          <Button fx:id="login_btn" alignment="CENTER" mnemonicParsing="false" onAction="#logInOnAction" prefWidth="70.0" text="Log In" />
+                <ImageView fx:id="message_iv" blendMode="SRC_ATOP" fitHeight="37.0" fitWidth="39.0" onMouseClicked="#messageOnAction" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@images/mail.png" />
+               </image>
+               <viewport>
+                  <Rectangle2D />
+               </viewport></ImageView>
+            <Label fx:id="login_status_lbl" prefHeight="21.0" text="Not Signed">
+               <padding>
+                  <Insets left="20.0" />
+               </padding></Label>
+        </items>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </ToolBar>
+      <Pane fx:id="pane" layoutX="179.0" layoutY="351.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="29.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />
+      <DecorationPane fx:id="decorationPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="29.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="47.0" />
+      <StatusBar fx:id="status_bar" layoutX="80.0" layoutY="544.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+   </children>
+    <stylesheets>
+        <URL value="@mainStyle.css" />
+    </stylesheets>
 </AnchorPane>
