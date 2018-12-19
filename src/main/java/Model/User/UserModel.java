@@ -64,7 +64,7 @@ public class UserModel extends ACRUDModel<User> {
         String [] whereValues = {user.getUserName()};
         String [] set = {UserTable.COLUMN_USERTABLE_KEY, UserTable.COLUMN_USERTABLE_PASS,
                 UserTable.COLUMN_USERTABLE_FIRST_NAME, UserTable.COLUMN_USERTABLE_LAST_NAME,
-                UserTable.COLUMN_USERTABLE_CITY, UserTable.COLUMN_USERTABLE_BIRTHDAY};
+                UserTable.COLUMN_USERTABLE_CITY, UserTable.COLUMN_USERTABLE_CONTACT_INFO, UserTable.COLUMN_USERTABLE_BIRTHDAY};
         String [] values = {user.getUserName(), user.getPassword(), user.getFirstName(),
                 user.getLastName(), user.getCity(), String.valueOf(user.getBirthDate()), user.getUserName()};
         result = tableManager.updateData(set , values, whereFields,whereValues);

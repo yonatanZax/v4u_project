@@ -71,6 +71,7 @@ public class ControllerCreateUser implements Observer{
         myView.setLastName(user.getLastName());
         myView.setCityName(user.getCity());
         myView.setPassword(user.getPassword());
+        myView.setContactInfo(user.getContactInfo());
         myView.setBirthdate(String.valueOf(user.getBirthDate()));
         myView.addObserver(this);
 
@@ -95,6 +96,7 @@ public class ControllerCreateUser implements Observer{
         newUser.setFirstName(values[2]);
         newUser.setLastName(values[3]);
         newUser.setCity(values[4]);
+        newUser.setContactInfo(values[5]);
         newUser.setBirthDate(date);
         return newUser;
     }
@@ -110,7 +112,8 @@ public class ControllerCreateUser implements Observer{
         String firstName = myView.getFirstName();
         String lastName = myView.getLastName();
         String city = myView.getCityName();
-        String[] values = {userName,password,firstName,lastName,city};
+        String contactInfo = myView.getContactInfo();
+        String[] values = {userName,password,firstName,lastName,city,contactInfo};
 
         int date = 0;
         LocalDate birthDay = myView.getBirthday();

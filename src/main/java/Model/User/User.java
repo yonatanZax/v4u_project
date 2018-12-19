@@ -1,5 +1,7 @@
 package Model.User;
 
+import javafx.beans.property.StringProperty;
+
 import java.sql.Date;
 
 public class User {
@@ -9,6 +11,7 @@ public class User {
     private String lastName;
     private String city;
     private int birthDate;
+    private String contactInfo;
 
     public User() {
         this.userName = null;
@@ -17,15 +20,17 @@ public class User {
         this.lastName = null;
         this.city = null;
         this.birthDate = 2018;
+        this.contactInfo = null;
     }
 
-    public User(String userName, String password, String firstName, String lastName, String city, int date){
+    public User(String userName, String password, String firstName, String lastName, String city, int date, String contactInfo){
         this.userName = userName;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.city = city;
         this.birthDate = date;
+        this.contactInfo = contactInfo;
     }
 
     public void setUserName(String userName) {
@@ -74,6 +79,14 @@ public class User {
 
     public int getBirthDate() {
         return birthDate;
+    }
+
+    public String getContactInfo() {
+        return contactInfo;
+    }
+
+    public void setContactInfo(String contactInfo) {
+        this.contactInfo = contactInfo;
     }
 
 
