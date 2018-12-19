@@ -21,10 +21,10 @@ public class PurchaseTable extends ATableManager<Purchase> {
     private final String FOREIGNKEY_VACATIONKEY = "(" + COLUMN_PURCHASETABLE_VACATIONKEY + ") references vacationInfo(key)";
     public static final String COLUMN_PURCHASETABLE_SELLERKEY = "sellerKey";
     private final String FOREIGNKEY_SELLERKEY = "(" + COLUMN_PURCHASETABLE_SELLERKEY + ") references userInfo(key)";
-    public static final String COLUMN_PURCHASETABLE_SELLEREMAIL = "sellerEmail";
+    public static final String COLUMN_PURCHASETABLE_SELLERINFO = "sellerInfo";
     public static final String COLUMN_PURCHASETABLE_BUYERKEY = "buyerKey";
     private final String FOREIGNKEY_BUYERKEY = "(" + COLUMN_PURCHASETABLE_BUYERKEY + ") references userInfo(key)";
-    public static final String COLUMN_PURCHASETABLE_BUYEREMAIL = "buyerEmail";
+    public static final String COLUMN_PURCHASETABLE_VACATIONKEYEXCHANGE = "vacationKeyToExchange";
     public static final String COLUMN_PURCHASETABLE_TIMESTAMP = "timestamp";
 
 
@@ -68,12 +68,12 @@ public class PurchaseTable extends ATableManager<Purchase> {
                         purchase.setBuyerKey( entry.getValue());
                         break;
 
-                    case COLUMN_PURCHASETABLE_SELLEREMAIL:
-                        purchase.setSellerEmail(entry.getValue());
+                    case COLUMN_PURCHASETABLE_SELLERINFO:
+                        purchase.setSellerInfo(entry.getValue());
                         break;
 
-                    case COLUMN_PURCHASETABLE_BUYEREMAIL:
-                        purchase.setBuyerEmail(entry.getValue());
+                    case COLUMN_PURCHASETABLE_VACATIONKEYEXCHANGE:
+                        purchase.setVacationKey(entry.getValue());
                         break;
 
                 }
@@ -90,7 +90,7 @@ public class PurchaseTable extends ATableManager<Purchase> {
     public DBResult createTable() {
         String[] primaryKeys = {COLUMN_PURCHASETABLE_VACATIONKEY,COLUMN_PURCHASETABLE_SELLERKEY,COLUMN_PURCHASETABLE_BUYERKEY};
         String[] foreignKeys = {FOREIGNKEY_VACATIONKEY,FOREIGNKEY_SELLERKEY,FOREIGNKEY_BUYERKEY};
-        String[] stringFields = {COLUMN_PURCHASETABLE_VACATIONKEY,COLUMN_PURCHASETABLE_SELLERKEY,COLUMN_PURCHASETABLE_SELLEREMAIL,COLUMN_PURCHASETABLE_BUYERKEY,COLUMN_PURCHASETABLE_BUYEREMAIL};
+        String[] stringFields = {COLUMN_PURCHASETABLE_VACATIONKEY,COLUMN_PURCHASETABLE_SELLERKEY,COLUMN_PURCHASETABLE_SELLERINFO,COLUMN_PURCHASETABLE_BUYERKEY,COLUMN_PURCHASETABLE_VACATIONKEYEXCHANGE};
         String[] intFields = {COLUMN_PURCHASETABLE_TIMESTAMP};
         String[] doubleFields = {};
         return super.createTable(primaryKeys, foreignKeys,stringFields,intFields,doubleFields);
@@ -100,9 +100,9 @@ public class PurchaseTable extends ATableManager<Purchase> {
     protected PreparedStatement getInsertPreparedStatement(Purchase object, Connection connection) {
         String sql = "INSERT INTO " + TABLE_NAME + "(" + COLUMN_PURCHASETABLE_VACATIONKEY + "," +
                 COLUMN_PURCHASETABLE_SELLERKEY+ "," +
-                COLUMN_PURCHASETABLE_SELLEREMAIL+ "," +
+                COLUMN_PURCHASETABLE_SELLERINFO+ "," +
                 COLUMN_PURCHASETABLE_BUYERKEY+ "," +
-                COLUMN_PURCHASETABLE_BUYEREMAIL+ "," +
+                COLUMN_PURCHASETABLE_VACATIONKEYEXCHANGE+ "," +
                 COLUMN_PURCHASETABLE_TIMESTAMP /*+ ","*/ +") VALUES(?,?,?,?,?,?)";
         PreparedStatement pstmt = null;
         if (connection != null) {
@@ -110,9 +110,9 @@ public class PurchaseTable extends ATableManager<Purchase> {
                 pstmt = connection.prepareStatement(sql);
                 pstmt.setString(1, object.getVacationKey());
                 pstmt.setString(2, object.getSellerKey());
-                pstmt.setString(3, object.getSellerEmail());
+                pstmt.setString(3, object.getSellerInfo());
                 pstmt.setString(4, object.getBuyerKey());
-                pstmt.setString(5, object.getBuyerEmail());
+                pstmt.setString(5, object.getVacationKey());
                 pstmt.setInt(6 ,object.getTimestamp());
                 return pstmt;
             } catch (SQLException e) {

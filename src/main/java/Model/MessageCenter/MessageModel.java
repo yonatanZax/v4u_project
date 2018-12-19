@@ -2,6 +2,7 @@ package Model.MessageCenter;
 
 import Model.Request.Request;
 import Model.Request.RequestModel;
+import Model.User.User;
 import Model.User.UserModel;
 import Model.Vacation.Vacation;
 import Model.Vacation.VacationModel;
@@ -42,17 +43,47 @@ public class MessageModel {
     public List<Pair<Message, String[]>> createMessageParametersForController() {
         List<Pair<Message, String[]>> messageParameters = new LinkedList<>();
         for (Message message : messagesList.getMessagesList()) {
+            boolean flag = true;
             if (message.isSeller()) {
+                String[] s = {message.getMessageType(), ""};
                 if (message.getRequest().getState().equals(Request.states[0])) {
-                    String[] s = {message.getMessageType(), message.getBuyerName() + " wish to buy from you the vacation to: " + message.getVacation().getDestination() + ", at the price " + message.getVacation().getPrice() + "$"};
+                    if (!message.getRequest().isExchange()) {
+                        s[1] = message.getBuyerName() + " wish to Buy from you the vacation to: " + message.getVacation().getDestination() + ", at the price " + message.getVacation().getPrice() + "$";
+                    } else {
+                        s[1] = message.getBuyerName() + " wish to Exchange with you the vacation to: " + message.getVacation().getDestination() + ", with the vacation to " + message.getRequest().getVacationToExchange().getDestination() + " at the price " + message.getRequest().getVacationToExchange().getPrice();
+                    }
+                } else if (message.getRequest().getState().equals(Request.states[1])) {
+                    if (!message.getRequest().isExchange()) {
+                        s[1] = " Please approve that you received the payment from: " + message.getBuyerName() + ", for the vacation to: " + message.getVacation().getDestination() + ", at the price " + message.getVacation().getPrice() + "$";
+                    } else {
+                        if (message.getRequest().getVacationToExchange().isVisible()){
+                        s[1] = "Please approve that you exchanged the vacation: " + message.getVacation().getDestination() + ", with the vacation to: " + message.getRequest().getVacationToExchange().getDestination() + ", from the user: " + message.getBuyerName();
+                        } else {
+                            flag = false;
+                        }
+                    }
+                }
+                if (flag) {
                     Pair<Message, String[]> pair = new Pair<>(message, s);
                     messageParameters.add(pair);
                 }
             } else {
                 if (message.getRequest().getState().equals(Request.states[1])) {
-                    String[] s = {message.getMessageType(), message.getSellerName() + " approved your request to buy the vacation to: " + message.getVacation().getDestination() + ", at the price " + message.getVacation().getPrice() + "$"};
-                    Pair<Message, String[]> pair = new Pair<>(message, s);
-                    messageParameters.add(pair);
+                    String[] s = {message.getMessageType(), ""};
+//                    String contactInfo =
+                    if (!message.getRequest().isExchange()) {
+                        s[1] = message.getSellerName() + " approved your request to Buy the vacation to: " + message.getVacation().getDestination() + ", at the price " + message.getVacation().getPrice() + "$, PLEASE CONTACT THE SELLER TO MAKE THE PURCHASE: " + userModel.getContactInfo(message.getSellerName());
+                    } else {
+                        if (message.getRequest().getVacationToExchange().isVisible()) {
+                            s[1] = message.getSellerName() + " approved your request to Exchange the vacation to: " + message.getVacation().getDestination() + ", with the vacation to " + message.getRequest().getVacationToExchange().getDestination() + ", PLEASE CONTACT THE SELLER TO MAKE THE PURCHASE: " + userModel.getContactInfo(message.getSellerName());
+                        } else {
+                            flag = false;
+                        }
+                    }
+                    if (flag) {
+                        Pair<Message, String[]> pair = new Pair<>(message, s);
+                        messageParameters.add(pair);
+                    }
                 }
             }
         }

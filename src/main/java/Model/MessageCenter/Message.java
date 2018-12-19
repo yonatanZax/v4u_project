@@ -29,6 +29,7 @@ public class Message {
     public StringProperty getBuyerNameProperty() {
         return buyerName;
     }
+
     public String getBuyerName() {
         return buyerName.get();
     }
@@ -36,6 +37,7 @@ public class Message {
     public StringProperty getSellerNameProperty() {
         return sellerName;
     }
+
     public String getSellerName() {
         return sellerName.get();
     }
@@ -47,6 +49,7 @@ public class Message {
     public StringProperty getMessageTypeProperty() {
         return messageType;
     }
+
     public String getMessageType() {
         return messageType.get();
     }

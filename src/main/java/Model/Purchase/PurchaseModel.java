@@ -19,29 +19,29 @@ public class PurchaseModel extends ACRUDModel<Purchase> {
 
         String [] whereFields = {   PurchaseTable.COLUMN_PURCHASETABLE_VACATIONKEY,
                                     PurchaseTable.COLUMN_PURCHASETABLE_SELLERKEY,
-                                    PurchaseTable.COLUMN_PURCHASETABLE_SELLEREMAIL,
+                                    PurchaseTable.COLUMN_PURCHASETABLE_SELLERINFO,
                                     PurchaseTable.COLUMN_PURCHASETABLE_BUYERKEY,
-                                    PurchaseTable.COLUMN_PURCHASETABLE_BUYEREMAIL};
+                                    PurchaseTable.COLUMN_PURCHASETABLE_VACATIONKEYEXCHANGE};
 
         String[] whereValues = {purchase.getVacationKey(),
                                 purchase.getSellerKey(),
-                                purchase.getSellerEmail(),
+                                purchase.getSellerInfo(),
                                 purchase.getBuyerKey(),
-                                purchase.getBuyerEmail()};
+                                purchase.getBuyerVacationToExchange()};
 
 
         String [] set = {   PurchaseTable.COLUMN_PURCHASETABLE_VACATIONKEY,
                             PurchaseTable.COLUMN_PURCHASETABLE_SELLERKEY,
-                            PurchaseTable.COLUMN_PURCHASETABLE_SELLEREMAIL,
+                            PurchaseTable.COLUMN_PURCHASETABLE_SELLERINFO,
                             PurchaseTable.COLUMN_PURCHASETABLE_BUYERKEY,
-                            PurchaseTable.COLUMN_PURCHASETABLE_BUYEREMAIL,
+                            PurchaseTable.COLUMN_PURCHASETABLE_VACATIONKEYEXCHANGE,
                             PurchaseTable.COLUMN_PURCHASETABLE_TIMESTAMP};
 
         String [] values = {purchase.getVacationKey(),
                             purchase.getSellerKey(),
-                            purchase.getSellerEmail(),
+                            purchase.getSellerInfo(),
                             purchase.getBuyerKey(),
-                            purchase.getBuyerEmail(),
+                            purchase.getBuyerVacationToExchange(),
                             String.valueOf(purchase.getTimestamp())};
 
 
@@ -77,9 +77,9 @@ public class PurchaseModel extends ACRUDModel<Purchase> {
         return Integer.parseInt(date);
     }
 
-    public void insertPurchaseToTable(String vacationKey, String seller, String sellerAccount, String buyer) {
-        Purchase purchase = new Purchase(vacationKey,seller,sellerAccount,buyer,null,getCurrentTimeStamp());
+    public void insertPurchaseToTable(String vacationKey, String seller, String sellerInfo, String buyer, String vacKeyToExchange) {
+        Purchase purchase = new Purchase(vacationKey,seller,sellerInfo,buyer,vacKeyToExchange,getCurrentTimeStamp());
         createNewData(purchase);
-        System.out.println("Purchase Added to DB: " + "VacationID: "+ vacationKey + "Seller: "+ seller + "Seller Account: "+ sellerAccount + ", Buyer: "+ buyer);
+        System.out.println("Purchase Added to DB: " + "VacationID: "+ vacationKey + "Seller: "+ seller + "SellerInfo: "+ sellerInfo + ", Buyer: "+ buyer);
     }
 }

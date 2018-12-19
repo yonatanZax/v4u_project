@@ -104,7 +104,6 @@ public class ControllerHome implements Observer {
 
                 //Updates the MessageCenter and sets it as subSceneName
                 Parent newRoot;
-//                TODO - here we need to get the path to the imageView and send it through setSubsceneIcon
                 String imagePath = "";
                 if(!subSceneName.equals(controllerMessageCenter.getClass().getSimpleName())) {
                     subSceneName = controllerMessageCenter.getClass().getSimpleName();
@@ -146,7 +145,8 @@ public class ControllerHome implements Observer {
                 String vacationKey = vacationSearchController.getVacationPickedKey();
                 String vacationSellerKey = vacationSearchController.getVacationPickedSeller();
                 if (vacationKey != null && vacationSellerKey != null){
-                    requestModel.insertRequestToTable(vacationKey, vacationSellerKey);
+                    // todo - change exchange (last parameter next func) as needed
+                    requestModel.insertRequestToTable(vacationKey, vacationSellerKey, false);
                 }
 
             }

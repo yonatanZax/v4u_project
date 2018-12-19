@@ -66,9 +66,9 @@ public class RequestModel extends ACRUDModel<Request> {
         return dataList;
     }
 
-    public void insertRequestToTable(String vacationKey, String seller) {
+    public void insertRequestToTable(String vacationKey, String seller, boolean exchange) {
         String userName = UserModel.getUserName();
-        Request request = new Request(vacationKey, seller, userName, false, getCurrentTimeStamp(),Request.states[0]);
+        Request request = new Request(vacationKey, seller, userName, false, getCurrentTimeStamp(),Request.states[0], exchange);
         createNewData(request);
     }
 
@@ -97,6 +97,14 @@ public class RequestModel extends ACRUDModel<Request> {
         for (Request req : list){
             req.setState(Request.states[1]);
             updateTable(req);
+        }
+        // if request is for vacation exchange
+        if (request.getVacationToExchange() != null){
+            vacationParameters[1][0] = request.getVacationToExchange().getVacationKey();
+            vacationList = vacationModel.readDataFromDB(vacationParameters);
+            vacation = vacationList.get(0);
+            vacation.setVisible(false);
+            vacationModel.updateTable(vacation);
         }
     }
 }

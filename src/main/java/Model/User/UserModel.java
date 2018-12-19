@@ -100,5 +100,10 @@ public class UserModel extends ACRUDModel<User> {
         deleteDataFromDB(keys);
     }
 
+    public String getContactInfo(String userName){
+        User user = readUser(userName);
+        return user.getContactInfo();
+    }
+
 
 }

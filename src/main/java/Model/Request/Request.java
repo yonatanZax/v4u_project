@@ -1,6 +1,6 @@
 package Model.Request;
 
-import MainPackage.Enum_RequestState;
+import Model.Vacation.Vacation;
 
 public class Request {
 
@@ -10,18 +10,21 @@ public class Request {
     private boolean approved;
     private int timestamp;
     private String state;
+    private boolean exchange;
+    private Vacation vacationToExchange = null;
 
     public static String[] states = {"PENDING","HOLD","SOLD","DENIED"};
 
     public Request(){}
 
-    public Request(String vacationKey, String sellerKey, String buyerKey, boolean approved, int timestamp, String status) {
+    public Request(String vacationKey, String sellerKey, String buyerKey, boolean approved, int timestamp, String status, boolean exchange) {
         this.vacationKey = vacationKey;
         this.sellerKey = sellerKey;
         this.buyerKey = buyerKey;
         this.approved = approved;
         this.timestamp = timestamp;
         this.state = status;
+        this.exchange = exchange;
     }
 
     public String getVacationKey() {
@@ -80,4 +83,19 @@ public class Request {
         this.state = state;
     }
 
+    public boolean isExchange() {
+        return exchange;
+    }
+
+    public void setExchange(boolean exchange) {
+        this.exchange = exchange;
+    }
+
+    public Vacation getVacationToExchange() {
+        return vacationToExchange;
+    }
+
+    public void setVacationToExchange(Vacation vacationToExchange) {
+        this.vacationToExchange = vacationToExchange;
+    }
 }
