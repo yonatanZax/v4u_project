@@ -21,6 +21,7 @@ public class VacationTable extends ATableManager<Vacation> {
     public static final String COLUMN_VACATIONTABLE_PRICE = "price";
     private final String FOREIGNKEY_SELLERKEY = "(" + COLUMN_VACATIONTABLE_SELLERKEY + ") references userInfo(key)";
     public static final String COLUMN_VACATIONTABLE_VISIBLE = "visible";
+    public static final String COLUMN_VACATIONTABLE_EXCHANGEABLE = "exchange";
     public static final String COLUMN_VACATIONTABLE_DESTINATION = "destination";
     public static final String COLUMN_VACATIONTABLE_ORIGIN = "origin";
     public static final String COLUMN_VACATIONTABLE_DEPARTUREDATE = "departure_date";
@@ -46,32 +47,32 @@ public class VacationTable extends ATableManager<Vacation> {
     public DBResult createTable() {
         String[] primaryKeys = {COLUMN_VACATIONTABLE_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT"};
         String[] foreignKeys = {FOREIGNKEY_SELLERKEY};
-        String[] stringFields = {COLUMN_VACATIONTABLE_SELLERKEY, COLUMN_VACATIONTABLE_ORIGIN, COLUMN_VACATIONTABLE_DESTINATION, COLUMN_VACATIONTABLE_VISIBLE};
-        String[] intFields = {COLUMN_VACATIONTABLE_TIMESTAMP,COLUMN_VACATIONTABLE_DEPARTUREDATE};
+        String[] stringFields = {COLUMN_VACATIONTABLE_SELLERKEY, COLUMN_VACATIONTABLE_ORIGIN, COLUMN_VACATIONTABLE_DESTINATION, COLUMN_VACATIONTABLE_VISIBLE, COLUMN_VACATIONTABLE_EXCHANGEABLE};
+        String[] intFields = {COLUMN_VACATIONTABLE_TIMESTAMP, COLUMN_VACATIONTABLE_DEPARTUREDATE};
         String[] doubleFields = {COLUMN_VACATIONTABLE_PRICE};
         return super.createTable(primaryKeys, foreignKeys, stringFields, intFields, doubleFields);
     }
 
 
     @Override /* Has  INTEGER PRIMARY KEY AUTOINCREMENT */
-    protected String getCreateTableSQLString(String[] primaryKeys, String[] foreignKeys, String[] stringFields,String[] intFields, String[] doubleFields) {
-        if(primaryKeys != null) {
+    protected String getCreateTableSQLString(String[] primaryKeys, String[] foreignKeys, String[] stringFields, String[] intFields, String[] doubleFields) {
+        if (primaryKeys != null) {
             String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (\n";
-            for (String key: primaryKeys)
-                    sql += key + " ,\n";
+            for (String key : primaryKeys)
+                sql += key + " ,\n";
 
-            for (String str: stringFields)
+            for (String str : stringFields)
                 sql += str + " TEXT NOT NULL,\n";
-            for (String i: intFields)
+            for (String i : intFields)
                 sql += i + " INTEGER NOT NULL,\n";
-            for (String d: doubleFields)
+            for (String d : doubleFields)
                 sql += d + " REAL NOT NULL,\n";
 
             // foreign key (house_id) references houses(id),
-            for (int i = 0 ; i < foreignKeys.length - 1; i++)
+            for (int i = 0; i < foreignKeys.length - 1; i++)
                 sql += "foreign key " + foreignKeys[i] + ",\n";
-            if( foreignKeys.length > 0)
-                sql += "foreign key " + foreignKeys[foreignKeys.length-1] + "\n";
+            if (foreignKeys.length > 0)
+                sql += "foreign key " + foreignKeys[foreignKeys.length - 1] + "\n";
 
 
             sql += "\n);";
@@ -84,11 +85,11 @@ public class VacationTable extends ATableManager<Vacation> {
     @Override
     protected List<Vacation> transformListMapToList(List<Map<String, String>> listMap) {
         List<Vacation> list = new ArrayList<>(listMap.size());
-        for(Map<String,String> map : listMap){
+        for (Map<String, String> map : listMap) {
             Vacation vacation = new Vacation();
-            for(Map.Entry<String,String> entry : map.entrySet()){
+            for (Map.Entry<String, String> entry : map.entrySet()) {
                 String key = entry.getKey();
-                switch (key){
+                switch (key) {
                     case COLUMN_VACATIONTABLE_TIMESTAMP:
                         String timestampAsString = entry.getValue();
                         int timestampAsInt = Integer.parseInt(timestampAsString);
@@ -96,11 +97,11 @@ public class VacationTable extends ATableManager<Vacation> {
                         break;
 
                     case COLUMN_VACATIONTABLE_KEY:
-                        vacation.setVacationKey( entry.getValue());
+                        vacation.setVacationKey(entry.getValue());
                         break;
 
                     case COLUMN_VACATIONTABLE_SELLERKEY:
-                        vacation.setSellerKey( entry.getValue());
+                        vacation.setSellerKey(entry.getValue());
                         break;
 
                     case COLUMN_VACATIONTABLE_DESTINATION:
@@ -113,6 +114,9 @@ public class VacationTable extends ATableManager<Vacation> {
 
                     case COLUMN_VACATIONTABLE_VISIBLE:
                         vacation.setVisible(entry.getValue().equals("true"));
+                        break;
+                    case COLUMN_VACATIONTABLE_EXCHANGEABLE:
+                        vacation.setExchangeable(entry.getValue());
                         break;
                     case COLUMN_VACATIONTABLE_PRICE:
                         vacation.setPrice(Double.parseDouble(entry.getValue()));
@@ -156,10 +160,11 @@ public class VacationTable extends ATableManager<Vacation> {
                 + "," + COLUMN_VACATIONTABLE_ORIGIN
                 + "," + COLUMN_VACATIONTABLE_DESTINATION
                 + "," + COLUMN_VACATIONTABLE_VISIBLE
+                + "," + COLUMN_VACATIONTABLE_EXCHANGEABLE
                 + "," + COLUMN_VACATIONTABLE_TIMESTAMP
                 + "," + COLUMN_VACATIONTABLE_DEPARTUREDATE
                 + "," + COLUMN_VACATIONTABLE_PRICE
-                + ") VALUES(?,?,?,?,?,?,?,?)";
+                + ") VALUES(?,?,?,?,?,?,?,?,?)";
         PreparedStatement pstmt = null;
         if (connection != null) {
             try {
@@ -168,10 +173,11 @@ public class VacationTable extends ATableManager<Vacation> {
                 pstmt.setString(2, object.getSellerKey());
                 pstmt.setString(3, object.getOrigin());
                 pstmt.setString(4, object.getDestination());
-                pstmt.setString(5, object.isVisible()+"");
-                pstmt.setInt(6, object.getTimeStamp());
-                pstmt.setInt(7,object.getDepartureDate());
-                pstmt.setDouble(8,object.getPrice());
+                pstmt.setString(5, object.isVisible() + "");
+                pstmt.setString(6, object.isExchangeable() + "");
+                pstmt.setInt(7, object.getTimeStamp());
+                pstmt.setInt(8, object.getDepartureDate());
+                pstmt.setDouble(9, object.getPrice());
                 return pstmt;
             } catch (SQLException e) {
                 System.out.println(e.getMessage());

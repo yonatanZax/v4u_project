@@ -19,8 +19,7 @@ public class Vacation {
     public Vacation() {
     }
 
-//    public Vacation(String vacationKey, String sellerKey, String origin, String destination, boolean visible, int timeStamp, double price, int departureDate, boolean isExchangeable) {
-    public Vacation(String vacationKey, String sellerKey, String origin, String destination, boolean visible, int timeStamp, double price, int departureDate) {
+    public Vacation(String vacationKey, String sellerKey, String origin, String destination, boolean visible, int timeStamp, double price, int departureDate, boolean isExchangeable) {
         this.vacationKey = new SimpleStringProperty(vacationKey);
         this.sellerKey = new SimpleStringProperty(sellerKey);
         this.price = price;
@@ -29,7 +28,7 @@ public class Vacation {
         this.visible = visible;
         this.timeStamp = timeStamp;
         this.departureDate = departureDate;
-//        this.isExchangeable = isExchangeable;
+        this.isExchangeable = isExchangeable;
     }
 
     public String getVacationKey() {
@@ -112,8 +111,12 @@ public class Vacation {
         return isExchangeable;
     }
 
+    public void setExchangeable(String exchange) {
+        this.isExchangeable = Boolean.getBoolean(exchange);
+    }
+
     public void setExchangeable(boolean exchangeable) {
-        isExchangeable = exchangeable;
+        this.isExchangeable = exchangeable;
     }
 
     public int getDepartureDate() {

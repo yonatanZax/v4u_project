@@ -80,7 +80,7 @@ public class ControllerCreateVacation extends Observable implements Observer {
                     String date = vacationView.departureDate.getValue().getYear() + "" + vacationView.departureDate.getValue().getMonthValue() + "" + vacationView.departureDate.getValue().getDayOfMonth();
 
                     int departureDate = Integer.parseInt(date);
-                    vacationModel.insertVacationToTable(vacationView.destination.getText(), price, departureDate);
+                    vacationModel.insertVacationToTable(vacationView.destination.getText(), price, departureDate,vacationView.exchange_checkBox.isSelected());
                     System.out.println("ControllerCreateVacation: update by vacationModel");
                     System.out.println("ControllerCreateVacation: " + vacationModel.getUserName() + " registered vacation to " + vacationView.destination.getText());
                     vacationView.closeWindow();

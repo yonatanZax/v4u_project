@@ -29,9 +29,9 @@ public class Main extends Application {
             userTable.InsertToTable(new User("DUnknown","UML4life","Rami","Puzis","Beer Sheva",19900303,"yes@no.com"));
             userTable.InsertToTable(new User("ForShizelMyNizel","UltimatePassword","Daniel","Nahmias","Beer Sheva",19900404,"0524365041"));
 
-            vacationTable.InsertToTable(new Vacation(null, "MightySalmon","Tel Aviv","New York",true,20181211,2000,20191210));
-            vacationTable.InsertToTable(new Vacation(null, "DUnknown","Tel Aviv","Moscow",true,20181211,350,20190307));
-            vacationTable.InsertToTable(new Vacation(null, "ForShizelMyNizel","Tel Aviv","Delhi",true,20181210,350,20190604));
+            vacationTable.InsertToTable(new Vacation(null, "MightySalmon","Tel Aviv","New York",true,20181211,2000,20191210,false));
+            vacationTable.InsertToTable(new Vacation(null, "DUnknown","Tel Aviv","Moscow",true,20181211,350,20190307,true));
+            vacationTable.InsertToTable(new Vacation(null, "ForShizelMyNizel","Tel Aviv","Delhi",true,20181210,350,20190604,false));
             System.out.println("*     Init project successfully   *");
         }
     }
