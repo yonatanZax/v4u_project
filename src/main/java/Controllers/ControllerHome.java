@@ -178,9 +178,17 @@ public class ControllerHome implements Observer {
                 String vacationKey = vacationSearchController.getVacationPickedKey();
                 String vacationSellerKey = vacationSearchController.getVacationPickedSeller();
                 if (vacationKey != null && vacationSellerKey != null){
-                    requestModel.insertRequestToTable(vacationKey, vacationSellerKey);
+                    requestModel.insertRequestToTable(vacationKey, vacationSellerKey/*, 0*/); // TODO - ILAN - change the signature
                 }
-
+            }
+            else if (arg.equals(VacationSearchController.EXCHANGE)){
+                homeView.setStatusBarString("Purchase request was sent to the seller");
+                String vacationKey = vacationSearchController.getVacationPickedKey();
+                String vacationSellerKey = vacationSearchController.getVacationPickedSeller();
+                String exchangeKey = vacationSearchController.getExchangedKey();
+                if (vacationKey != null && vacationSellerKey != null){
+                    requestModel.insertRequestToTable(vacationKey, vacationSellerKey/*, exchangeKey*/); // TODO - ILAN - change the signature
+                }
             }
         }else if(o.equals(controllerLogin)){
             if (arg.equals(ControllerLogin.CONTROLLER_LOGIN_ARGS_LOGGEDIN)){

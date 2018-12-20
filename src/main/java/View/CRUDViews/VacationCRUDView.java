@@ -46,7 +46,6 @@ public class VacationCRUDView extends ACRUDView {
         System.out.println("VacationCRUDView: " + arg);
         setChanged();
         notifyObservers(arg);
-
     }
 
 

@@ -1,7 +1,9 @@
 package Model.Purchase;
 
 import Model.ACRUDModel;
+import Model.User.UserModel;
 import db.DBResult;
+import db.Managers.ATableManager;
 import db.Tables.PurchaseTable;
 
 import java.time.LocalDateTime;
@@ -48,6 +50,8 @@ public class PurchaseModel extends ACRUDModel<Purchase> {
         setChanged();
         notifyObservers(result);
     }
+
+
 
     @Override
     public List<Purchase> readDataFromDB(String[][] parameters) {

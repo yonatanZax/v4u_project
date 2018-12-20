@@ -1,7 +1,7 @@
 package Model.User;
 
-
 import Model.ACRUDModel;
+import Model.Request.RequestModel;
 import db.DBResult;
 import db.Tables.UserTable;
 

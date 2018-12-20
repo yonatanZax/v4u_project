@@ -1,6 +1,5 @@
 package Model;
 
-import Model.Request.Request;
 import db.DBResult;
 import db.Managers.ATableManager;
 

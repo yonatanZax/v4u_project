@@ -5,6 +5,7 @@ import Model.User.UserModel;
 import View.UserDetailsView;
 import db.DBResult;
 import Model.User.User;
+import db.Tables.UserTable;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

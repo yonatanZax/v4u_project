@@ -23,10 +23,12 @@ public class VacationSearchController extends Observable implements Observer,Sub
     private FXMLLoader fxmlLoader;
 
     private Vacation pickedVacation;
+    private String exchangedKey;
 
     public static final String BTN_ADD = "add_btn";
     public static final String VACATION_PICKED = "vacation_picked";
     public static final String SEND_VACATION_PURCHASE_REQUEST = "send_vacation_purchase_request";
+    public static final String EXCHANGE = "exchange";
 
     public VacationSearchController() {
         fxmlLoader = new FXMLLoader(getClass().getResource("/vacation_search_view.fxml"));
@@ -130,11 +132,17 @@ public class VacationSearchController extends Observable implements Observer,Sub
         if (result.isPresent()){
             String ans = result.get();
             if (!ans.equals("Choose vacation")) {
-                Vacation pickedVacation = vacationDestinations.get(ans);
-//                System.out.println(pickedVacation);
-                // TODO - call from here to exchange vacation
+                Vacation pickedVacationForExchange = vacationDestinations.get(ans);
+                this.exchangedKey = pickedVacationForExchange.getVacationKey();
+                setChanged();
+                notifyObservers(EXCHANGE);
+
             }
         }
+    }
+
+    public String getExchangedKey(){
+        return this.exchangedKey;
     }
 
 
