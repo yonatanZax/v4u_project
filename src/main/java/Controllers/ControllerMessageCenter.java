@@ -40,9 +40,7 @@ public class ControllerMessageCenter extends Observable implements Observer, Sub
 
     MessageCenterView messageCenterView;
 
-    private PaypalTable paypalAPI;
     private UserModel userModel = new UserModel();
-    private VacationModel vacationModel = new VacationModel();
     private RequestModel requestModel = new RequestModel();
     private PurchaseModel purchaseModel = new PurchaseModel();
     private MessageModel messageModel = new MessageModel();
