@@ -7,11 +7,14 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import javafx.scene.layout.Pane;
 import org.controlsfx.control.StatusBar;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Observable;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -23,6 +26,7 @@ public class HomeView extends Observable {
     public static final String HOMEVIEW_AGRS_LOGIN = "Login";
     public static final String HOMEVIEW_AGRS_MESSAGECENER = "MessageCenter";
     public static final String HOMEVIEW_AGRS_GOBACK = "GoBack";
+
 
     private Parent defaultParent;
     private boolean firstScene = true;
@@ -60,17 +64,19 @@ public class HomeView extends Observable {
         }
         this.decorationPane.getChildren().clear();
         this.decorationPane.getChildren().add(sub_scene);
+        this.decorationPane.setPrefSize(decorationPane.getMaxWidth(), decorationPane.getMaxHeight());
 
     }
 
     public void setSubsceneIcon(String path){
-//        TODO - change the image view picture here
+            message_iv.setImage(new Image(path));
     }
 
     /**
      * changes the login status in the home view
      * if userName is null: it means we are doing logout
      * if userName isn't null: it means we successfully logged in
+     *
      * @param newLabel the name of the new user or null it it's logout
      */
     public void setLoginStatusLabel(String newLabel){
@@ -104,8 +110,9 @@ public class HomeView extends Observable {
     }
 
 
-    public void setStatusBarString(String newStatus){
-        if(thread.isAlive()){
+
+    public void setStatusBarString(String newStatus) {
+        if (thread.isAlive()) {
             thread.interrupt();
         }
         thread = new Thread(this::runStatusBarThread);
@@ -113,7 +120,7 @@ public class HomeView extends Observable {
         thread.start();
     }
 
-    private void runStatusBarThread(){
+    private void runStatusBarThread() {
         try {
             Thread.sleep(((long) (5 * 1000)));
         } catch (InterruptedException e) {
@@ -123,5 +130,7 @@ public class HomeView extends Observable {
             status_bar.setText("");
         });
     }
+
+
 
 }

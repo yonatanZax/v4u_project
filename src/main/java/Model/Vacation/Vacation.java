@@ -14,10 +14,11 @@ public class Vacation {
     private int timeStamp;
     private double price;
     private int departureDate;
+    private boolean isExchangeable;
 
     public Vacation() {}
 
-    public Vacation(String vacationKey, String sellerKey, String origin, String destination, boolean visible, int timeStamp, double price, int departureDate) {
+    public Vacation(String vacationKey, String sellerKey, String origin, String destination, boolean visible, int timeStamp, double price, int departureDate, boolean isExchangeable) {
         this.vacationKey = new SimpleStringProperty(vacationKey);
         this.sellerKey = new SimpleStringProperty(sellerKey);
         this.price = price;
@@ -26,7 +27,8 @@ public class Vacation {
         this.visible = visible;
         this.timeStamp = timeStamp;
         this.departureDate = departureDate;
-    }
+        this.isExchangeable = isExchangeable;
+}
 
     public String getVacationKey() {
         return vacationKey.get();
@@ -104,6 +106,18 @@ public class Vacation {
         this.price = price;
     }
 
+    public boolean isExchangeable() {
+        return isExchangeable;
+    }
+
+    public void setExchangeable(String exchange) {
+        this.isExchangeable = exchange.equals("true");
+    }
+
+    public void setExchangeable(boolean exchangeable) {
+        this.isExchangeable = exchangeable;
+    }
+
     public int getDepartureDate() {
         return departureDate;
     }
@@ -114,13 +128,10 @@ public class Vacation {
 
     @Override
     public String toString(){
-//        TODO - add all the information to the string. what returns here is what we will show the user in the information before confirmation on purchase
         String ans = "VacationDetails:\n";
         ans += "\tDestination: " + this.getDestination() + '\n';
         ans += "\tPrice: " + price + "\n";
         ans += "\tDeparture Date: " + departureDate + "\n";
         return ans;
     }
-
-
 }

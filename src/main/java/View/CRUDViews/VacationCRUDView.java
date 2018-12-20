@@ -1,6 +1,9 @@
 package View.CRUDViews;
 
 import MainPackage.Enum_CRUD;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.input.InputMethodEvent;
@@ -18,6 +21,7 @@ public class VacationCRUDView extends ACRUDView {
     public Button cancel_btn;
     public Label priceInfo_lbl;
     public DatePicker departureDate;
+    public CheckBox exchange_checkBox;
 
 
     @Override

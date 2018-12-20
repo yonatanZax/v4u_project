@@ -3,6 +3,7 @@ package Model.Vacation;
 import Model.ACRUDModel;
 import Model.User.UserModel;
 import db.DBResult;
+//import db.Tables.VacationExchangeTable;
 import db.Tables.VacationTable;
 
 import java.time.LocalDateTime;
@@ -10,6 +11,8 @@ import java.util.List;
 
 public class VacationModel extends ACRUDModel<Vacation> {
 
+
+//    VacationExchangeTable vacationExchangeTable;
 
     private int getCurrentTimeStamp() {
         String date = LocalDateTime.now().getYear() + "" + LocalDateTime.now().getMonthValue() + "" + LocalDateTime.now().getDayOfMonth();
@@ -21,9 +24,9 @@ public class VacationModel extends ACRUDModel<Vacation> {
     }
 
 
-    public void insertVacationToTable(String destination, double price, int departure) {
+    public void insertVacationToTable(String destination, double price, int departure, boolean isExchangeable) {
         String userName = UserModel.getUserName();
-        Vacation vacation = new Vacation(null, userName, "TLV", destination, true, getCurrentTimeStamp(), price, departure);
+        Vacation vacation = new Vacation(null, userName, "TLV", destination, true, getCurrentTimeStamp(), price, departure, isExchangeable);
         createNewData(vacation);
 
     }
@@ -41,6 +44,7 @@ public class VacationModel extends ACRUDModel<Vacation> {
                 VacationTable.COLUMN_VACATIONTABLE_DESTINATION,
                 VacationTable.COLUMN_VACATIONTABLE_TIMESTAMP,
                 VacationTable.COLUMN_VACATIONTABLE_VISIBLE,
+                VacationTable.COLUMN_VACATIONTABLE_EXCHANGEABLE,
                 VacationTable.COLUMN_VACATIONTABLE_DEPARTUREDATE};
         String [] values = {vacation.getVacationKey(),
                 vacation.getSellerKey(),
@@ -49,6 +53,7 @@ public class VacationModel extends ACRUDModel<Vacation> {
                 vacation.getDestination(),
                 String.valueOf(vacation.getTimeStamp()),
                 String.valueOf(vacation.isVisible()),
+                String.valueOf(vacation.isExchangeable()),
                 String.valueOf(vacation.getDepartureDate())};
 
 

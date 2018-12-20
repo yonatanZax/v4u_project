@@ -69,11 +69,11 @@ public class PurchaseTable extends ATableManager<Purchase> {
                         break;
 
                     case COLUMN_PURCHASETABLE_SELLEREMAIL:
-                        purchase.getSellerEmail();
+                        purchase.setSellerEmail(entry.getValue());
                         break;
 
                     case COLUMN_PURCHASETABLE_BUYEREMAIL:
-                        purchase.getBuyerEmail();
+                        purchase.setBuyerEmail(entry.getValue());
                         break;
 
                 }

@@ -28,6 +28,11 @@ public class LoginView extends Observable implements Initializable {
     @FXML
     private Label errorMessage;
 
+    public void resetLoginCredentials(){
+        userId.setText("");
+        password.setText("");
+    }
+
 
     @FXML
     protected void processLogin() {
@@ -43,8 +48,6 @@ public class LoginView extends Observable implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        userId.setText("user1");
-        password.setText("p");
     }
 
     public void closeWindow(){

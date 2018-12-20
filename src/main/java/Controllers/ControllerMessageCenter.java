@@ -181,11 +181,13 @@ public class ControllerMessageCenter extends Observable implements Observer,SubS
                     }
                 } else {
                     String paymentAccount = confirmPaymentPurchase();
+                    if (!paymentAccount.equals("")) {
                     updatePurchase(paymentAccount);
                     fillTableList();
                 }
             }
         }
+    }
     }
 
     private void updatePurchase(String buyerPaymentAccount){

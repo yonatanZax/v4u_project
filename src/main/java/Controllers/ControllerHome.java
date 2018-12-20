@@ -5,16 +5,23 @@ import Model.User.UserModel;
 import Model.Vacation.Vacation;
 import View.HomeView;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
 import java.util.Observable;
 import java.util.Observer;
 
-public class ControllerHome extends Application implements Observer {
+//public class ControllerHome extends Application implements Observer {
+public class ControllerHome implements Observer {
 
 
     private Stage stage;
@@ -38,6 +45,8 @@ public class ControllerHome extends Application implements Observer {
             e.printStackTrace();
         }
         Scene scene = new Scene(root);
+        stage.getIcons().add(new Image("/images/vacation.png"));
+        stage.setTitle("Vacation 4 U");
         stage.setScene(scene);
 
         homeView = fxmlLoader.getController();
@@ -56,15 +65,15 @@ public class ControllerHome extends Application implements Observer {
         // Set the subSceneName to be vacationSearchController
         vacationSearchController.updateSubScene();
         homeView.setSub_scene(vacationSearchController.getRoot());
-
-
+        currentSceneController = vacationSearchController;
+        startRefreshThread();
         stage.show();
     }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-
-    }
+//    @Override
+//    public void start(Stage primaryStage) throws Exception {
+//
+//    }
 
     /**
      * changes the login status in the home view
@@ -79,7 +88,33 @@ public class ControllerHome extends Application implements Observer {
         homeView.setLoginStatusLabel(userName);
     }
 
+    private void startRefreshThread(){
+        if(refreshThread.isAlive()){
+            refreshThread.interrupt();
+        }
+        refreshThread = new Thread(this::runRefreshThread);
+        refreshThread.setDaemon(true);
+        refreshThread.start();
+    }
+
+    private void runRefreshThread(){
+
+        try {
+            while(true) {
+                Thread.sleep(((long) (5 * 1000)));
+                Platform.runLater(() -> {
+                    currentSceneController.updateSubScene();
+                });
+            }
+        } catch (InterruptedException e) {
+            return;
+        }
+
+    }
+
     private String subSceneName = "";
+    private SubScenable currentSceneController;
+    private Thread refreshThread = new Thread();
 
     @Override
     public void update(Observable o, Object arg) {
@@ -103,16 +138,19 @@ public class ControllerHome extends Application implements Observer {
                 if(!subSceneName.equals(controllerMessageCenter.getClass().getSimpleName())) {
                     subSceneName = controllerMessageCenter.getClass().getSimpleName();
                     controllerMessageCenter.updateSubScene();
+                    currentSceneController = controllerMessageCenter;
                     newRoot = controllerMessageCenter.getRoot();
-//                    imagePath = ??
+                    imagePath = "/images/search.png";
                 }else{
                     subSceneName = vacationSearchController.getClass().getSimpleName();
                     vacationSearchController.updateSubScene();
+                    currentSceneController = vacationSearchController;
                     newRoot = vacationSearchController.getRoot();
-//                    imagePath = ??
+                    imagePath = "/images/mail.png";
                 }
+                homeView.setSubsceneIcon(imagePath);
                 homeView.setSub_scene(newRoot);
-//                homeView.setSubsceneIcon(imagePath);
+                startRefreshThread();
 
             }else if (arg.equals(HomeView.HOMEVIEW_AGRS_GOBACK)){
 //                if(!subSceneStack.empty()){
@@ -147,6 +185,7 @@ public class ControllerHome extends Application implements Observer {
         }else if(o.equals(controllerLogin)){
             if (arg.equals(ControllerLogin.CONTROLLER_LOGIN_ARGS_LOGGEDIN)){
                 changeLoginStatus(UserModel.getUserName());
+                homeView.setSubsceneIcon("/images/mail.png");
             }
         }
         else if (o.equals(controllerCreateVacation)){
@@ -159,7 +198,7 @@ public class ControllerHome extends Application implements Observer {
 
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+//    public static void main(String[] args) {
+//        launch(args);
+//    }
 }
