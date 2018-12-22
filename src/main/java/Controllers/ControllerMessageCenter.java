@@ -75,9 +75,6 @@ public class ControllerMessageCenter extends Observable implements Observer, Sub
         fillTableList();
     }
 
-    // todo - cant send PURCHASE REQUEST TWICE.. need to be checked!!!!!
-    // todo - change table list colours to be different than the search list (home page)
-
     private void fillTableList() {
         messageModel.checkIfApprovalDue();
         messageModel.setMessagesForUser();
@@ -200,7 +197,7 @@ public class ControllerMessageCenter extends Observable implements Observer, Sub
             } else if (arg.equals(REQUEST_PICKED)) {
                 pickedRequest = messageCenterView.getPickedRequest();
                 if (pickedRequest.getSellerKey().equals(messageModel.getUserName())) {
-                    if (pickedRequest.getApproved()) {
+                    if (!pickedRequest.getApproved()) {
                         boolean approved = confirmDialog("Do you APPROVE to make this deal?");
                         if (approved) {
                             initPurchase();

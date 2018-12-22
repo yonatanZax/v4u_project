@@ -107,7 +107,7 @@ public class MessageModel {
             }
         }
         for (Request request : requestsAsSeller) {
-            if (request.getState().equals(Request.states[0])) {
+            if (request.getState().equals(Request.states[0]) || request.getState().equals(Request.states[1])) {
                 String key = request.getVacationKey();
                 List<Vacation> vacationsList = getVacationFromKey(key);
                 if (!vacationsList.isEmpty()) {

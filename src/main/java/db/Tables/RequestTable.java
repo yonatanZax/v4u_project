@@ -27,6 +27,7 @@ public class RequestTable extends ATableManager<Request> {
     public static final String COLUMN_REQUESTTABLE_APPROVED = "approved";
     public static final String COLUMN_REQUESTTABLE_TIMESTAMP = "timestamp";
     public static final String COLUMN_REQUESTTABLE_STATUS = "status";
+    public static final String COLUMN_REQUESTTABLE_VACATIONKEYTOEXCHANGE = "vacationKeyToExchange";
 
 
     // Singleton
@@ -116,6 +117,8 @@ public class RequestTable extends ATableManager<Request> {
                     case COLUMN_REQUESTTABLE_STATUS:
                         request.setState(entry.getValue());
                         break;
+                    case COLUMN_REQUESTTABLE_VACATIONKEYTOEXCHANGE:
+                        request.setVacationToExchange(Integer.valueOf(entry.getValue()));
                 }
 
             }
@@ -126,7 +129,7 @@ public class RequestTable extends ATableManager<Request> {
 
     @Override
     protected PreparedStatement getInsertPreparedStatement(Request object, Connection connection) {
-        String sql = "INSERT INTO " + TABLE_NAME + "(" + COLUMN_REQUESTTABLE_VACATIONKEY + "," + COLUMN_REQUESTTABLE_SELLERKEY + "," + COLUMN_REQUESTTABLE_BUYERKEY + "," + COLUMN_REQUESTTABLE_STATUS + "," + COLUMN_REQUESTTABLE_APPROVED + "," + COLUMN_REQUESTTABLE_TIMESTAMP + ") VALUES(?,?,?,?,?,?)";
+        String sql = "INSERT INTO " + TABLE_NAME + "(" + COLUMN_REQUESTTABLE_VACATIONKEY + "," + COLUMN_REQUESTTABLE_SELLERKEY + "," + COLUMN_REQUESTTABLE_BUYERKEY + "," + COLUMN_REQUESTTABLE_STATUS + "," + COLUMN_REQUESTTABLE_APPROVED + "," + COLUMN_REQUESTTABLE_TIMESTAMP + "," + COLUMN_REQUESTTABLE_VACATIONKEYTOEXCHANGE + ") VALUES(?,?,?,?,?,?,?)";
         PreparedStatement pstmt = null;
         if (connection != null) {
             try {
@@ -137,6 +140,7 @@ public class RequestTable extends ATableManager<Request> {
                 pstmt.setString(4, object.getState().toString());
                 pstmt.setString(5, object.getApproved() + "");
                 pstmt.setInt(6, object.getTimestamp());
+                pstmt.setString(7, String.valueOf(object.getVacationToExchange()));
                 return pstmt;
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -154,7 +158,7 @@ public class RequestTable extends ATableManager<Request> {
     public DBResult createTable() {
         String[] primaryKeys = {COLUMN_REQUESTTABLE_VACATIONKEY, COLUMN_REQUESTTABLE_SELLERKEY, COLUMN_REQUESTTABLE_BUYERKEY};
         String[] foreignKeys = {FOREIGNKEY_VACATIONKEY, FOREIGNKEY_SELLERKEY, FOREIGNKEY_BUYERKEY};
-        String[] stringFields = {COLUMN_REQUESTTABLE_VACATIONKEY, COLUMN_REQUESTTABLE_SELLERKEY, COLUMN_REQUESTTABLE_BUYERKEY, COLUMN_REQUESTTABLE_STATUS,COLUMN_REQUESTTABLE_APPROVED};
+        String[] stringFields = {COLUMN_REQUESTTABLE_VACATIONKEY, COLUMN_REQUESTTABLE_SELLERKEY, COLUMN_REQUESTTABLE_BUYERKEY, COLUMN_REQUESTTABLE_STATUS,COLUMN_REQUESTTABLE_APPROVED,COLUMN_REQUESTTABLE_VACATIONKEYTOEXCHANGE};
         String[] intFields = {COLUMN_REQUESTTABLE_TIMESTAMP};
         String[] doubleFields = {};
         return super.createTable(primaryKeys, foreignKeys, stringFields, intFields, doubleFields);

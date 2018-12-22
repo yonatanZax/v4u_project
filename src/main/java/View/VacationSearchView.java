@@ -3,6 +3,8 @@ package View;
 
 import Controllers.VacationSearchController;
 import Model.Vacation.Vacation;
+import com.sun.javafx.scene.control.skin.CheckBoxSkin;
+import impl.org.controlsfx.skin.CheckComboBoxSkin;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,6 +13,7 @@ import javafx.collections.transformation.SortedList;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 
 
 import java.time.LocalDate;
@@ -40,6 +43,9 @@ public class VacationSearchView extends Observable{
     @FXML
     public TableColumn<Vacation,String> departureDateColumn;
 
+    @FXML
+    public TableColumn<Vacation, String> exchangeableColumn;
+
     private ObservableList<Vacation> masterData = FXCollections.observableArrayList();
 
     private Vacation pickedVacation;
@@ -68,6 +74,7 @@ public class VacationSearchView extends Observable{
         priceColumn.setCellValueFactory(cellData -> new SimpleStringProperty("" +cellData.getValue().getPrice()));
         sellerColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSellerKey()));
         departureDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty("" + cellData.getValue().getDepartureDate()));
+        exchangeableColumn.setCellValueFactory(cellData -> new SimpleStringProperty("" + cellData.getValue().isExchangeable()));
 
 
         // 1. Wrap the ObservableList in a FilteredList (initially display all data).

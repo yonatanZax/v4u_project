@@ -5,6 +5,7 @@ import Model.User.UserModel;
 import Model.Vacation.Vacation;
 import View.HomeView;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -57,13 +58,15 @@ public class ControllerHome implements Observer {
         controllerCreateVacation.addObserver(this);
         vacationSearchController.addObserver(this);
 
+
+
         // Stack holds the last subSceneName
 //        subSceneStack.push(vacationSearchController);
         // Set the subSceneName to be vacationSearchController
         vacationSearchController.updateSubScene();
         homeView.setSub_scene(vacationSearchController.getRoot());
-
-
+        currentSceneController = vacationSearchController;
+        startRefreshThread();
         stage.show();
     }
 
@@ -85,7 +88,33 @@ public class ControllerHome implements Observer {
         homeView.setLoginStatusLabel(userName);
     }
 
+    private void startRefreshThread(){
+        if(refreshThread.isAlive()){
+            refreshThread.interrupt();
+        }
+        refreshThread = new Thread(this::runRefreshThread);
+        refreshThread.setDaemon(true);
+        refreshThread.start();
+    }
+
+    private void runRefreshThread(){
+
+        try {
+            while(true) {
+                Thread.sleep(((long) (5 * 1000)));
+                Platform.runLater(() -> {
+                    currentSceneController.updateSubScene();
+                });
+            }
+        } catch (InterruptedException e) {
+            return;
+        }
+
+    }
+
     private String subSceneName = "";
+    private SubScenable currentSceneController;
+    private Thread refreshThread = new Thread();
 
     @Override
     public void update(Observable o, Object arg) {
@@ -108,16 +137,19 @@ public class ControllerHome implements Observer {
                 if(!subSceneName.equals(controllerMessageCenter.getClass().getSimpleName())) {
                     subSceneName = controllerMessageCenter.getClass().getSimpleName();
                     controllerMessageCenter.updateSubScene();
+                    currentSceneController = controllerMessageCenter;
                     newRoot = controllerMessageCenter.getRoot();
                     imagePath = "/images/search.png";
                 }else{
                     subSceneName = vacationSearchController.getClass().getSimpleName();
                     vacationSearchController.updateSubScene();
+                    currentSceneController = vacationSearchController;
                     newRoot = vacationSearchController.getRoot();
                     imagePath = "/images/mail.png";
                 }
                 homeView.setSubsceneIcon(imagePath);
                 homeView.setSub_scene(newRoot);
+                startRefreshThread();
 
             }else if (arg.equals(HomeView.HOMEVIEW_AGRS_GOBACK)){
 //                if(!subSceneStack.empty()){
@@ -148,7 +180,15 @@ public class ControllerHome implements Observer {
                     // todo - change exchange (last parameter next func) as needed
                     requestModel.insertRequestToTable(vacationKey, vacationSellerKey, false);
                 }
-
+            }
+            else if (arg.equals(VacationSearchController.EXCHANGE)){
+                homeView.setStatusBarString("Purchase request was sent to the seller");
+                String vacationKey = vacationSearchController.getVacationPickedKey();
+                String vacationSellerKey = vacationSearchController.getVacationPickedSeller();
+                String exchangeKey = vacationSearchController.getExchangedKey();
+                if (vacationKey != null && vacationSellerKey != null){
+                    requestModel.insertRequestToTable(vacationKey, vacationSellerKey, Integer.valueOf(exchangeKey));
+                }
             }
         }else if(o.equals(controllerLogin)){
             if (arg.equals(ControllerLogin.CONTROLLER_LOGIN_ARGS_LOGGEDIN)){
