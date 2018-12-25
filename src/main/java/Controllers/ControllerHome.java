@@ -84,6 +84,8 @@ public class ControllerHome implements Observer {
     public void changeLoginStatus(String userName){
         if (userName == null) {
             vacationSearchController.updateSubScene();
+            currentSceneController = vacationSearchController;
+            startRefreshThread();
         }
         homeView.setLoginStatusLabel(userName);
     }
