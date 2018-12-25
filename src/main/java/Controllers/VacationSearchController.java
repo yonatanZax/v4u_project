@@ -22,7 +22,6 @@ public class VacationSearchController extends Observable implements Observer,Sub
     private Parent root;
     private FXMLLoader fxmlLoader;
 
-    private Vacation pickedVacation;
     private String exchangedKey;
 
     public static final String BTN_ADD = "add_btn";
@@ -58,7 +57,7 @@ public class VacationSearchController extends Observable implements Observer,Sub
         alert.setTitle("Buy Confirmation Dialog");
         alert.setHeaderText(null);
         String alertContentString = "Are you sure you want sent a request for buying this vacation?\n\n";
-        alertContentString += pickedVacation.toString();
+        alertContentString += myView.getPickedVacation().toString();
 
         ButtonType buttonTypeOK = new ButtonType("OK");
         ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
@@ -87,7 +86,7 @@ public class VacationSearchController extends Observable implements Observer,Sub
         alert.setHeaderText(null);
         String alertContentString = "Would you like to Buy this vacation?\n" +
                                     "or would you want to exchange this vacation with one of your own?\n\n";
-        alertContentString += pickedVacation.toString() + "\n";
+        alertContentString += myView.getPickedVacation().toString() + "\n";
 
         ButtonType buttonTypeBuy = new ButtonType("Buy");
         ButtonType buttonTypeExchange = new ButtonType("Exchange");
@@ -147,10 +146,10 @@ public class VacationSearchController extends Observable implements Observer,Sub
 
 
     private void vacationPicked(){
-        if (pickedVacation.isExchangeable()){
+        if (myView.getPickedVacation() != null && myView.getPickedVacation().isExchangeable()){
             showExchangeOrBuyVacationWindow();
         }
-        else{
+        else if (myView.getPickedVacation() != null){
             showBuyVacationWindow();
         }
 
@@ -167,15 +166,15 @@ public class VacationSearchController extends Observable implements Observer,Sub
     }
 
     public String getVacationPickedKey(){
-        if (pickedVacation != null){
-            return pickedVacation.getVacationKey();
+        if (myView.getPickedVacation() != null){
+            return myView.getPickedVacation().getVacationKey();
         }
         return null;
     }
 
     public String getVacationPickedSeller(){
-        if (pickedVacation != null){
-            return pickedVacation.getSellerKey();
+        if (myView.getPickedVacation() != null){
+            return myView.getPickedVacation().getSellerKey();
         }
         return null;
     }
@@ -185,8 +184,8 @@ public class VacationSearchController extends Observable implements Observer,Sub
         if (o == myView){
             if (arg.equals(VACATION_PICKED)){
                 if (UserModel.isLoggedIn()) {
-                    pickedVacation = myView.getPickedVacation();
-                    if (pickedVacation.getSellerKey().equals(UserModel.getUserName())){
+                    //pickedVacation = myView.getPickedVacation();
+                    if (myView.getPickedVacation() != null && myView.getPickedVacation().getSellerKey().equals(UserModel.getUserName())){
                         informationDialog("Not Relevant for You",null, "Why would you want to buy your own vacation?!");
                     }else {
                         if (checkIfAlreadyRequested()){
