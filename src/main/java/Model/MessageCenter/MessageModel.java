@@ -40,7 +40,7 @@ public class MessageModel {
     /**
      * Message parameters: {messageType, info}
      */
-    public List<Pair<Message, String[]>> createMessageParametersForController() {
+    public List<Pair<Message, String[]>> createMessageParametersForController() { // TODO: 03/01/2019 if buyer wish to buy -> we dont need thr approval of seller!
         List<Pair<Message, String[]>> messageParameters = new LinkedList<>();
         for (Message message : messagesList.getMessagesList()) {
             boolean flag = true;
