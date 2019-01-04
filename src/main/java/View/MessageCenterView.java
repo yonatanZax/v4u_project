@@ -25,7 +25,7 @@ public class MessageCenterView extends Observable {
     public TableColumn<ListMessageContent, String> messageType_col;
     public TableColumn<ListMessageContent, String> info_col;
 
-    private Request pickedRequest;
+//    private Request pickedRequest;
 
     private ObservableList<Request> masterData = FXCollections.observableArrayList();
 
@@ -38,9 +38,9 @@ public class MessageCenterView extends Observable {
                 if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
                     Request rowData = row.getItem().getMessage().getRequest();
                     System.out.println("Request picked: " + rowData.getVacationKey() + ", Seller: " + rowData.getSellerKey() + ", Buyer: " + rowData.getBuyerKey());
-                    pickedRequest = rowData;
                     this.setChanged();
-                    this.notifyObservers(ControllerMessageCenter.REQUEST_PICKED);
+//                    this.notifyObservers(ControllerMessageCenter.REQUEST_PICKED);
+                    this.notifyObservers(rowData);
                 }
             });
             return row ;
@@ -62,7 +62,7 @@ public class MessageCenterView extends Observable {
         notifyObservers("refresh");
     }
 
-    public Request getPickedRequest() {
-        return pickedRequest;
-    }
+//    public Request getPickedRequest() {
+//        return pickedRequest;
+//    }
 }

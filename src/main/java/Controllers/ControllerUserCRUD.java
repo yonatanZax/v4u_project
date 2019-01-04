@@ -1,19 +1,19 @@
 //package Controllers;
 
-import Model.ACRUDModel;
-import Model.User.UserModel;
-import View.CRUDViews.UserCRUDView;
-import View.LoginView;
-import db.DBResult;
-import Model.User.User;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import MainPackage.Enum_CRUD;
-import java.io.IOException;
-import java.util.Observable;
-import java.util.Observer;
+//import Model.ACRUDModel;
+//import Model.User.UserModel;
+//import View.CRUDViews;
+//import View.LoginView;
+//import db.DBResult;
+//import Model.User.User;
+//import javafx.fxml.FXMLLoader;
+//import javafx.scene.Parent;
+//import javafx.scene.Scene;
+//import javafx.stage.Stage;
+//import MainPackage.Enum_CRUD;
+//import java.io.IOException;
+//import java.util.Observable;
+//import java.util.Observer;
 //
 //
 //public class ControllerUserCRUD implements Observer {}

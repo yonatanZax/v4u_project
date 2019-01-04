@@ -46,7 +46,7 @@ public class ControllerMessageCenter extends Observable implements Observer, Sub
     private MessageModel messageModel;
     private Parent root;
     private FXMLLoader fxmlLoader;
-    private Request pickedRequest;
+//    private Request pickedRequest;
     public static final String REQUEST_PICKED = "request_picked";
 
 
@@ -156,7 +156,7 @@ public class ControllerMessageCenter extends Observable implements Observer, Sub
         }
     }
 
-    private void initPurchase() {
+    private void initPurchase(Request pickedRequest) {
         String sellerName = pickedRequest.getSellerKey();
         if (pickedRequest.getVacationToExchange() <1) {
             purchaseModel.insertPurchaseToTable(pickedRequest.getVacationKey(), pickedRequest.getSellerKey(), userModel.getContactInfo(sellerName), pickedRequest.getBuyerKey(), null);
@@ -166,18 +166,24 @@ public class ControllerMessageCenter extends Observable implements Observer, Sub
         requestModel.updateApprovedRequest(pickedRequest);
     }
 
+
+    @Override
+    public Parent getRoot() {
+        return root;
+    }
+
     @Override
     public void update(Observable o, Object arg) {
         if (o.equals(messageCenterView)) {
             if (arg.equals("history")) {
                 informationDialog("This process is still under construction...");
-            } else if (arg.equals(REQUEST_PICKED)) {
-                Request pickedRequest = messageCenterView.getPickedRequest();
+            } else if (arg instanceof Request) {
+                Request pickedRequest = (Request) arg;
                 if (pickedRequest.getSellerKey().equals(messageModel.getUserName())) {
                     if (!pickedRequest.getApproved()) {
                         boolean approved = confirmDialog("Do you APPROVE to make this deal?");
                         if (approved) {
-                            initPurchase();
+                            initPurchase(pickedRequest);
                             fillTableList();
                         }
                     } else {
@@ -193,16 +199,21 @@ public class ControllerMessageCenter extends Observable implements Observer, Sub
     }
 
     @Override
-    public Parent getRoot() {
-        return root;
-    }
-
-    @Override
     public void updateSubScene() {
         messageCenterView.messageCenter_tableList.setItems(null);
         fillTableList();
     }
 
+
+//        private void initPurchase(Request pickedRequest) {
+//        String sellerName = this.pickedRequest.getSellerKey();
+//        if (this.pickedRequest.getVacationToExchange() <1) {
+//            purchaseModel.insertPurchaseToTable(this.pickedRequest.getVacationKey(), this.pickedRequest.getSellerKey(), userModel.getContactInfo(sellerName), this.pickedRequest.getBuyerKey(), null);
+//        } else {
+//            purchaseModel.insertPurchaseToTable(this.pickedRequest.getVacationKey(), this.pickedRequest.getSellerKey(), userModel.getContactInfo(sellerName), this.pickedRequest.getBuyerKey(), String.valueOf(this.pickedRequest.getVacationToExchange()));
+//        }
+//        requestModel.updateApprovedRequest(this.pickedRequest);
+//    }
 //    @Override
 //    public void update(Observable o, Object arg) {
 //        if (o.equals(messageCenterView)) {
@@ -225,10 +236,7 @@ public class ControllerMessageCenter extends Observable implements Observer, Sub
 //                }
 //            }
 //        }
-
 //    }
-
-
 //    private void updatePurchase(String buyerPaymentAccount) {
 //        String[][] parameters = {{PurchaseTable.COLUMN_PURCHASETABLE_VACATIONKEY}, {pickedRequest.getVacationKey()}};
 //        List<Purchase> purchaseList = purchaseModel.readDataFromDB(parameters);
@@ -248,7 +256,6 @@ public class ControllerMessageCenter extends Observable implements Observer, Sub
 //        PaypalPayment payment = new PaypalPayment(null, buyerPaymentAccount, sellerAccount, amount);
 //        paypalAPI.InsertToTable(payment);
 //    }
-
 //    private void initPurchase(String paymentAccount) {
 //        purchaseModel.insertPurchaseToTable(pickedRequest.getVacationKey(), pickedRequest.getSellerKey(), paymentAccount, pickedRequest.getBuyerKey());
 //        requestModel.updateApprovedRequest(pickedRequest);

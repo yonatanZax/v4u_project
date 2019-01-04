@@ -2,6 +2,7 @@ package Controllers;
 
 import Model.Request.RequestModel;
 import Model.User.UserModel;
+import Model.Vacation.Vacation;
 import Model.Vacation.VacationModel;
 import View.HomeView;
 import javafx.application.Application;
@@ -11,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import org.apache.commons.lang3.tuple.MutablePair;
 
 import java.io.File;
 import java.io.IOException;
@@ -176,25 +178,26 @@ public class ControllerHome implements Observer {
                     controllerLogin.errorMessageNotLoggedIn("Only Registered User can publish new vacation for sale.");
                 }
 
-            }else if(arg.equals(VacationSearchController.VACATION_PICKED)){
+            } else if (arg instanceof MutablePair) {
+                MutablePair<String, Vacation> updatePair = (MutablePair<String, Vacation>) arg;
+                if (updatePair.left.equals(VacationSearchController.VACATION_PICKED)) {
 
-            }
-            else if (arg.equals(VacationSearchController.SEND_VACATION_PURCHASE_REQUEST)){
-                homeView.setStatusBarString("Purchase request was sent to the seller");
-                String vacationKey = vacationSearchController.getVacationPickedKey();
-                String vacationSellerKey = vacationSearchController.getVacationPickedSeller();
-                if (vacationKey != null && vacationSellerKey != null){
-                    // todo - change exchange (last parameter next func) as needed
-                    requestModel.insertRequestToTable(vacationKey, vacationSellerKey, 0);
-                }
-            }
-            else if (arg.equals(VacationSearchController.EXCHANGE)){
-                homeView.setStatusBarString("Purchase request was sent to the seller");
-                String vacationKey = vacationSearchController.getVacationPickedKey();
-                String vacationSellerKey = vacationSearchController.getVacationPickedSeller();
-                String exchangeKey = vacationSearchController.getExchangedKey();
-                if (vacationKey != null && vacationSellerKey != null){
-                    requestModel.insertRequestToTable(vacationKey, vacationSellerKey, Integer.valueOf(exchangeKey));
+                } else if (updatePair.left.equals(VacationSearchController.SEND_VACATION_PURCHASE_REQUEST)) {
+                    homeView.setStatusBarString("Purchase request was sent to the seller");
+                    String vacationKey = updatePair.right.getVacationKey();
+                    String vacationSellerKey = updatePair.right.getSellerKey();
+                    if (vacationKey != null && vacationSellerKey != null) {
+                        // todo - change exchange (last parameter next func) as needed
+                        requestModel.insertRequestToTable(vacationKey, vacationSellerKey, 0);
+                    }
+                } else if (updatePair.left.equals(VacationSearchController.EXCHANGE)) {
+                    homeView.setStatusBarString("Purchase request was sent to the seller");
+                    String vacationKey = updatePair.right.getVacationKey();
+                    String vacationSellerKey = updatePair.right.getSellerKey();
+                    String exchangeKey = vacationSearchController.getExchangedKey();
+                    if (vacationKey != null && vacationSellerKey != null) {
+                        requestModel.insertRequestToTable(vacationKey, vacationSellerKey, Integer.valueOf(exchangeKey));
+                    }
                 }
             }
         }else if(o.equals(controllerLogin)){

@@ -14,6 +14,8 @@ import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import org.apache.commons.lang3.mutable.Mutable;
+import org.apache.commons.lang3.tuple.MutablePair;
 
 
 import java.time.LocalDate;
@@ -48,7 +50,7 @@ public class VacationSearchView extends Observable{
 
     private ObservableList<Vacation> masterData = FXCollections.observableArrayList();
 
-    private Vacation pickedVacation;
+//    private Vacation pickedVacation;
 
 
     @FXML
@@ -61,9 +63,9 @@ public class VacationSearchView extends Observable{
                 if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
                     Vacation rowData = row.getItem();
                     System.out.println("Vacation picked: " + rowData.getVacationKey());
-                    pickedVacation = rowData;
+//                    pickedVacation = rowData;
                     this.setChanged();
-                    this.notifyObservers(VacationSearchController.VACATION_PICKED);
+                    this.notifyObservers(new MutablePair<String,Vacation>("",rowData));
                 }
             });
             return row ;
@@ -117,16 +119,14 @@ public class VacationSearchView extends Observable{
         return vacation.isVisible() && booleanVal;
     }
 
-    public Vacation getPickedVacation() {
-        return pickedVacation;
-    }
-
+//    public Vacation getPickedVacation() {
+//        return pickedVacation;
+//    }
 
     public void addVacationOnAction(){
         setChanged();
         notifyObservers(VacationSearchController.BTN_ADD);
     }
-
 
     public void setVacations_listview(List<Vacation> vacationList) {
         Vacation[] vacations = new Vacation[vacationList.size()];
