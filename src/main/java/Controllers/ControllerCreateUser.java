@@ -5,6 +5,7 @@ import Model.User.UserModel;
 import View.UserDetailsView;
 import db.DBResult;
 import Model.User.User;
+import db.Tables.UserTable;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,7 +20,7 @@ import java.util.Observer;
 public class ControllerCreateUser implements Observer{
 
     private UserDetailsView myView;
-    private ACRUDModel myModel;
+    private UserModel userModel;
     private String status;
     private Stage stage;
     private Parent root;
@@ -27,7 +28,7 @@ public class ControllerCreateUser implements Observer{
 
     private String updateUserName = null;
 
-    public ControllerCreateUser(ACRUDModel myModel) {
+    public ControllerCreateUser(UserModel myModel) {
         stage = new Stage();
         fxmlLoader = new FXMLLoader(getClass().getResource("/createUser_view.fxml"));
         try {
@@ -40,7 +41,7 @@ public class ControllerCreateUser implements Observer{
         stage.setScene(scene);
         myView = fxmlLoader.getController();
 
-        this.myModel = myModel;
+        userModel = myModel;
         myModel.addObserver(this);
     }
 
@@ -107,7 +108,6 @@ public class ControllerCreateUser implements Observer{
         System.out.println("ControllerCreateUser: generateUser");
         myView.setResult_lbl("");
         String userName = myView.getUserName();
-
         String password = myView.getPassword();
         String firstName = myView.getFirstName();
         String lastName = myView.getLastName();
@@ -135,7 +135,7 @@ public class ControllerCreateUser implements Observer{
 
         User newUser = generateUserFromFields();
         if (newUser != null){
-            myModel.createNewData(newUser);
+            userModel.createNewData(newUser);
         }else{
             myView.setResult_lbl("Please fill all the fields correctly..");
         }
@@ -149,7 +149,7 @@ public class ControllerCreateUser implements Observer{
                 myView.setResult_lbl("User name already exist");
             }
             else{
-                myModel.updateTable(newUser);
+                userModel.updateTable(newUser);
             }
         } else
             myView.setResult_lbl("Please fill all the fields..");
@@ -165,7 +165,7 @@ public class ControllerCreateUser implements Observer{
      */
     private boolean checkUpdateUserName(String newUserName, String oldUserName){
         if(!newUserName.equals(oldUserName)){
-            User user = ((UserModel)myModel).readUser(oldUserName);
+            User user =  userModel.readUser(oldUserName);
             if(user != null){
                 return false;
             }
@@ -191,7 +191,7 @@ public class ControllerCreateUser implements Observer{
             }else if(status.equals("update")){
                 updateInfo();
             }
-        }else if (o == myModel){
+        }else if (o == userModel){
             System.out.println("ControllerCreateUser: update by userModel");
 
             if(arg.equals(DBResult.ADDED)) {

@@ -22,8 +22,8 @@ public class ControllerLogin extends Observable implements Observer {
 
     // Class variables
     private LoginView loginView;
-    private UserModel userModel = new UserModel();
-    private ControllerUserCRUD controllerUserCRUD = new ControllerUserCRUD();
+    private UserModel userModel;
+    private ControllerCreateUser controllerCreateUser;
 
     // GUI
     private Stage stage;
@@ -31,7 +31,7 @@ public class ControllerLogin extends Observable implements Observer {
     private FXMLLoader fxmlLoader;
 
 
-    public ControllerLogin() {
+    public ControllerLogin(UserModel userModel) {
         stage = new Stage();
         fxmlLoader = new FXMLLoader(getClass().getResource("/login_view.fxml"));
         try {
@@ -39,6 +39,8 @@ public class ControllerLogin extends Observable implements Observer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.userModel = userModel;
+        this.controllerCreateUser  = new ControllerCreateUser(userModel);
         Scene scene = new Scene(root);
         stage.getIcons().add(new Image("/images/user.png"));
         stage.setScene(scene);
@@ -76,7 +78,7 @@ public class ControllerLogin extends Observable implements Observer {
 
 
         } else if (o.equals(loginView) && arg.equals(LoginView.LOGINVIEW_SIGNIN)) {
-            controllerUserCRUD.createUser();
+            controllerCreateUser.openCreate();
         }
     }
 }

@@ -34,6 +34,7 @@ public class Main extends Application {
             vacationTable.InsertToTable(new Vacation(null, "ForShizelMyNizel","Tel Aviv","Delhi",true,20181210,350,20190604,false));
             System.out.println("*     Init project successfully   *");
         }
+        VacationTable.getInstance().updateTableByDate();
     }
 
     public static void main(String[] args) {

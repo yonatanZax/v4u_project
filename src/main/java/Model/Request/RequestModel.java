@@ -14,10 +14,12 @@ import java.util.List;
 
 public class RequestModel extends ACRUDModel<Request> {
 
-    public RequestModel() {
+    private VacationModel vacationModel;
+
+    public RequestModel(VacationModel vacationModel) {
+        this.vacationModel = vacationModel;
         super.setTableManager(RequestTable.getInstance());
     }
-    private VacationModel vacationModel = new VacationModel();
 
     @Override
     public void updateTable(Request request) {
@@ -55,27 +57,43 @@ public class RequestModel extends ACRUDModel<Request> {
     @Override
     public List<Request> readDataFromDB(String[][] parameters) {
         // Todo - implement --> BETTER!!
-            String selection = parameters[0][0] + " IN (";
-            for (int i = 0; i < parameters[1].length - 1; i++) {
-                selection += "\"" + parameters[1][i] + "\",";
-            }
-            selection += "\"" + parameters[1][parameters[1].length - 1] + "\")";
+        String selection = parameters[0][0] + " IN (";
+        for (int i = 0; i < parameters[1].length - 1; i++) {
+            selection += "\"" + parameters[1][i] + "\",";
+        }
+        selection += "\"" + parameters[1][parameters[1].length - 1] + "\")";
 
-            // Get the list of users from the database
-            List<Request> dataList = tableManager.select(null, selection, null);
+        // Get the list of users from the database
+        List<Request> dataList = tableManager.select(null, selection, null);
         return dataList;
     }
 
-    public void insertRequestToTable(String vacationKey, String seller, boolean exchange) {
+    public void insertRequestToTable(String vacationKey, String seller, int vacToExchange) {
         String userName = UserModel.getUserName();
-        Request request = new Request(vacationKey, seller, userName, false, getCurrentTimeStamp(),Request.states[0], exchange);
+        Request request = new Request(vacationKey, seller, userName, false, getCurrentTimeStamp(),Request.states[0], vacToExchange);
         createNewData(request);
     }
 
-    public void finishPurchase(Request request){
-        String[][] requestParameters = {{RequestTable.COLUMN_REQUESTTABLE_VACATIONKEY},{request.getVacationKey()}};
+    public void finishPurchase(Request request) {
+        String[][] requestParameters = {{RequestTable.COLUMN_REQUESTTABLE_VACATIONKEY}, {request.getVacationKey()}};
         List<Request> list = readDataFromDB(requestParameters);
-        for (Request req : list){
+
+        // set vacation to Visible = false, if vacation exchanged change the exchanged to Visible = false also.
+        String[][] vacationParameters = {{VacationTable.COLUMN_VACATIONTABLE_KEY}, {request.getVacationKey()}};
+        List<Vacation> vacationList = vacationModel.readDataFromDB(vacationParameters);
+        Vacation vacation = vacationList.get(0);
+        vacation.setVisible(false);
+        vacationModel.updateTable(vacation);
+
+        if (request.getVacationToExchange() != 0) {
+            vacationParameters[1][0] = String.valueOf(request.getVacationToExchange());
+            vacationList = vacationModel.readDataFromDB(vacationParameters);
+            vacation = vacationList.get(0);
+            vacation.setVisible(false);
+            vacationModel.updateTable(vacation);
+        }
+
+        for (Request req : list) {
             req.setState(Request.states[3]);
             updateTable(req);
         }
@@ -83,28 +101,33 @@ public class RequestModel extends ACRUDModel<Request> {
         updateTable(request);
     }
 
-    public void updateApprovedRequest(Request request){
+    public void updateApprovedRequest(Request request) {
         request.setState(Request.states[1]);
         request.setApproved(true);
         updateTable(request);
-        String[][] vacationParameters = {{VacationTable.COLUMN_VACATIONTABLE_KEY},{request.getVacationKey()}};
-        List<Vacation> vacationList = vacationModel.readDataFromDB(vacationParameters);
-        Vacation vacation = vacationList.get(0);
-        vacation.setVisible(false);
-        vacationModel.updateTable(vacation);
-        String[][] requestParameters = {{RequestTable.COLUMN_REQUESTTABLE_VACATIONKEY},{request.getVacationKey()}};
+//        String[][] vacationParameters = {{VacationTable.COLUMN_VACATIONTABLE_KEY},{request.getVacationKey()}};
+//        List<Vacation> vacationList = vacationModel.readDataFromDB(vacationParameters);
+//        Vacation vacation = vacationList.get(0);
+//        vacation.setVisible(false);
+//        vacationModel.updateTable(vacation);
+        String[][] requestParameters = {{RequestTable.COLUMN_REQUESTTABLE_VACATIONKEY}, {request.getVacationKey()}};
         List<Request> list = readDataFromDB(requestParameters);
-        for (Request req : list){
+        for (Request req : list) {
             req.setState(Request.states[1]);
             updateTable(req);
         }
+
         // if request is for vacation exchange
-        if (request.getVacationToExchange() != null){
-            vacationParameters[1][0] = request.getVacationToExchange().getVacationKey();
-            vacationList = vacationModel.readDataFromDB(vacationParameters);
-            vacation = vacationList.get(0);
-            vacation.setVisible(false);
-            vacationModel.updateTable(vacation);
-        }
+//        if (request.getVacationToExchange() != 0){
+//            vacationParameters[1][0] = String.valueOf(request.getVacationToExchange());
+//            vacationList = vacationModel.readDataFromDB(vacationParameters);
+//            vacation = vacationList.get(0);
+//            vacation.setVisible(false);
+//            vacationModel.updateTable(vacation);
+//        }
+    }
+
+    public VacationModel getVacationModel() {
+            return vacationModel;
     }
 }

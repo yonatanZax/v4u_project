@@ -2,9 +2,10 @@ package Controllers;
 
 import Model.Request.RequestModel;
 import Model.User.UserModel;
-import Model.Vacation.Vacation;
+import Model.Vacation.VacationModel;
 import View.HomeView;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -29,11 +30,14 @@ public class ControllerHome implements Observer {
 
     private HomeView homeView;
 
-    private VacationSearchController vacationSearchController = new VacationSearchController();
-    private ControllerMessageCenter controllerMessageCenter = new ControllerMessageCenter();
-    private ControllerLogin controllerLogin = new ControllerLogin();
-    private ControllerCreateVacation controllerCreateVacation = new ControllerCreateVacation();
-    private RequestModel requestModel = new RequestModel();
+    private VacationSearchController vacationSearchController;
+    private ControllerMessageCenter controllerMessageCenter;
+    private ControllerLogin controllerLogin;
+    private ControllerCreateVacation controllerCreateVacation;
+    private RequestModel requestModel;
+    private String subSceneName = "";
+    private SubScenable currentSceneController;
+    private Thread refreshThread = new Thread();
 
     public ControllerHome() {
         stage = new Stage();
@@ -44,10 +48,16 @@ public class ControllerHome implements Observer {
             e.printStackTrace();
         }
         Scene scene = new Scene(root);
+        VacationModel vacationModel = new VacationModel();
+        requestModel = new RequestModel(vacationModel);
+        UserModel userModel = new UserModel();
+        controllerMessageCenter = new ControllerMessageCenter(requestModel,userModel);
+        controllerLogin = new ControllerLogin(userModel);
+        controllerCreateVacation = new ControllerCreateVacation(vacationModel);
+        vacationSearchController = new VacationSearchController(vacationModel);
         stage.getIcons().add(new Image("/images/vacation.png"));
         stage.setTitle("Vacation 4 U");
         stage.setScene(scene);
-
         homeView = fxmlLoader.getController();
         homeView.addObserver(this);
 
@@ -62,8 +72,8 @@ public class ControllerHome implements Observer {
         // Set the subSceneName to be vacationSearchController
         vacationSearchController.updateSubScene();
         homeView.setSub_scene(vacationSearchController.getRoot());
-
-
+        currentSceneController = vacationSearchController;
+        startRefreshThread();
         stage.show();
     }
 
@@ -81,11 +91,37 @@ public class ControllerHome implements Observer {
     public void changeLoginStatus(String userName){
         if (userName == null) {
             vacationSearchController.updateSubScene();
+            currentSceneController = vacationSearchController;
+            startRefreshThread();
         }
         homeView.setLoginStatusLabel(userName);
     }
 
-    private String subSceneName = "";
+    private void startRefreshThread(){
+        if(refreshThread.isAlive()){
+            refreshThread.interrupt();
+        }
+        refreshThread = new Thread(this::runRefreshThread);
+        refreshThread.setDaemon(true);
+        refreshThread.start();
+    }
+
+    private void runRefreshThread(){
+
+        try {
+            while(true) {
+                Thread.sleep(((long) (5 * 1000)));
+                Platform.runLater(() -> {
+                    currentSceneController.updateSubScene();
+                });
+            }
+        } catch (InterruptedException e) {
+            return;
+        }
+
+    }
+
+
 
     @Override
     public void update(Observable o, Object arg) {
@@ -108,16 +144,19 @@ public class ControllerHome implements Observer {
                 if(!subSceneName.equals(controllerMessageCenter.getClass().getSimpleName())) {
                     subSceneName = controllerMessageCenter.getClass().getSimpleName();
                     controllerMessageCenter.updateSubScene();
+                    currentSceneController = controllerMessageCenter;
                     newRoot = controllerMessageCenter.getRoot();
                     imagePath = "/images/search.png";
                 }else{
                     subSceneName = vacationSearchController.getClass().getSimpleName();
                     vacationSearchController.updateSubScene();
+                    currentSceneController = vacationSearchController;
                     newRoot = vacationSearchController.getRoot();
                     imagePath = "/images/mail.png";
                 }
                 homeView.setSubsceneIcon(imagePath);
                 homeView.setSub_scene(newRoot);
+                startRefreshThread();
 
             }else if (arg.equals(HomeView.HOMEVIEW_AGRS_GOBACK)){
 //                if(!subSceneStack.empty()){
@@ -146,9 +185,17 @@ public class ControllerHome implements Observer {
                 String vacationSellerKey = vacationSearchController.getVacationPickedSeller();
                 if (vacationKey != null && vacationSellerKey != null){
                     // todo - change exchange (last parameter next func) as needed
-                    requestModel.insertRequestToTable(vacationKey, vacationSellerKey, false);
+                    requestModel.insertRequestToTable(vacationKey, vacationSellerKey, 0);
                 }
-
+            }
+            else if (arg.equals(VacationSearchController.EXCHANGE)){
+                homeView.setStatusBarString("Purchase request was sent to the seller");
+                String vacationKey = vacationSearchController.getVacationPickedKey();
+                String vacationSellerKey = vacationSearchController.getVacationPickedSeller();
+                String exchangeKey = vacationSearchController.getExchangedKey();
+                if (vacationKey != null && vacationSellerKey != null){
+                    requestModel.insertRequestToTable(vacationKey, vacationSellerKey, Integer.valueOf(exchangeKey));
+                }
             }
         }else if(o.equals(controllerLogin)){
             if (arg.equals(ControllerLogin.CONTROLLER_LOGIN_ARGS_LOGGEDIN)){

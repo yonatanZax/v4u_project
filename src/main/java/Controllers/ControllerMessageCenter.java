@@ -38,47 +38,33 @@ import java.util.Optional;
 
 public class ControllerMessageCenter extends Observable implements Observer, SubScenable {
 
-    MessageCenterView messageCenterView;
 
-    private PaypalTable paypalAPI;
-    private UserModel userModel = new UserModel();
-    private VacationModel vacationModel = new VacationModel();
-    private RequestModel requestModel = new RequestModel();
+    private MessageCenterView messageCenterView;
+    private UserModel userModel;
     private PurchaseModel purchaseModel = new PurchaseModel();
-    private MessageModel messageModel = new MessageModel();
+    private RequestModel requestModel;
+    private MessageModel messageModel;
     private Parent root;
     private FXMLLoader fxmlLoader;
-
     private Request pickedRequest;
-
     public static final String REQUEST_PICKED = "request_picked";
 
-    public ControllerMessageCenter() {
+
+
+    public ControllerMessageCenter(RequestModel requestModel, UserModel userModel) {
+        messageModel = new MessageModel(requestModel);
         fxmlLoader = new FXMLLoader(getClass().getResource("/messageCenter_view.fxml"));
         try {
             root = fxmlLoader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        this.userModel=userModel;
+        this.requestModel = requestModel;
         messageCenterView = fxmlLoader.getController();
         messageCenterView.addObserver(this);
     }
 
-
-    @Override
-    public Parent getRoot() {
-        return root;
-    }
-
-    @Override
-    public void updateSubScene() {
-        messageCenterView.messageCenter_tableList.setItems(null);
-        fillTableList();
-    }
-
-    // todo - cant send PURCHASE REQUEST TWICE.. need to be checked!!!!!
-    // todo - change table list colours to be different than the search list (home page)
 
     private void fillTableList() {
         messageModel.checkIfApprovalDue();
@@ -170,6 +156,53 @@ public class ControllerMessageCenter extends Observable implements Observer, Sub
         }
     }
 
+    private void initPurchase() {
+        String sellerName = pickedRequest.getSellerKey();
+        if (pickedRequest.getVacationToExchange() <1) {
+            purchaseModel.insertPurchaseToTable(pickedRequest.getVacationKey(), pickedRequest.getSellerKey(), userModel.getContactInfo(sellerName), pickedRequest.getBuyerKey(), null);
+        } else {
+            purchaseModel.insertPurchaseToTable(pickedRequest.getVacationKey(), pickedRequest.getSellerKey(), userModel.getContactInfo(sellerName), pickedRequest.getBuyerKey(), String.valueOf(pickedRequest.getVacationToExchange()));
+        }
+        requestModel.updateApprovedRequest(pickedRequest);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o.equals(messageCenterView)) {
+            if (arg.equals("history")) {
+                informationDialog("This process is still under construction...");
+            } else if (arg.equals(REQUEST_PICKED)) {
+                Request pickedRequest = messageCenterView.getPickedRequest();
+                if (pickedRequest.getSellerKey().equals(messageModel.getUserName())) {
+                    if (!pickedRequest.getApproved()) {
+                        boolean approved = confirmDialog("Do you APPROVE to make this deal?");
+                        if (approved) {
+                            initPurchase();
+                            fillTableList();
+                        }
+                    } else {
+                        boolean approved = confirmDialog("ARE YOU SURE THAT THE DEAL IS MADE WITH THE BUYER?");
+                        if (approved) {
+                            requestModel.finishPurchase(pickedRequest);
+                            fillTableList();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public Parent getRoot() {
+        return root;
+    }
+
+    @Override
+    public void updateSubScene() {
+        messageCenterView.messageCenter_tableList.setItems(null);
+        fillTableList();
+    }
+
 //    @Override
 //    public void update(Observable o, Object arg) {
 //        if (o.equals(messageCenterView)) {
@@ -192,43 +225,8 @@ public class ControllerMessageCenter extends Observable implements Observer, Sub
 //                }
 //            }
 //        }
+
 //    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-        if (o.equals(messageCenterView)) {
-            if (arg.equals("history")) {
-                informationDialog("This process is still under construction...");
-            } else if (arg.equals(REQUEST_PICKED)) {
-                pickedRequest = messageCenterView.getPickedRequest();
-                if (pickedRequest.getSellerKey().equals(messageModel.getUserName())) {
-                    if (pickedRequest.getApproved()) {
-                        boolean approved = confirmDialog("Do you APPROVE to make this deal?");
-                        if (approved) {
-                            initPurchase();
-                            fillTableList();
-                        }
-                    } else {
-                        boolean approved = confirmDialog("ARE YOU SURE THAT THE DEAL IS MADE WITH THE BUYER?");
-                        if (approved) {
-                            requestModel.finishPurchase(pickedRequest);
-                            fillTableList();
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private void initPurchase() {
-        String sellerName = pickedRequest.getSellerKey();
-        if (!pickedRequest.isExchange()) {
-            purchaseModel.insertPurchaseToTable(pickedRequest.getVacationKey(), pickedRequest.getSellerKey(), userModel.getContactInfo(sellerName), pickedRequest.getBuyerKey(), null);
-        } else {
-            purchaseModel.insertPurchaseToTable(pickedRequest.getVacationKey(), pickedRequest.getSellerKey(), userModel.getContactInfo(sellerName), pickedRequest.getBuyerKey(), pickedRequest.getVacationToExchange().getVacationKey());
-        }
-        requestModel.updateApprovedRequest(pickedRequest);
-    }
 
 
 //    private void updatePurchase(String buyerPaymentAccount) {

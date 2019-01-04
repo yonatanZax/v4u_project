@@ -1,8 +1,10 @@
 package db.Managers;
 
+import com.sun.xml.internal.ws.api.addressing.WSEndpointReference;
 import db.DBResult;
 
 import java.sql.*;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +40,36 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         }
         return null;
     }
+
+    protected DBResult executeQuery(String sql){
+        Connection connection = db.connect();
+        PreparedStatement pstmt = null;
+        int  resultInt;
+        DBResult result = DBResult.NONE;;
+        if (connection != null) {
+            try {
+                pstmt = connection.prepareStatement(sql);
+                resultInt = pstmt.executeUpdate();
+                if (1 == resultInt)
+                    result = DBResult.UPDATED;
+            } catch (SQLException e) {
+                int errorCode = e.getErrorCode();
+                if (errorCode == 19)
+                    result = DBResult.ALREADY_EXIST;
+                else {
+                    e.printStackTrace();
+                    result = DBResult.ERROR;
+                }
+            } finally {
+                closeStatement(pstmt);
+                if (db.closeConnection(connection) != DBResult.CONNECTION_CLOSED)
+                    result = DBResult.ERROR;
+            }
+        }
+        return result;
+    }
+
+
 
 
 
@@ -116,7 +148,7 @@ public abstract class ATableManager<T> implements ITableManager<T> {
     @Override
     public List<T> select(String projection, String selection, String orderBy) {
         String sqlQuery = createSQLSelect(projection, selection, orderBy);
-        System.out.println(sqlQuery);
+//        System.out.println(sqlQuery);
         Connection connection = db.connect();
         List<T> list = null;
         if (connection != null) {

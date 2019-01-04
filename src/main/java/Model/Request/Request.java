@@ -10,21 +10,21 @@ public class Request {
     private boolean approved;
     private int timestamp;
     private String state;
-    private boolean exchange;
-    private Vacation vacationToExchange = null;
+//    private boolean exchange;
+    private int vacationToExchange = 0;
 
     public static String[] states = {"PENDING","HOLD","SOLD","DENIED"};
 
     public Request(){}
 
-    public Request(String vacationKey, String sellerKey, String buyerKey, boolean approved, int timestamp, String status, boolean exchange) {
+    public Request(String vacationKey, String sellerKey, String buyerKey, boolean approved, int timestamp, String status, int vacToExchange) {
         this.vacationKey = vacationKey;
         this.sellerKey = sellerKey;
         this.buyerKey = buyerKey;
         this.approved = approved;
         this.timestamp = timestamp;
         this.state = status;
-        this.exchange = exchange;
+        this.vacationToExchange = vacToExchange;
     }
 
     public String getVacationKey() {
@@ -83,19 +83,19 @@ public class Request {
         this.state = state;
     }
 
-    public boolean isExchange() {
-        return exchange;
-    }
+//    public boolean isExchange() {
+//        return exchange;
+//    }
 
-    public void setExchange(boolean exchange) {
-        this.exchange = exchange;
-    }
+//    public void setExchange(boolean exchange) {
+//        this.exchange = exchange;
+//    }
 
-    public Vacation getVacationToExchange() {
+    public int getVacationToExchange() {
         return vacationToExchange;
     }
 
-    public void setVacationToExchange(Vacation vacationToExchange) {
+    public void setVacationToExchange(int vacationToExchange) {
         this.vacationToExchange = vacationToExchange;
     }
 }

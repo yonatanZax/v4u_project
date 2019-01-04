@@ -8,6 +8,7 @@ import db.Managers.DBManager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +53,21 @@ public class VacationTable extends ATableManager<Vacation> {
         String[] doubleFields = {COLUMN_VACATIONTABLE_PRICE};
         return super.createTable(primaryKeys, foreignKeys, stringFields, intFields, doubleFields);
     }
+
+    private int getCurrentTimeStamp() {
+        String date = LocalDateTime.now().getYear() + "" + LocalDateTime.now().getMonthValue() + "" + LocalDateTime.now().getDayOfMonth();
+        return Integer.parseInt(date);
+    }
+
+    public DBResult updateTableByDate(){
+        String sql = "UPDATE " + TABLE_NAME +
+                    " SET " + COLUMN_VACATIONTABLE_VISIBLE + " = 'false'" +
+                    " WHERE " + COLUMN_VACATIONTABLE_DEPARTUREDATE + " <= " + getCurrentTimeStamp();
+        DBResult result = executeQuery(sql);
+        return result;
+
+    }
+
 
 
     @Override /* Has  INTEGER PRIMARY KEY AUTOINCREMENT */
@@ -116,7 +132,8 @@ public class VacationTable extends ATableManager<Vacation> {
                         vacation.setVisible(entry.getValue().equals("true"));
                         break;
                     case COLUMN_VACATIONTABLE_EXCHANGEABLE:
-                        vacation.setExchangeable(entry.getValue());
+//                        vacation.setExchangeable(entry.getValue());
+                        vacation.setExchangeable(entry.getValue().equals("true"));
                         break;
                     case COLUMN_VACATIONTABLE_PRICE:
                         vacation.setPrice(Double.parseDouble(entry.getValue()));

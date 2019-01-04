@@ -5,6 +5,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.MouseEvent;
@@ -12,9 +13,10 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.Observable;
 import java.util.ResourceBundle;
 
-public class VacationCRUDView extends ACRUDView {
+public class CreateVacationView extends Observable implements Initializable {
 
     public TextField price;
     public TextField destination;
@@ -23,8 +25,6 @@ public class VacationCRUDView extends ACRUDView {
     public DatePicker departureDate;
     public CheckBox exchange_checkBox;
 
-
-    @Override
     public void initialize(URL location, ResourceBundle resources) {
         price.setText("500");
         destination.setText("Spain");
@@ -40,10 +40,8 @@ public class VacationCRUDView extends ACRUDView {
         });
     }
 
-
-    @Override
     public void notifyController(Enum_CRUD arg) {
-        System.out.println("VacationCRUDView: " + arg);
+        System.out.println("CreateVacationView: " + arg);
         setChanged();
         notifyObservers(arg);
 
