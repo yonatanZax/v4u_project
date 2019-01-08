@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 import java.util.Observable;
 
-public class UserDetailsView extends Observable implements Initializable {
+public class UserCreateView extends Observable implements Initializable {
 
 
     public TextField userName_textInput;
@@ -108,7 +108,7 @@ public class UserDetailsView extends Observable implements Initializable {
 
 
     public void saveInfo() {
-        System.out.println("UserDetailsView: saveInfo");
+        System.out.println("UserCreateView: saveInfo");
         setChanged();
         notifyObservers("saveInfo");
     }

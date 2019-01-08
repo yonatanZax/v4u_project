@@ -1,11 +1,9 @@
 package Controllers;
 
-import Model.ACRUDModel;
 import Model.User.UserModel;
-import View.UserDetailsView;
+import View.UserCreateView;
 import db.DBResult;
 import Model.User.User;
-import db.Tables.UserTable;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,7 +17,7 @@ import java.util.Observer;
 
 public class ControllerCreateUser implements Observer{
 
-    private UserDetailsView myView;
+    private UserCreateView myView;
     private UserModel userModel;
     private String status;
     private Stage stage;
@@ -49,9 +47,9 @@ public class ControllerCreateUser implements Observer{
         status = "create";
         stage.setTitle("Create user");
 
-        UserDetailsView userDetailsView = fxmlLoader.getController();
-        userDetailsView.resetAll();
-        userDetailsView.addObserver(this);
+        UserCreateView userCreateView = fxmlLoader.getController();
+        userCreateView.resetAll();
+        userCreateView.addObserver(this);
 
         myView.create_datePicker.setValue(LocalDate.now().minusYears(25));
 

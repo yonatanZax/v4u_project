@@ -17,10 +17,10 @@ public class VacationTable extends ATableManager<Vacation> {
 
 
     private static VacationTable ourInstance;
+    private final String FOREIGNKEY_SELLERKEY = "(" + COLUMN_VACATIONTABLE_SELLERKEY + ") references userInfo(key)";
     public static final String COLUMN_VACATIONTABLE_KEY = "key";
     public static final String COLUMN_VACATIONTABLE_SELLERKEY = "sellerKey";
     public static final String COLUMN_VACATIONTABLE_PRICE = "price";
-    private final String FOREIGNKEY_SELLERKEY = "(" + COLUMN_VACATIONTABLE_SELLERKEY + ") references userInfo(key)";
     public static final String COLUMN_VACATIONTABLE_VISIBLE = "visible";
     public static final String COLUMN_VACATIONTABLE_EXCHANGEABLE = "exchange";
     public static final String COLUMN_VACATIONTABLE_DESTINATION = "destination";

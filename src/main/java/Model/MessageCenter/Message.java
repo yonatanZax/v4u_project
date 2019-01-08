@@ -14,10 +14,10 @@ public class Message {
     private Vacation vacation;
     private Request request;
 
-    Message(String seller, String buyer, Vacation vac, boolean isSeller, Request request){
+    Message(String seller, String buyer, Vacation vacation, boolean isSeller, Request request){
         sellerName = new SimpleStringProperty(seller);
         buyerName = new SimpleStringProperty(buyer);
-        vacation = vac;
+        this.vacation = vacation;
         this.isSeller = isSeller;
         this.request = request;
     }
