@@ -25,8 +25,6 @@ public class MessageCenterView extends Observable {
     public TableColumn<ListMessageContent, String> messageType_col;
     public TableColumn<ListMessageContent, String> info_col;
 
-    private Request pickedRequest;
-
     private ObservableList<Request> masterData = FXCollections.observableArrayList();
 
     @FXML
@@ -35,15 +33,15 @@ public class MessageCenterView extends Observable {
         messageCenter_tableList.setRowFactory(tv -> {
             TableRow<ListMessageContent> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
                     Request rowData = row.getItem().getMessage().getRequest();
                     System.out.println("Request picked: " + rowData.getVacationKey() + ", Seller: " + rowData.getSellerKey() + ", Buyer: " + rowData.getBuyerKey());
-                    pickedRequest = rowData;
                     this.setChanged();
-                    this.notifyObservers(ControllerMessageCenter.REQUEST_PICKED);
+//                    this.notifyObservers(ControllerMessageCenter.REQUEST_PICKED);
+                    this.notifyObservers(rowData);
                 }
             });
-            return row;
+            return row ;
         });
 
         messageType_col.setCellValueFactory(cellData -> cellData.getValue().messageTypeProperty());
@@ -60,9 +58,5 @@ public class MessageCenterView extends Observable {
     public void refresh() {
         setChanged();
         notifyObservers("refresh");
-    }
-
-    public Request getPickedRequest() {
-        return pickedRequest;
     }
 }

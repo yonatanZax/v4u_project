@@ -7,6 +7,7 @@ import Model.Purchase.Purchase;
 import Model.Purchase.PurchaseModel;
 import Model.Request.Request;
 import Model.Request.RequestModel;
+import Model.User.UserModel;
 import Model.Vacation.Vacation;
 import Model.Vacation.VacationModel;
 import PaypalPackage.PayPalDBManager;
@@ -37,43 +38,32 @@ import java.util.Optional;
 
 public class ControllerMessageCenter extends Observable implements Observer, SubScenable {
 
-    MessageCenterView messageCenterView;
 
-    private PaypalTable paypalAPI;
-    private VacationModel vacationModel = new VacationModel();
-    private RequestModel requestModel = new RequestModel();
+    private MessageCenterView messageCenterView;
+    private UserModel userModel;
     private PurchaseModel purchaseModel = new PurchaseModel();
-    private MessageModel messageModel = new MessageModel();
+    private RequestModel requestModel;
+    private MessageModel messageModel;
     private Parent root;
     private FXMLLoader fxmlLoader;
-
-    private Request pickedRequest;
-
     public static final String REQUEST_PICKED = "request_picked";
 
-    public ControllerMessageCenter() {
+
+
+    public ControllerMessageCenter(RequestModel requestModel, UserModel userModel) {
+        messageModel = new MessageModel(requestModel);
         fxmlLoader = new FXMLLoader(getClass().getResource("/messageCenter_view.fxml"));
         try {
             root = fxmlLoader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        this.userModel=userModel;
+        this.requestModel = requestModel;
         messageCenterView = fxmlLoader.getController();
         messageCenterView.addObserver(this);
     }
 
-
-    @Override
-    public Parent getRoot() {
-        return root;
-    }
-
-    @Override
-    public void updateSubScene() {
-        messageCenterView.messageCenter_tableList.setItems(null);
-        fillTableList();
-    }
 
     private void fillTableList() {
         messageModel.checkIfApprovalDue();
@@ -120,7 +110,6 @@ public class ControllerMessageCenter extends Observable implements Observer, Sub
 
         dialog.getDialogPane().setContent(gridPane);
 
-
         // Convert the result to a username-password-pair when the login button is clicked.
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == loginButtonType) {
@@ -143,7 +132,7 @@ public class ControllerMessageCenter extends Observable implements Observer, Sub
         dialog.setTitle("Confirm Purchase");
         dialog.setHeaderText("Do you wish to confirm purchase for this seller?");
         dialog.setContentText("Please enter your payPal account to receive payment:");
-// Traditional way to get the response value.
+        // Traditional way to get the response value.
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()) {
             return result.get();
@@ -151,53 +140,65 @@ public class ControllerMessageCenter extends Observable implements Observer, Sub
         return "";
     }
 
+    public boolean confirmDialog(String message) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void initPurchase(Request pickedRequest) {
+        String sellerName = pickedRequest.getSellerKey();
+        if (pickedRequest.getVacationToExchange() <1) {
+            purchaseModel.insertPurchaseToTable(pickedRequest.getVacationKey(), pickedRequest.getSellerKey(), userModel.getContactInfo(sellerName), pickedRequest.getBuyerKey(), null);
+        } else {
+            purchaseModel.insertPurchaseToTable(pickedRequest.getVacationKey(), pickedRequest.getSellerKey(), userModel.getContactInfo(sellerName), pickedRequest.getBuyerKey(), String.valueOf(pickedRequest.getVacationToExchange()));
+        }
+    }
+
+
+    @Override
+    public Parent getRoot() {
+        return root;
+    }
 
     @Override
     public void update(Observable o, Object arg) {
         if (o.equals(messageCenterView)) {
             if (arg.equals("history")) {
                 informationDialog("This process is still under construction...");
-            } else if (arg.equals(REQUEST_PICKED)) {
-                pickedRequest = messageCenterView.getPickedRequest();
+            } else if (arg instanceof Request) {
+                Request pickedRequest = (Request) arg;
                 if (pickedRequest.getSellerKey().equals(messageModel.getUserName())) {
-                    String paymentAccount = confirmPurchase();
-                    if (!paymentAccount.equals("")) {
-                        initPurchase(paymentAccount);
-                        fillTableList();
-                    }
-                } else {
-                    String paymentAccount = confirmPaymentPurchase();
-                    if (!paymentAccount.equals("")) {
-                        updatePurchase(paymentAccount);
-                        fillTableList();
+                    if (!pickedRequest.getApproved()) {
+                        boolean approved = confirmDialog("Do you APPROVE to make this deal?");
+                        if (approved) {
+                            requestModel.updateApprovedRequest(pickedRequest);
+                            fillTableList();
+                        }
+                    } else {
+                        boolean approved = confirmDialog("ARE YOU SURE THAT THE DEAL IS MADE WITH THE BUYER?");
+                        if (approved) {
+                            initPurchase(pickedRequest);
+                            requestModel.finishPurchase(pickedRequest);
+                            fillTableList();
+                        }
                     }
                 }
             }
         }
     }
 
-    private void updatePurchase(String buyerPaymentAccount) {
-        String[][] parameters = {{PurchaseTable.COLUMN_PURCHASETABLE_VACATIONKEY}, {pickedRequest.getVacationKey()}};
-        List<Purchase> purchaseList = purchaseModel.readDataFromDB(parameters); // todo - read worng data (in table data is different) - need fix
-        Purchase purchase = purchaseList.get(0);
-        purchase.setBuyerEmail(buyerPaymentAccount);
-        purchaseModel.updateTable(purchase); // // todo - not updating data (in table data is different) - need fix
-        requestModel.finishPurchase(pickedRequest);
-
-        // DEMO FOR PAYPAL API USAGE
-
-        paypalAPI = PaypalTable.getInstance();
-        String sellerAccount = purchase.getSellerEmail();
-        String[][] vacationParameters = {{VacationTable.COLUMN_VACATIONTABLE_KEY}, {purchase.getVacationKey()}};
-        List<Vacation> vacationList = vacationModel.readDataFromDB(vacationParameters);
-        Double amount = vacationList.get(0).getPrice();
-        PaypalPayment payment = new PaypalPayment(null, buyerPaymentAccount, sellerAccount, amount);
-        paypalAPI.InsertToTable(payment); // todo - not inserting
+    @Override
+    public void updateSubScene() {
+        messageCenterView.messageCenter_tableList.setItems(null);
+        fillTableList();
     }
-
-    private void initPurchase(String paymentAccount) {
-        purchaseModel.insertPurchaseToTable(pickedRequest.getVacationKey(), pickedRequest.getSellerKey(), paymentAccount, pickedRequest.getBuyerKey());
-        requestModel.updateApprovedRequest(pickedRequest);
-    }
-
 }

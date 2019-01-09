@@ -1,15 +1,15 @@
 package db.Managers;
-
 import db.DBResult;
 
 import java.sql.*;
+import java.time.LocalTime;
 
 public class DBManager implements IDBManager {
 
     private static DBManager ourInstance;
 
     public static DBManager getInstance() {
-        if (ourInstance == null) {
+        if(ourInstance == null) {
             ourInstance = new DBManager();
             ourInstance.createDatabase();
         }
@@ -24,7 +24,7 @@ public class DBManager implements IDBManager {
         DBResult result = DBResult.NONE;
 
         Connection connection = connect();
-        if (connection != null) {
+        if(connection != null) {
             try {
                 DatabaseMetaData meta = connection.getMetaData();
                 result = DBResult.DATABASE_CREATED;
@@ -32,7 +32,7 @@ public class DBManager implements IDBManager {
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
                 result = DBResult.ERROR;
-            } finally {
+            }finally {
                 if (closeConnection(connection) != DBResult.CONNECTION_CLOSED)
                     result = DBResult.ERROR;
             }
@@ -43,7 +43,7 @@ public class DBManager implements IDBManager {
     public DBResult createTable(String sql) {
         DBResult result = DBResult.NONE;
         Connection conn = connect();
-        if (conn != null && sql != null) {
+        if(conn != null && sql != null) {
             try {
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 // createUser a new table
@@ -60,6 +60,7 @@ public class DBManager implements IDBManager {
         }
         return result;
     }
+
 
 
     @Override

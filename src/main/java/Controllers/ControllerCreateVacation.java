@@ -2,7 +2,7 @@ package Controllers;
 
 import MainPackage.Enum_CRUD;
 import Model.Vacation.VacationModel;
-import View.CRUDViews.VacationCRUDView;
+import View.CRUDViews.CreateVacationView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -11,7 +11,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -20,18 +19,19 @@ public class ControllerCreateVacation extends Observable implements Observer {
     private Stage stage;
     private Parent root;
     private FXMLLoader fxmlLoader;
-    public VacationCRUDView vacationView;
-    public VacationModel vacationModel = new VacationModel();
+    public CreateVacationView createVacationView;
+    public VacationModel vacationModel;
 
     public static final String VACATION_ADDED = "vacation_added";
 
     public void showStage() {
-        vacationView.price.setText("500");
-        vacationView.destination.setText("Spain");
+        createVacationView.price.setText("500");
+        createVacationView.destination.setText("Spain");
         stage.show();
     }
 
-    public ControllerCreateVacation() {
+    public ControllerCreateVacation(VacationModel vacationModel) {
+        this.vacationModel = vacationModel;
         stage = new Stage();
         fxmlLoader = new FXMLLoader(getClass().getResource("/createVacation_view.fxml"));
         try {
@@ -42,8 +42,8 @@ public class ControllerCreateVacation extends Observable implements Observer {
         Scene scene = new Scene(root);
         stage.getIcons().add(new Image("/images/create.png"));
         stage.setScene(scene);
-        vacationView = fxmlLoader.getController();
-        vacationView.addObserver(this);
+        createVacationView = fxmlLoader.getController();
+        createVacationView.addObserver(this);
     }
 
     private boolean checkNumber(String num) {
@@ -68,20 +68,27 @@ public class ControllerCreateVacation extends Observable implements Observer {
 
         if (o.equals(vacationModel)) {
 
-        } else if (o.equals(vacationView)) {
+        } else if (o.equals(createVacationView)) {
             if (arg.equals(Enum_CRUD.CREATE)) {
-                if (!checkNumber(vacationView.price.getText())) {
-                    vacationView.createVacationSetPriceError(true);
+                if (!checkNumber(createVacationView.price.getText())) {
+                    createVacationView.createVacationSetPriceError(true);
                 } else {
-                    double price = Double.parseDouble(vacationView.price.getText());
-
-                    String date = vacationView.departureDate.getValue().getYear() + "" + vacationView.departureDate.getValue().getMonthValue() + "" + vacationView.departureDate.getValue().getDayOfMonth();
+                    double price = Double.parseDouble(createVacationView.price.getText());
+                    String day = String.valueOf(createVacationView.departureDate.getValue().getDayOfMonth());
+                    String month = String.valueOf(createVacationView.departureDate.getValue().getMonthValue());
+                    if (day.length() < 2){
+                        day = "0" + day;
+                    }
+                    if (month.length() < 2){
+                        month = "0" + month;
+                    }
+                    String date = createVacationView.departureDate.getValue().getYear() + "" + month + day;
 
                     int departureDate = Integer.parseInt(date);
-                    vacationModel.insertVacationToTable(vacationView.destination.getText(), price, departureDate);
+                    vacationModel.insertVacationToTable(createVacationView.destination.getText(), price, departureDate, createVacationView.exchange_checkBox.isSelected());
                     System.out.println("ControllerCreateVacation: update by vacationModel");
-                    System.out.println("ControllerCreateVacation: " + vacationModel.getUserName() + " registered vacation to " + vacationView.destination.getText());
-                    vacationView.closeWindow();
+                    System.out.println("ControllerCreateVacation: " + vacationModel.getUserName() + " registered vacation to " + createVacationView.destination.getText());
+                    createVacationView.closeWindow();
                     setChanged();
                     notifyObservers(VACATION_ADDED);
                 }

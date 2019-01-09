@@ -4,21 +4,20 @@ public class Purchase {
 
     private String vacationKey;
     private String sellerKey;
-    private String sellerEmail;
+    private String sellerInfo;
     private String buyerKey;
-    private String buyerEmail;
+    private String buyerVacationToExchange;
     private int timestamp;
 
 
-    public Purchase() {
-    }
+    public Purchase(){}
 
-    public Purchase(String vacationKey, String sellerKey, String sellerEmail, String buyerKey, String buyerEmail, int timestamp) {
+    public Purchase(String vacationKey, String sellerKey, String sellerInfo, String buyerKey, String buyerVacEx, int timestamp) {
         this.vacationKey = vacationKey;
         this.sellerKey = sellerKey;
-        this.sellerEmail = sellerEmail;
+        this.sellerInfo = sellerInfo;
         this.buyerKey = buyerKey;
-        this.buyerEmail = buyerEmail;
+        this.buyerVacationToExchange = buyerVacEx;
         this.timestamp = timestamp;
     }
 
@@ -38,14 +37,6 @@ public class Purchase {
         this.sellerKey = sellerKey;
     }
 
-    public String getSellerEmail() {
-        return sellerEmail;
-    }
-
-    public void setSellerEmail(String sellerEmail) {
-        this.sellerEmail = sellerEmail;
-    }
-
     public String getBuyerKey() {
         return buyerKey;
     }
@@ -54,19 +45,27 @@ public class Purchase {
         this.buyerKey = buyerKey;
     }
 
-    public String getBuyerEmail() {
-        return buyerEmail;
-    }
-
-    public void setBuyerEmail(String buyerEmail) {
-        this.buyerEmail = buyerEmail;
-    }
-
     public int getTimestamp() {
         return timestamp;
     }
 
     public void setTimestamp(int timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getSellerInfo() {
+        return sellerInfo;
+    }
+
+    public void setSellerInfo(String sellerInfo) {
+        this.sellerInfo = sellerInfo;
+    }
+
+    public String getBuyerVacationToExchange() {
+        return buyerVacationToExchange;
+    }
+
+    public void setBuyerVacationToExchange(String buyerVacationToExchange) {
+        this.buyerVacationToExchange = buyerVacationToExchange;
     }
 }

@@ -1,7 +1,9 @@
 package Model.MessageCenter;
 
+import Model.ACRUDModel;
 import Model.Request.Request;
 import Model.Request.RequestModel;
+import Model.User.User;
 import Model.User.UserModel;
 import Model.Vacation.Vacation;
 import Model.Vacation.VacationModel;
@@ -20,10 +22,10 @@ public class MessageModel {
     private VacationModel vacationModel;
     private MessagesBox messagesList;
 
-    public MessageModel() {
-        this.requestModel = new RequestModel();
-        this.userModel = new UserModel();
-        this.vacationModel = new VacationModel();
+    public MessageModel(RequestModel requestModel) {
+        this.requestModel = requestModel;
+        vacationModel = requestModel.getVacationModel();
+        userModel = new UserModel();
         messagesList = new MessagesBox();
     }
 
@@ -42,21 +44,59 @@ public class MessageModel {
     public List<Pair<Message, String[]>> createMessageParametersForController() {
         List<Pair<Message, String[]>> messageParameters = new LinkedList<>();
         for (Message message : messagesList.getMessagesList()) {
+            boolean flag = true;
             if (message.isSeller()) {
-                if (message.getRequest().getState().equals(Request.states[0])) {
-                    String[] s = {message.getMessageType(), message.getBuyerName() + " wish to buy from you the vacation to: " + message.getVacation().getDestination() + ", at the price " + message.getVacation().getPrice() + "$"};
+                String[] s = {message.getMessageType(), ""};
+                Vacation vacation = message.getRequest().getVacationToExchange() < 1 ? null : getVacationFromRequestExchange(message.getRequest().getVacationToExchange());
+                if ((message.getRequest().getState().equals(Request.states[0]) || message.getRequest().getState().equals(Request.states[1])) && !message.getRequest().getApproved()) {
+                    if (message.getRequest().getVacationToExchange()<1) {
+                        s[1] = message.getBuyerName() + " wish to Buy from you the vacation to: " + message.getVacation().getDestination() + ", at the price " + message.getVacation().getPrice() + "$";
+                    } else {
+                        s[1] = message.getBuyerName() + " wish to Exchange with you the vacation to: " + message.getVacation().getDestination() + ", with the vacation to " + vacation.getDestination() + " at the price " + vacation.getPrice();
+                    }
+                } else if (message.getRequest().getState().equals(Request.states[1]) && message.getRequest().getApproved()) {
+                    if (message.getRequest().getVacationToExchange()<1) {
+                        s[1] = " Please approve that you received the payment from: " + message.getBuyerName() + ", for the vacation to: " + message.getVacation().getDestination() + ", at the price " + message.getVacation().getPrice() + "$";
+                    } else {
+                        if (vacation.isVisible()){
+                        s[1] = "Please approve that you exchanged the vacation: " + message.getVacation().getDestination() + ", with the vacation to: " + vacation.getDestination() + ", from the user: " + message.getBuyerName();
+                        } else {
+                            flag = false;
+                        }
+                    }
+                }
+                if (flag) {
                     Pair<Message, String[]> pair = new Pair<>(message, s);
                     messageParameters.add(pair);
                 }
             } else {
-                if (message.getRequest().getState().equals(Request.states[1])) {
-                    String[] s = {message.getMessageType(), message.getSellerName() + " approved your request to buy the vacation to: " + message.getVacation().getDestination() + ", at the price " + message.getVacation().getPrice() + "$"};
-                    Pair<Message, String[]> pair = new Pair<>(message, s);
-                    messageParameters.add(pair);
+                if (message.getRequest().getState().equals(Request.states[1]) && message.getRequest().getApproved()) {
+                    String[] s = {message.getMessageType(), ""};
+                    if (message.getRequest().getVacationToExchange()<1) {
+                        s[1] = message.getSellerName() + " approved your request to Buy the vacation to: " + message.getVacation().getDestination() + ", at the price " + message.getVacation().getPrice() + "$, PLEASE CONTACT THE SELLER TO MAKE THE PURCHASE: " + userModel.getContactInfo(message.getSellerName());
+                    } else {
+                        Vacation vacation = getVacationFromRequestExchange(message.getRequest().getVacationToExchange());
+                        if (vacation.isVisible()){
+                            s[1] = message.getSellerName() + " approved your request to Exchange the vacation to: " + message.getVacation().getDestination() + ", with the vacation to " + vacation.getDestination() + ", PLEASE CONTACT THE SELLER TO MAKE THE PURCHASE: " + userModel.getContactInfo(message.getSellerName());
+                        } else {
+                            flag = false;
+                        }
+                    }
+                    if (flag) {
+                        Pair<Message, String[]> pair = new Pair<>(message, s);
+                        messageParameters.add(pair);
+                    }
                 }
             }
         }
         return messageParameters;
+    }
+
+    private Vacation getVacationFromRequestExchange(int vacationToExchange) {
+        String[][] parameters = {{VacationTable.COLUMN_VACATIONTABLE_KEY},{String.valueOf(vacationToExchange)}};
+        List<Vacation> vacations = vacationModel.readDataFromDB(parameters);
+        Vacation vacation = vacations.get(0);
+        return vacation;
     }
 
     public void setMessagesForUser() {
@@ -76,7 +116,7 @@ public class MessageModel {
             }
         }
         for (Request request : requestsAsSeller) {
-            if (request.getState().equals(Request.states[0])) {
+            if (request.getState().equals(Request.states[0]) || request.getState().equals(Request.states[1])) {
                 String key = request.getVacationKey();
                 List<Vacation> vacationsList = getVacationFromKey(key);
                 if (!vacationsList.isEmpty()) {
@@ -113,10 +153,6 @@ public class MessageModel {
         return messagesList.getMessagesList();
     }
 
-    public int getCurrentTimeStamp() {
-        String date = LocalDateTime.now().getYear() + "" + LocalDateTime.now().getMonthValue() + "" + LocalDateTime.now().getDayOfMonth();
-        return Integer.parseInt(date);
-    }
 
     private void checkListForDueDateApproval(List<Request> list) {
         String day;
@@ -125,7 +161,7 @@ public class MessageModel {
             if (requestBuyer.getState().equals(Request.states[1])) {
                 day = String.valueOf(requestBuyer.getTimestamp());
                 day = day.substring(6);
-                todayDate = String.valueOf(getCurrentTimeStamp());
+                todayDate = String.valueOf(ACRUDModel.getCurrentTimeStamp());
                 todayDate = todayDate.substring(6);
                 if (Integer.parseInt(day) + 2 == Integer.parseInt(todayDate)) {
                     requestBuyer.setState(Request.states[0]);

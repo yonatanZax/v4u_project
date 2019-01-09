@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
@@ -54,8 +56,7 @@
 <!--░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░▒█████████▒░░░░░░░░░░░░░░░░░░░-->
 <!--░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░▒▒▒░░░░░░░░░░░░░░░░░░░░░░░-->
 
-<?import java.net.URL?>
-<GridPane alignment="center" hgap="10" prefHeight="714.0" prefWidth="565.0" vgap="10" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.CRUDViews.VacationCRUDView">
+<GridPane alignment="center" hgap="10" prefHeight="714.0" prefWidth="565.0" vgap="10" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.CRUDViews.CreateVacationView">
     <padding>
         <Insets bottom="40" left="40" right="40" top="40" />
     </padding>
@@ -99,8 +100,8 @@
     <!--<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />-->
     <!--</GridPane.margin>-->
     <!--</DatePicker>-->
-    <Button fx:id="cancel_btn" defaultButton="true" layoutX="370.0" layoutY="470.0" onAction="#handleCancelButtonAction" prefHeight="40" prefWidth="100" text="Cancel" GridPane.columnIndex="3" GridPane.rowIndex="16" />
-    <Button defaultButton="true" onAction="#handleSubmitButtonAction" prefHeight="40" prefWidth="100" text="Submit" GridPane.columnIndex="1" GridPane.rowIndex="16" />
+    <Button fx:id="cancel_btn" defaultButton="true" layoutX="370.0" layoutY="470.0" onAction="#handleCancelButtonAction" prefHeight="40" prefWidth="100" text="Cancel" GridPane.columnIndex="3" GridPane.rowIndex="17" />
+    <Button defaultButton="true" onAction="#handleSubmitButtonAction" prefHeight="40" prefWidth="100" text="Submit" GridPane.columnIndex="1" GridPane.rowIndex="17" />
     <Label text="Baggage per ticket :" GridPane.columnIndex="1" GridPane.rowIndex="10" />
     <Label text="Vacation type:" GridPane.columnIndex="1" GridPane.rowIndex="12" />
     <Label text="Connection Flight :" GridPane.columnIndex="1" GridPane.rowIndex="11" />
@@ -115,13 +116,18 @@
     <Label fx:id="errorMessage_r_time" text="Check Field" textFill="RED" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="8" />
     <Label fx:id="errorMessage_r_date" text="Check Field" textFill="RED" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="7" />
     <Label fx:id="errorMessage_d_time" text="Check Field" textFill="RED" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="6" />
-    <ChoiceBox fx:id="vacation_type_choice" visible="false" prefHeight="25.0" prefWidth="208.0" GridPane.columnIndex="2" GridPane.rowIndex="12" />
-    <ChoiceBox fx:id="accommodation_type_choice" visible="false" prefHeight="25.0" prefWidth="208.0" GridPane.columnIndex="2" GridPane.rowIndex="13" />
+    <ChoiceBox fx:id="vacation_type_choice" prefHeight="25.0" prefWidth="208.0" GridPane.columnIndex="2" GridPane.rowIndex="12" />
+    <ChoiceBox fx:id="accommodation_type_choice" prefHeight="25.0" prefWidth="208.0" GridPane.columnIndex="2" GridPane.rowIndex="13" />
     <TextField fx:id="depart_time" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
     <TextField fx:id="return_time" prefHeight="24.0" prefWidth="34.0" GridPane.columnIndex="2" GridPane.rowIndex="8" />
     <TextArea fx:id="freeText" prefHeight="77.0" prefWidth="319.0" promptText="Add here more info" GridPane.columnIndex="2" GridPane.rowIndex="14" />
     <Label text="Additional Info:" GridPane.columnIndex="1" GridPane.rowIndex="14" />
    <DatePicker fx:id="departureDate" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+   <CheckBox fx:id="exchange_checkBox" mnemonicParsing="false" text="Willing to Exchange" GridPane.columnIndex="2" GridPane.rowIndex="16">
+      <font>
+         <Font name="System Bold" size="12.0" />
+      </font>
+   </CheckBox>
     <rowConstraints>
         <RowConstraints minHeight="10.0" prefHeight="30.0" />
         <RowConstraints minHeight="10.0" prefHeight="30.0" />
@@ -139,6 +145,7 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" />
         <RowConstraints minHeight="10.0" prefHeight="80.0" />
         <RowConstraints />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" />
         <RowConstraints prefHeight="30.0" />
     </rowConstraints>
     <stylesheets>

@@ -28,7 +28,7 @@ public class LoginView extends Observable implements Initializable {
     @FXML
     private Label errorMessage;
 
-    public void resetLoginCredentials() {
+    public void resetLoginCredentials(){
         userId.setText("");
         password.setText("");
     }
@@ -50,7 +50,7 @@ public class LoginView extends Observable implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
     }
 
-    public void closeWindow() {
+    public void closeWindow(){
         Stage stage = (Stage) cancel.getScene().getWindow();
         stage.close();
     }
@@ -68,7 +68,7 @@ public class LoginView extends Observable implements Initializable {
         setErrorMessageVisble(false);
     }
 
-    public void setErrorMessageVisble(boolean isVisible) {
+    public void setErrorMessageVisble(boolean isVisible){
         errorMessage.setVisible(isVisible);
     }
 

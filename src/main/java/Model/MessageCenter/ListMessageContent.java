@@ -8,7 +8,7 @@ public class ListMessageContent {
     private SimpleStringProperty info;
     private Message message;
 
-    public ListMessageContent(String messageType, String info, Message message) {
+    public ListMessageContent(String messageType, String info,Message message){
         this.messageType = new SimpleStringProperty(messageType);
         this.info = new SimpleStringProperty(info);
         this.message = message;

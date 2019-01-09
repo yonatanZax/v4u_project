@@ -23,6 +23,7 @@ public class UserTable extends ATableManager<User> {
     public static final String COLUMN_USERTABLE_LAST_NAME = "lastName";
     public static final String COLUMN_USERTABLE_CITY = "city";
     public static final String COLUMN_USERTABLE_BIRTHDAY = "birthday";
+    public static final String COLUMN_USERTABLE_CONTACT_INFO = "contactInfo";
 
 
     // Singleton
@@ -68,8 +69,9 @@ public class UserTable extends ATableManager<User> {
                         break;
                     case COLUMN_USERTABLE_PASS:
                         user.setPassword(entry.getValue());
-                        //TODO (Keep for Part1) - delete this, we don't want to return password never
-
+                        break;
+                    case COLUMN_USERTABLE_CONTACT_INFO:
+                        user.setContactInfo(entry.getValue());
                         break;
                 }
 
@@ -82,7 +84,8 @@ public class UserTable extends ATableManager<User> {
 
     @Override
     protected PreparedStatement getInsertPreparedStatement(User object, Connection connection) {
-        String sql = "INSERT INTO " + TABLE_NAME + "(" + COLUMN_USERTABLE_KEY + "," + COLUMN_USERTABLE_PASS + "," + COLUMN_USERTABLE_FIRST_NAME + "," + COLUMN_USERTABLE_LAST_NAME + "," + COLUMN_USERTABLE_CITY + "," + COLUMN_USERTABLE_BIRTHDAY + ") VALUES(?,?,?,?,?,?)";
+        String sql = "INSERT INTO " + TABLE_NAME + "(" + COLUMN_USERTABLE_KEY + "," + COLUMN_USERTABLE_PASS + "," + COLUMN_USERTABLE_FIRST_NAME + "," + COLUMN_USERTABLE_LAST_NAME + "," + COLUMN_USERTABLE_CITY + "," + COLUMN_USERTABLE_CONTACT_INFO + "," +
+                COLUMN_USERTABLE_BIRTHDAY + ") VALUES(?,?,?,?,?,?,?)";
         PreparedStatement pstmt = null;
         if (connection != null) {
             try {
@@ -92,7 +95,8 @@ public class UserTable extends ATableManager<User> {
                 pstmt.setString(3, object.getFirstName());
                 pstmt.setString(4, object.getLastName());
                 pstmt.setString(5, object.getCity());
-                pstmt.setObject(6, object.getBirthDate());
+                pstmt.setObject(6, object.getContactInfo());
+                pstmt.setObject(7, object.getBirthDate());
                 return pstmt;
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -111,7 +115,7 @@ public class UserTable extends ATableManager<User> {
     public DBResult createTable() {
         String[] primaryKeys = {COLUMN_USERTABLE_KEY};
         String[] foreignKeys = {};
-        String[] stringFields = {COLUMN_USERTABLE_KEY, COLUMN_USERTABLE_PASS, COLUMN_USERTABLE_FIRST_NAME, COLUMN_USERTABLE_LAST_NAME, COLUMN_USERTABLE_CITY};
+        String[] stringFields = {COLUMN_USERTABLE_KEY, COLUMN_USERTABLE_PASS, COLUMN_USERTABLE_FIRST_NAME, COLUMN_USERTABLE_LAST_NAME, COLUMN_USERTABLE_CITY, COLUMN_USERTABLE_CONTACT_INFO};
         String[] intFields = {COLUMN_USERTABLE_BIRTHDAY};
         String[] doubleFields = {};
         return super.createTable(primaryKeys, foreignKeys, stringFields, intFields, doubleFields);

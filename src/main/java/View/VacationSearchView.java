@@ -3,6 +3,8 @@ package View;
 
 import Controllers.VacationSearchController;
 import Model.Vacation.Vacation;
+import com.sun.javafx.scene.control.skin.CheckBoxSkin;
+import impl.org.controlsfx.skin.CheckComboBoxSkin;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,13 +13,16 @@ import javafx.collections.transformation.SortedList;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import org.apache.commons.lang3.mutable.Mutable;
+import org.apache.commons.lang3.tuple.MutablePair;
 
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Observable;
 
-public class VacationSearchView extends Observable {
+public class VacationSearchView extends Observable{
 
     @FXML
     private TextField destinationField;
@@ -26,23 +31,24 @@ public class VacationSearchView extends Observable {
     public TableView<Vacation> vacations_tableview;
 
     @FXML
-    public TableColumn<Vacation, String> destinationColumn;
+    public TableColumn<Vacation,String> destinationColumn;
 
     @FXML
-    public TableColumn<Vacation, String> originColumn;
+    public TableColumn<Vacation,String> originColumn;
 
     @FXML
-    public TableColumn<Vacation, String> priceColumn;
+    public TableColumn<Vacation,String> priceColumn;
 
     @FXML
-    public TableColumn<Vacation, String> sellerColumn;
+    public TableColumn<Vacation,String> sellerColumn;
 
     @FXML
-    public TableColumn<Vacation, String> departureDateColumn;
+    public TableColumn<Vacation,String> departureDateColumn;
+
+    @FXML
+    public TableColumn<Vacation, String> exchangeableColumn;
 
     private ObservableList<Vacation> masterData = FXCollections.observableArrayList();
-
-    private Vacation pickedVacation;
 
 
     @FXML
@@ -52,22 +58,23 @@ public class VacationSearchView extends Observable {
         vacations_tableview.setRowFactory(tv -> {
             TableRow<Vacation> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
                     Vacation rowData = row.getItem();
                     System.out.println("Vacation picked: " + rowData.getVacationKey());
-                    pickedVacation = rowData;
+//                    pickedVacation = rowData;
                     this.setChanged();
-                    this.notifyObservers(VacationSearchController.VACATION_PICKED);
+                    this.notifyObservers(new MutablePair<String,Vacation>("",rowData));
                 }
             });
-            return row;
+            return row ;
         });
 
         destinationColumn.setCellValueFactory(cellData -> cellData.getValue().destinationProperty());
         originColumn.setCellValueFactory(cellData -> cellData.getValue().originProperty());
-        priceColumn.setCellValueFactory(cellData -> new SimpleStringProperty("" + cellData.getValue().getPrice()));
+        priceColumn.setCellValueFactory(cellData -> new SimpleStringProperty("" +cellData.getValue().getPrice()));
         sellerColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSellerKey()));
         departureDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty("" + cellData.getValue().getDepartureDate()));
+        exchangeableColumn.setCellValueFactory(cellData -> new SimpleStringProperty("" + cellData.getValue().isExchangeable()));
 
 
         // 1. Wrap the ObservableList in a FilteredList (initially display all data).
@@ -90,6 +97,7 @@ public class VacationSearchView extends Observable {
         });
 
 
+
         // 3. Wrap the FilteredList in a SortedList.
         SortedList<Vacation> sortedData = new SortedList<>(filteredData);
 
@@ -101,28 +109,21 @@ public class VacationSearchView extends Observable {
 
     }
 
-    private boolean predicateForTable(Vacation vacation) {
+    private boolean predicateForTable(Vacation vacation){
         int departureDateInt = vacation.getDepartureDate();
         int todayDateInt = convertDateStringToInt(LocalDate.now().toString());
-        boolean booleanVal = departureDateInt > todayDateInt;
-//        System.out.println("departureDateInt: " + departureDateInt + " , todayDateInt: " + todayDateInt + " , booleanVal: " + booleanVal);
+        boolean booleanVal =  departureDateInt > todayDateInt;
         return vacation.isVisible() && booleanVal;
     }
 
-    public Vacation getPickedVacation() {
-        return pickedVacation;
-    }
-
-
-    public void addVacationOnAction() {
+    public void addVacationOnAction(){
         setChanged();
         notifyObservers(VacationSearchController.BTN_ADD);
     }
 
-
     public void setVacations_listview(List<Vacation> vacationList) {
         Vacation[] vacations = new Vacation[vacationList.size()];
-        for (int i = 0; i < vacations.length; i++) {
+        for (int i = 0 ; i < vacations.length ; i++){
             vacations[i] = vacationList.get(i);
         }
         masterData.clear();
@@ -130,7 +131,7 @@ public class VacationSearchView extends Observable {
     }
 
     private int convertDateStringToInt(String str) {
-        if (str != null && !str.equals("")) {
+        if(str != null && !str.equals("")){
             String[] tempArr = str.split("-");
             String temp = tempArr[0] + tempArr[1] + tempArr[2];
             return Integer.valueOf(temp);

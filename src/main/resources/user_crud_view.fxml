@@ -9,93 +9,81 @@
 <?import javafx.scene.text.Font?>
 
 <?import java.net.URL?>
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      prefHeight="400.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="View.CRUDViews.UserCRUDView">
-    <children>
-        <Label text="Welcome">
-            <font>
-                <Font size="14.0"/>
-            </font>
-            <VBox.margin>
-                <Insets top="10.0"/>
-            </VBox.margin>
-        </Label>
-        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-            <children>
-                <Label text="User name">
-                    <opaqueInsets>
-                        <Insets/>
-                    </opaqueInsets>
-                    <HBox.margin>
-                        <Insets right="10.0"/>
-                    </HBox.margin>
-                </Label>
-                <TextField fx:id="userName">
-                    <opaqueInsets>
-                        <Insets/>
-                    </opaqueInsets>
-                    <HBox.margin>
-                        <Insets left="10.0"/>
-                    </HBox.margin>
-                </TextField>
-            </children>
-        </HBox>
-        <HBox>
-            <children>
-                <VBox alignment="BASELINE_CENTER">
-                    <children>
-                        <Button fx:id="readUser_btn" mnemonicParsing="false" onAction="#read" prefHeight="31.0"
-                                prefWidth="73.0" text="Read">
-                            <VBox.margin>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                            </VBox.margin>
-                        </Button>
-                        <Button fx:id="createUser_btn" mnemonicParsing="false" onAction="#create" prefHeight="31.0"
-                                prefWidth="73.0" text="Create">
-                            <VBox.margin>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                            </VBox.margin>
-                        </Button>
-                        <Button fx:id="updateUser_btn" mnemonicParsing="false" onAction="#update" prefHeight="31.0"
-                                prefWidth="73.0" text="Update">
-                            <VBox.margin>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                            </VBox.margin>
-                        </Button>
-                        <Button fx:id="deleteUser_btn" mnemonicParsing="false" onAction="#delete" prefWidth="73.0"
-                                text="Delete">
-                            <VBox.margin>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                            </VBox.margin>
-                        </Button>
-                        <Button fx:id="searchVacation_btn" mnemonicParsing="false" onAction="#search" prefWidth="73.0"
-                                text="Search">
-                            <VBox.margin>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                            </VBox.margin>
-                        </Button>
-                    </children>
-                    <HBox.margin>
-                        <Insets bottom="10.0" left="20.0" right="10.0" top="10.0"/>
-                    </HBox.margin>
-                </VBox>
-                <Label fx:id="info_lbl" alignment="BASELINE_CENTER" wrapText="true">
-                    <HBox.margin>
-                        <Insets bottom="15.0" left="60.0" right="15.0" top="15.0"/>
-                    </HBox.margin>
-                </Label>
-            </children>
-        </HBox>
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.CRUDViews.UserCRUDView">
+   <children>
+      <Label text="Welcome">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin></Label>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+         <children>
+             <Label text="User name">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin></Label>
+            <TextField fx:id="userName">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin></TextField>
+         </children>
+      </HBox>
+      <HBox>
+         <children>
+            <VBox alignment="BASELINE_CENTER">
+               <children>
+                  <Button fx:id="readUser_btn" mnemonicParsing="false" onAction="#read" prefHeight="31.0" prefWidth="73.0" text="Read">
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button fx:id="createUser_btn" mnemonicParsing="false" onAction="#create" prefHeight="31.0" prefWidth="73.0" text="Create">
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button fx:id="updateUser_btn" mnemonicParsing="false" onAction="#update" prefHeight="31.0" prefWidth="73.0" text="Update">
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button fx:id="deleteUser_btn" mnemonicParsing="false" onAction="#delete" prefWidth="73.0" text="Delete">
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button fx:id="searchVacation_btn" mnemonicParsing="false" onAction="#search" prefWidth="73.0" text="Search">
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+               <HBox.margin>
+                  <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
+               </HBox.margin>
+            </VBox>
+            <Label fx:id="info_lbl" alignment="BASELINE_CENTER" wrapText="true">
+               <HBox.margin>
+                  <Insets bottom="15.0" left="60.0" right="15.0" top="15.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
 
-        <Label fx:id="status_lbl" alignment="CENTER" prefHeight="22.0" prefWidth="420.0" textAlignment="CENTER"
-               wrapText="true">
-            <VBox.margin>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-            </VBox.margin>
-        </Label>
-    </children>
-    <stylesheets>
-        <URL value="@mainStyle.css"/>
-    </stylesheets>
+      <Label fx:id="status_lbl" alignment="CENTER" prefHeight="22.0" prefWidth="420.0" textAlignment="CENTER" wrapText="true">
+         <VBox.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </VBox.margin></Label>
+   </children>
+   <stylesheets>
+      <URL value="@mainStyle.css" />
+   </stylesheets>
 </VBox>

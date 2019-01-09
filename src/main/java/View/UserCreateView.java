@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 import java.util.Observable;
 
-public class UserDetailsView extends Observable implements Initializable {
+public class UserCreateView extends Observable implements Initializable {
 
 
     public TextField userName_textInput;
@@ -23,6 +23,7 @@ public class UserDetailsView extends Observable implements Initializable {
     public TextField firstName_textInput;
     public TextField lastName_textInput;
     public TextField city_textInput;
+    public TextField contactInfo_textInput;
     public DatePicker create_datePicker;
     public Button save_btn;
 
@@ -71,6 +72,14 @@ public class UserDetailsView extends Observable implements Initializable {
         return city_textInput.getText().trim();
     }
 
+    public void setContactInfo(String contactInfo) {
+        contactInfo_textInput.setText(contactInfo);
+    }
+
+    public String getContactInfo(){
+        return contactInfo_textInput.getText().trim();
+    }
+
 
     private int convertDateFromStringToInt(String dateAsString) {
         int day = Integer.valueOf(dateAsString.substring(dateAsString.length() - 2, dateAsString.length()));
@@ -99,7 +108,7 @@ public class UserDetailsView extends Observable implements Initializable {
 
 
     public void saveInfo() {
-        System.out.println("UserDetailsView: saveInfo");
+        System.out.println("UserCreateView: saveInfo");
         setChanged();
         notifyObservers("saveInfo");
     }
@@ -131,6 +140,7 @@ public class UserDetailsView extends Observable implements Initializable {
         firstName_textInput.setText("");
         lastName_textInput.setText("");
         city_textInput.setText("");
+        contactInfo_textInput.setText("");
         create_datePicker.setValue(null);
     }
 }

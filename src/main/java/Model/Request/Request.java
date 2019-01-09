@@ -1,7 +1,5 @@
 package Model.Request;
 
-import MainPackage.Enum_RequestState;
-
 public class Request {
 
     private String vacationKey;
@@ -10,19 +8,21 @@ public class Request {
     private boolean approved;
     private int timestamp;
     private String state;
+    private int vacationToExchange = 0;
 
-    public static String[] states = {"PENDING", "HOLD", "SOLD", "DENIED"};
+//    public static String[] states = {"PENDING","HOLD","SOLD","DENIED","ACCEPT"};
+    public static String[] states = {"PENDING","HOLD","SOLD","DENIED"};
 
-    public Request() {
-    }
+    public Request(){}
 
-    public Request(String vacationKey, String sellerKey, String buyerKey, boolean approved, int timestamp, String status) {
+    public Request(String vacationKey, String sellerKey, String buyerKey, boolean approved, int timestamp, String status, int vacToExchange) {
         this.vacationKey = vacationKey;
         this.sellerKey = sellerKey;
         this.buyerKey = buyerKey;
         this.approved = approved;
         this.timestamp = timestamp;
         this.state = status;
+        this.vacationToExchange = vacToExchange;
     }
 
     public String getVacationKey() {
@@ -69,7 +69,7 @@ public class Request {
         this.timestamp = timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(String timestamp){
         this.timestamp = Integer.valueOf(timestamp);
     }
 
@@ -81,4 +81,19 @@ public class Request {
         this.state = state;
     }
 
+//    public boolean isExchange() {
+//        return exchange;
+//    }
+
+//    public void setExchange(boolean exchange) {
+//        this.exchange = exchange;
+//    }
+
+    public int getVacationToExchange() {
+        return vacationToExchange;
+    }
+
+    public void setVacationToExchange(int vacationToExchange) {
+        this.vacationToExchange = vacationToExchange;
+    }
 }
