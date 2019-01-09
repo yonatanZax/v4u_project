@@ -3,7 +3,6 @@ package Model.Vacation;
 import Model.ACRUDModel;
 import Model.User.UserModel;
 import db.DBResult;
-import db.Tables.VacationExchangeTable;
 import db.Tables.VacationTable;
 
 import java.time.LocalDateTime;
@@ -11,17 +10,8 @@ import java.util.List;
 
 public class VacationModel extends ACRUDModel<Vacation> {
 
-
-    VacationExchangeTable vacationExchangeTable;
-
-    private int getCurrentTimeStamp() {
-        String date = LocalDateTime.now().getYear() + "" + LocalDateTime.now().getMonthValue() + "" + LocalDateTime.now().getDayOfMonth();
-        return Integer.parseInt(date);
-    }
-
     public VacationModel() {
         super.setTableManager(VacationTable.getInstance());
-        vacationExchangeTable = VacationExchangeTable.getInstance();
     }
 
 
@@ -69,7 +59,6 @@ public class VacationModel extends ACRUDModel<Vacation> {
 
     @Override
     public List<Vacation> readDataFromDB(String[][] parameters) {
-        //TODO - implement --> BETTER!
         String selection = parameters[0][0] + " IN (";
         for (int i=0 ; i < parameters[1].length - 1; i++) {
             selection += "\"" + parameters[1][i] + "\",";
@@ -79,25 +68,4 @@ public class VacationModel extends ACRUDModel<Vacation> {
         // Get the list of users from the database
         return tableManager.select(null,selection,null);
     }
-
-
-
-    // VACATION EXCHANGE
-
-
-    public DBResult insertVacationExchange(VacationExchange vacationExchange){
-        DBResult result = DBResult.NONE;
-        int v1 = vacationExchange.getV1();
-        int v2 = vacationExchange.getV2();
-        VacationExchange exchange1 = new VacationExchange(v1,v2);
-        VacationExchange exchange2 = new VacationExchange(v2,v1);
-        result = vacationExchangeTable.InsertToTable(exchange1);
-        if (result == DBResult.ERROR)
-            return result;
-        result = vacationExchangeTable.InsertToTable(exchange2);
-        return result;
-    }
-
-
-
 }

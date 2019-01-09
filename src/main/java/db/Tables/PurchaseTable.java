@@ -73,7 +73,7 @@ public class PurchaseTable extends ATableManager<Purchase> {
                         break;
 
                     case COLUMN_PURCHASETABLE_VACATIONKEYEXCHANGE:
-                        purchase.setVacationKey(entry.getValue());
+                        purchase.setBuyerVacationToExchange(entry.getValue());
                         break;
 
                 }
@@ -112,7 +112,7 @@ public class PurchaseTable extends ATableManager<Purchase> {
                 pstmt.setString(2, object.getSellerKey());
                 pstmt.setString(3, object.getSellerInfo());
                 pstmt.setString(4, object.getBuyerKey());
-                pstmt.setString(5, object.getVacationKey());
+                pstmt.setString(5, object.getBuyerVacationToExchange());
                 pstmt.setInt(6 ,object.getTimestamp());
                 return pstmt;
             } catch (SQLException e) {

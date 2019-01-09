@@ -24,8 +24,6 @@ public class ControllerCreateVacation extends Observable implements Observer {
 
     public static final String VACATION_ADDED = "vacation_added";
 
-    // Todo - implement here -> DONE
-
     public void showStage() {
         createVacationView.price.setText("500");
         createVacationView.destination.setText("Spain");
@@ -74,10 +72,17 @@ public class ControllerCreateVacation extends Observable implements Observer {
             if (arg.equals(Enum_CRUD.CREATE)) {
                 if (!checkNumber(createVacationView.price.getText())) {
                     createVacationView.createVacationSetPriceError(true);
-                } else { // TODO - how do we check the destination (OR NOT)
+                } else {
                     double price = Double.parseDouble(createVacationView.price.getText());
-
-                    String date = createVacationView.departureDate.getValue().getYear() + "" + createVacationView.departureDate.getValue().getMonthValue() + "" + createVacationView.departureDate.getValue().getDayOfMonth();
+                    String day = String.valueOf(createVacationView.departureDate.getValue().getDayOfMonth());
+                    String month = String.valueOf(createVacationView.departureDate.getValue().getMonthValue());
+                    if (day.length() < 2){
+                        day = "0" + day;
+                    }
+                    if (month.length() < 2){
+                        month = "0" + month;
+                    }
+                    String date = createVacationView.departureDate.getValue().getYear() + "" + month + day;
 
                     int departureDate = Integer.parseInt(date);
                     vacationModel.insertVacationToTable(createVacationView.destination.getText(), price, departureDate, createVacationView.exchange_checkBox.isSelected());

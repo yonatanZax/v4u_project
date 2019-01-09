@@ -121,8 +121,6 @@ public class Vacation {
 
     public int getDepartureDate() {
         return departureDate;
-//        TODO - return the departure not the bot number
-//        return 20181230;
     }
 
     public void setDepartureDate(int departureDate) {

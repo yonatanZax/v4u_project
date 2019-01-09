@@ -69,7 +69,6 @@ public class UserTable extends ATableManager<User> {
                         break;
                     case COLUMN_USERTABLE_PASS:
                         user.setPassword(entry.getValue());
-                        //TODO (Keep for Part1) - delete this, we don't want to return password never
                         break;
                     case COLUMN_USERTABLE_CONTACT_INFO:
                         user.setContactInfo(entry.getValue());

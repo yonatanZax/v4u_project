@@ -3,16 +3,12 @@ package MainPackage;
 import Controllers.ControllerHome;
 import Model.User.User;
 import Model.Vacation.Vacation;
-import Model.Vacation.VacationExchange;
-import Model.Vacation.VacationModel;
 import PaypalPackage.PaypalTable;
-import db.DBResult;
 import db.Tables.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.util.List;
 
 public class Main extends Application {
     private static void initProject(){

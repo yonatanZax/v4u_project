@@ -50,8 +50,6 @@ public class VacationSearchView extends Observable{
 
     private ObservableList<Vacation> masterData = FXCollections.observableArrayList();
 
-//    private Vacation pickedVacation;
-
 
     @FXML
     public void initialize() {
@@ -115,13 +113,8 @@ public class VacationSearchView extends Observable{
         int departureDateInt = vacation.getDepartureDate();
         int todayDateInt = convertDateStringToInt(LocalDate.now().toString());
         boolean booleanVal =  departureDateInt > todayDateInt;
-//        System.out.println("departureDateInt: " + departureDateInt + " , todayDateInt: " + todayDateInt + " , booleanVal: " + booleanVal);
         return vacation.isVisible() && booleanVal;
     }
-
-//    public Vacation getPickedVacation() {
-//        return pickedVacation;
-//    }
 
     public void addVacationOnAction(){
         setChanged();

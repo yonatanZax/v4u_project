@@ -25,8 +25,6 @@ public class MessageCenterView extends Observable {
     public TableColumn<ListMessageContent, String> messageType_col;
     public TableColumn<ListMessageContent, String> info_col;
 
-//    private Request pickedRequest;
-
     private ObservableList<Request> masterData = FXCollections.observableArrayList();
 
     @FXML
@@ -61,8 +59,4 @@ public class MessageCenterView extends Observable {
         setChanged();
         notifyObservers("refresh");
     }
-
-//    public Request getPickedRequest() {
-//        return pickedRequest;
-//    }
 }

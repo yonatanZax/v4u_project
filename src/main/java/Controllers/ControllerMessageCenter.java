@@ -46,7 +46,6 @@ public class ControllerMessageCenter extends Observable implements Observer, Sub
     private MessageModel messageModel;
     private Parent root;
     private FXMLLoader fxmlLoader;
-//    private Request pickedRequest;
     public static final String REQUEST_PICKED = "request_picked";
 
 
@@ -111,7 +110,6 @@ public class ControllerMessageCenter extends Observable implements Observer, Sub
 
         dialog.getDialogPane().setContent(gridPane);
 
-
         // Convert the result to a username-password-pair when the login button is clicked.
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == loginButtonType) {
@@ -134,7 +132,7 @@ public class ControllerMessageCenter extends Observable implements Observer, Sub
         dialog.setTitle("Confirm Purchase");
         dialog.setHeaderText("Do you wish to confirm purchase for this seller?");
         dialog.setContentText("Please enter your payPal account to receive payment:");
-// Traditional way to get the response value.
+        // Traditional way to get the response value.
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()) {
             return result.get();
@@ -163,7 +161,6 @@ public class ControllerMessageCenter extends Observable implements Observer, Sub
         } else {
             purchaseModel.insertPurchaseToTable(pickedRequest.getVacationKey(), pickedRequest.getSellerKey(), userModel.getContactInfo(sellerName), pickedRequest.getBuyerKey(), String.valueOf(pickedRequest.getVacationToExchange()));
         }
-        requestModel.updateApprovedRequest(pickedRequest);
     }
 
 
@@ -183,12 +180,13 @@ public class ControllerMessageCenter extends Observable implements Observer, Sub
                     if (!pickedRequest.getApproved()) {
                         boolean approved = confirmDialog("Do you APPROVE to make this deal?");
                         if (approved) {
-                            initPurchase(pickedRequest);
+                            requestModel.updateApprovedRequest(pickedRequest);
                             fillTableList();
                         }
                     } else {
                         boolean approved = confirmDialog("ARE YOU SURE THAT THE DEAL IS MADE WITH THE BUYER?");
                         if (approved) {
+                            initPurchase(pickedRequest);
                             requestModel.finishPurchase(pickedRequest);
                             fillTableList();
                         }
@@ -203,61 +201,4 @@ public class ControllerMessageCenter extends Observable implements Observer, Sub
         messageCenterView.messageCenter_tableList.setItems(null);
         fillTableList();
     }
-
-
-//        private void initPurchase(Request pickedRequest) {
-//        String sellerName = this.pickedRequest.getSellerKey();
-//        if (this.pickedRequest.getVacationToExchange() <1) {
-//            purchaseModel.insertPurchaseToTable(this.pickedRequest.getVacationKey(), this.pickedRequest.getSellerKey(), userModel.getContactInfo(sellerName), this.pickedRequest.getBuyerKey(), null);
-//        } else {
-//            purchaseModel.insertPurchaseToTable(this.pickedRequest.getVacationKey(), this.pickedRequest.getSellerKey(), userModel.getContactInfo(sellerName), this.pickedRequest.getBuyerKey(), String.valueOf(this.pickedRequest.getVacationToExchange()));
-//        }
-//        requestModel.updateApprovedRequest(this.pickedRequest);
-//    }
-//    @Override
-//    public void update(Observable o, Object arg) {
-//        if (o.equals(messageCenterView)) {
-//            if (arg.equals("history")) {
-//                informationDialog("This process is still under construction...");
-//            } else if (arg.equals(REQUEST_PICKED)){
-//                pickedRequest = messageCenterView.getPickedRequest();
-//                if (pickedRequest.getSellerKey().equals(messageModel.getUserName())){
-//                    String paymentAccount = confirmPurchase();
-//                    if (!paymentAccount.equals("")){
-//                        initPurchase(paymentAccount);
-//                        fillTableList();
-//                    }
-//                } else {
-//                    String paymentAccount = confirmPaymentPurchase();
-//                    if (!paymentAccount.equals("")) {
-//                        updatePurchase(paymentAccount);
-//                        fillTableList();
-//                    }
-//                }
-//            }
-//        }
-//    }
-//    private void updatePurchase(String buyerPaymentAccount) {
-//        String[][] parameters = {{PurchaseTable.COLUMN_PURCHASETABLE_VACATIONKEY}, {pickedRequest.getVacationKey()}};
-//        List<Purchase> purchaseList = purchaseModel.readDataFromDB(parameters);
-//        Purchase purchase = purchaseList.get(0);
-//        purchase.setBuyerEmail(buyerPaymentAccount);
-//        purchaseModel.updateTable(purchase);
-//        requestModel.finishPurchase(pickedRequest);
-//
-//        // DEMO FOR PAYPAL API USAGE
-//
-//        paypalAPI = PaypalTable.getInstance();
-////        String transactionId = String.valueOf((int)(Math.random() * 10000000 + 1));
-//        String sellerAccount = purchase.getSellerEmail();
-//        String[][] vacationParameters = {{VacationTable.COLUMN_VACATIONTABLE_KEY}, {purchase.getVacationKey()}};
-//        List<Vacation> vacationList = vacationModel.readDataFromDB(vacationParameters);
-//        Double amount = vacationList.get(0).getPrice();
-//        PaypalPayment payment = new PaypalPayment(null, buyerPaymentAccount, sellerAccount, amount);
-//        paypalAPI.InsertToTable(payment);
-//    }
-//    private void initPurchase(String paymentAccount) {
-//        purchaseModel.insertPurchaseToTable(pickedRequest.getVacationKey(), pickedRequest.getSellerKey(), paymentAccount, pickedRequest.getBuyerKey());
-//        requestModel.updateApprovedRequest(pickedRequest);
-//    }
 }

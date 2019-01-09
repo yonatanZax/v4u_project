@@ -88,13 +88,6 @@ public class UserModel extends ACRUDModel<User> {
     }
 
 
-//    public void deleteDataFromDB(String keys[][]) {
-//        String where = keys[keys.length - 1][0] + " = " + "\"" + keys[keys.length - 1][1] + "\"";
-//        DBResult result = tableManager.deleteFromTable(where);
-//        setChanged();
-//        notifyObservers(result);
-//    }
-
     public void deleteUser(String key){
         String[][] keys = {{UserTable.COLUMN_USERTABLE_KEY,key}};
         deleteDataFromDB(keys);

@@ -195,24 +195,8 @@ public class VacationSearchController extends Observable implements Observer, Su
         }
     }
 
-
-    // todo - read from requestTable with multiple arguments
     private boolean checkIfAlreadyRequested() {
         return false;
     }
 
-
-//    public String getVacationPickedKey() {
-//        if (myView.getPickedVacation() != null) {
-//            return myView.getPickedVacation().getVacationKey();
-//        }
-//        return null;
-//    }
-//
-//    public String getVacationPickedSeller() {
-//        if (myView.getPickedVacation() != null) {
-//            return myView.getPickedVacation().getSellerKey();
-//        }
-//        return null;
-//    }
 }

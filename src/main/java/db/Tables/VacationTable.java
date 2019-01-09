@@ -28,9 +28,6 @@ public class VacationTable extends ATableManager<Vacation> {
     public static final String COLUMN_VACATIONTABLE_DEPARTUREDATE = "departure_date";
     public static final String COLUMN_VACATIONTABLE_TIMESTAMP = "timestamp";
 
-    // Todo - add more columns
-
-
     // Singleton
     public static VacationTable getInstance() {
         if (ourInstance == null) {

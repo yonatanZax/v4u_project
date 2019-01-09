@@ -81,12 +81,6 @@ public abstract class ATableManager<T> implements ITableManager<T> {
         if (connection != null) {
             try {
                 pstmt = connection.prepareStatement(sql);
-//                for (int i = 0; i < values.length; i++) {
-//                    pstmt.setObject(i+1,values[i]);
-//                }
-//                for (int j = 0; j < whereValues.length; J++ i++) {
-//                    pstmt.setObject(i+1,whereValues[j]);
-//                }
                 return pstmt;
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -107,11 +101,6 @@ public abstract class ATableManager<T> implements ITableManager<T> {
             if (i<strings.length-1)
                 s+=", ";
         }
-//        for (int i = 0; i < strings.length; i++) {
-//            s+= strings[i] + " = ?";
-//            if (i<strings.length-1)
-//                s+=", ";
-//        }
         return s;
     }
 
@@ -122,11 +111,6 @@ public abstract class ATableManager<T> implements ITableManager<T> {
             if (i<whereFields.length-1)
                 s+=" AND ";
         }
-//        for (int i = 0; i < whereFields.length; i++) {
-//            s+= whereFields[i] + " = ?";
-//            if (i<whereFields.length-1)
-//                s+=" AND ";
-//        }
         return s;
     }
 
@@ -148,7 +132,6 @@ public abstract class ATableManager<T> implements ITableManager<T> {
     @Override
     public List<T> select(String projection, String selection, String orderBy) {
         String sqlQuery = createSQLSelect(projection, selection, orderBy);
-//        System.out.println(sqlQuery);
         Connection connection = db.connect();
         List<T> list = null;
         if (connection != null) {
@@ -242,9 +225,6 @@ public abstract class ATableManager<T> implements ITableManager<T> {
                     if(1 == preparedStatement.executeUpdate())
                         result = DBResult.ADDED;
                 }catch (SQLException e){
-                    /*
-                    errorCode(vendorCode) 19 is: name = SQLITE_CONSTRAINT_PRIMARYKEY, messeage =  A PRIMARY KEY constraint failed.
-                     */
                     int errorCode = e.getErrorCode();
                     if (errorCode == 19)
                         result = DBResult.ALREADY_EXIST;

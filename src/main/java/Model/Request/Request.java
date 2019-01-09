@@ -1,7 +1,5 @@
 package Model.Request;
 
-import Model.Vacation.Vacation;
-
 public class Request {
 
     private String vacationKey;
@@ -10,9 +8,9 @@ public class Request {
     private boolean approved;
     private int timestamp;
     private String state;
-//    private boolean exchange;
     private int vacationToExchange = 0;
 
+//    public static String[] states = {"PENDING","HOLD","SOLD","DENIED","ACCEPT"};
     public static String[] states = {"PENDING","HOLD","SOLD","DENIED"};
 
     public Request(){}

@@ -4,6 +4,7 @@ import Model.Request.Request;
 import db.DBResult;
 import db.Managers.ATableManager;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Observable;
 
@@ -48,7 +49,18 @@ public abstract class ACRUDModel<T> extends Observable{
 
     //abstract public void deleteDataFromDB(String keys[][]);
 
-
+    public static int getCurrentTimeStamp() {
+        String month = String.valueOf(LocalDateTime.now().getMonthValue());
+        String day = String.valueOf(LocalDateTime.now().getDayOfMonth());
+        if (month.length() == 1) {
+            month = "0" + month;
+        }
+        if (day.length() == 1) {
+            day = "0" + day;
+        }
+        String date = LocalDateTime.now().getYear() + "" + month + "" + day;
+        return Integer.parseInt(date);
+    }
 
 
 

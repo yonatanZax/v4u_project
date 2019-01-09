@@ -68,21 +68,12 @@ public class ControllerHome implements Observer {
         controllerMessageCenter.addObserver(this);
         controllerCreateVacation.addObserver(this);
         vacationSearchController.addObserver(this);
-
-        // Stack holds the last subSceneName
-//        subSceneStack.push(vacationSearchController);
-        // Set the subSceneName to be vacationSearchController
         vacationSearchController.updateSubScene();
         homeView.setSub_scene(vacationSearchController.getRoot());
         currentSceneController = vacationSearchController;
         startRefreshThread();
         stage.show();
     }
-
-//    @Override
-//    public void start(Stage primaryStage) throws Exception {
-//
-//    }
 
     /**
      * changes the login status in the home view
@@ -120,9 +111,7 @@ public class ControllerHome implements Observer {
         } catch (InterruptedException e) {
             return;
         }
-
     }
-
 
 
     @Override
@@ -161,13 +150,7 @@ public class ControllerHome implements Observer {
                 startRefreshThread();
 
             }else if (arg.equals(HomeView.HOMEVIEW_AGRS_GOBACK)){
-//                if(!subSceneStack.empty()){
-//                    // Prepares the last subSceneName to 'Show'
-//                    SubScenable last = subSceneStack.pop();
-//                    last.updateSubScene();
-//                    homeView.setSub_scene(last.getRoot());
-//
-//                }
+
             }
 
         }else if (o.equals(vacationSearchController)){
@@ -187,7 +170,6 @@ public class ControllerHome implements Observer {
                     String vacationKey = updatePair.right.getVacationKey();
                     String vacationSellerKey = updatePair.right.getSellerKey();
                     if (vacationKey != null && vacationSellerKey != null) {
-                        // todo - change exchange (last parameter next func) as needed
                         requestModel.insertRequestToTable(vacationKey, vacationSellerKey, 0);
                     }
                 } else if (updatePair.left.equals(VacationSearchController.EXCHANGE)) {
@@ -215,8 +197,4 @@ public class ControllerHome implements Observer {
 
 
     }
-
-//    public static void main(String[] args) {
-//        launch(args);
-//    }
 }
