@@ -58,7 +58,7 @@ public class ControllerHome implements Observer {
         controllerCreateVacation = new ControllerCreateVacation(vacationModel);
         vacationSearchController = new VacationSearchController(vacationModel);
         stage.getIcons().add(new Image("/images/vacation.png"));
-        stage.setTitle("Vacation 4 U");
+        stage.setTitle("EveryVacation 4 U");
         stage.setScene(scene);
         homeView = fxmlLoader.getController();
         homeView.addObserver(this);
